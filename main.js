@@ -1,21 +1,84 @@
-var red, green, blue;
+let color1 = [0,0,0];
 
-var red2, green2, blue2;
+let color2 = [0,0,0];
 
-var change = 1;
+let change1 = [0,0,0];
+
+let change2 = [0,0,0];
+
+let target1 = [0,0,0];
+
+let target2 = [0,0,0];
+
+let startTime = null
+
+function checkTarget(color, target, change){
+    if(change[0] == 0 || Math.abs(color[0] - target[0]) < 1){
+        target = generateNewTarget(target);
+        change = [target[0] - color[0], target[1] - color[1], target[2] - color[2]];
+
+        let magnitude = Math.sqrt(change[0] * change[0] + change[1] * change[1] + change[2] * change[2]);
+        
+
+        for(let i = 0; i < 3; i++){
+            change[i] = change[i] / magnitude;
+        }
+        
+    }
+
+    return [target,change];
+}
+function updateValues(){
+    color1 = updateValue(color1,change1);
+    color2 = updateValue(color2,change2);
+
+    let r1 = checkTarget(color1, target1, change1);
+    target1 = r1[0];
+    change1 = r1[1];
+
+    let r2 = checkTarget(color2, target2, change2);
+    target2 = r2[0];
+    change2 = r2[1];
+    
+}
+
+function generateNewTarget(current){
+    let c = [0,0,0];
+    do{
+        c = [getRandomInt(256), getRandomInt(256), getRandomInt(256)];
+    } while(Math.abs(c[0] + c[1] + c[2] - current[0] - current[1] - current[2]) < 50);
+    
+    return c;
+}
+function animate(timestamp){
+    if(!startTime) startTime = timestamp;
+
+    let progress = timestamp - startTime;
+
+    updateValues();
+    updateColor();
+
+    requestAnimationFrame(animate);
+}
+
+requestAnimationFrame(animate);
+
+function createColor(color){
+    return `rgb(${color[0]},${color[1]},${color[2]})`;
+}
 
 function updateColor(){
-    let color1 = `rgb(${red},${green},${blue})`;
-    let color2 = `rgb(${red2},${green2},${blue2})`;
+    let c1 = createColor(color1);
+    let c2 = createColor(color2);
 
 
-    document.getElementById("background").style.background = `radial-gradient(${color1},${color2})`;
+    document.getElementById("background").style.background = `radial-gradient(${c1},${c2})`;
 
-    document.getElementById("btn").style.border =  `2px solid ${color1}`;
+    document.getElementById("btn").style.border =  `2px solid ${c1}`;
 
-    document.getElementById("btn").style.border =  `2px solid ${color1}`;
+    document.getElementById("btn").style.border =  `2px solid ${c1}`;
 
-    document.getElementById("button-container").style.borderImage = `linear-gradient(to right, ${color1},${color2}) 1`
+    document.getElementById("button-container").style.borderImage = `linear-gradient(to right, ${c1},${c2}) 1`
 
     
 }
@@ -24,31 +87,32 @@ function getRandomInt(max){
     return Math.floor(Math.random() * max);
 }
 
+function printColor(color){
+    console.log(color[0] + " " + color[1] + " " + color[2]);
+}
+
 function changeColor(){
 
-    red = getRandomInt(256);
-    green = getRandomInt(256);
-    blue = getRandomInt(256);
-
-    red2 = getRandomInt(256);
-    green2 = getRandomInt(256);
-    blue2 = getRandomInt(256);
-
-    while(Math.abs(red2 - red) < 20 && Math.abs(green2 - green) < 20 && Math.abs(blue2 - blue) < 20){
-        red2 = getRandomInt(256);
-        green2 = getRandomInt(256);
-        blue2 = getRandomInt(256);
-    }
-
-    
-
+    let min = 255;
+    do{
+        min = 255;
+        for(let i = 0; i < 3; i++){
+            color1[i] = getRandomInt(256);
+            color2[i] = getRandomInt(256);
+            min = Math.min(min, color2[i] - color1[i]);
+        }
+    } while(min < 20);
     updateColor();
-    let color1 = `rgb(${red},${green},${blue})`;
-    document.getElementById("btn").style.backgroundColor =  `${color1}`;
+    let c1 = createColor(color1);
+    document.getElementById("btn").style.backgroundColor =  `${c1}`;
 }
 
 function updateValue(value, change){
-    return (value + change) % 256;
+    for(let i = 0; i < 3; i++){
+        value[i] = Math.max(0,Math.min(value[i] + change[i],255));
+    }
+    //printColor(value);
+    return value;
 }
 
 function scroll(event){
@@ -56,13 +120,8 @@ function scroll(event){
 
     let change = event.deltaY / 20.0;
 
-    red = updateValue(red,change);
-    green = updateValue(green,change);
-    blue = updateValue(blue,change);
-
-    red2 = updateValue(red2,change*0.8);
-    green2 = updateValue(green2,change*0.8);
-    blue2 = updateValue(blue2,change*0.8);
+    color1 = updateValue(color1,[change,change,change]);
+    color2 = updateValue(color2,[change,change,change]);
 
     updateColor();
 }
@@ -78,10 +137,10 @@ btn.style.backgroundColor = "white";
 btn.style.color = "black";
 
 btn.addEventListener("mouseenter", function( event ) {   
-    let color1 = `rgb(${red},${green},${blue})`;
-    event.target.style.backgroundColor = `${color1}`;
+    let c1 = `rgb(${color1[0]},${color1[1]},${color1[2]})`;
+    event.target.style.backgroundColor = `${c1}`;
 
-    if(red + green + blue > 600){
+    if(color1[0] + color1[1] + color1[2] > 600){
         event.target.style.color = "white";
     }
   }, false);

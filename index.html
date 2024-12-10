@@ -9,10 +9,42 @@
         <meta name = "viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="stylesheet" href="index.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     </head> 
 
     <body>
         <div id="background">
+            <div id="top-nav">
+                <ul class="horizontal-bar">
+                    <li id="home-nav" class="top-list-item">
+                        <a>Home</a>
+                    </li>
+                    <li id="projects-nav" class="top-list-item">
+                        <a>Projects</a>
+                    </li>
+                    <li id="journal-nav" class="top-list-item">
+                        <a>Journal</a>
+                    </li>
+                    <li id="about-nav" class="top-list-item">
+                        <a>About Me</a>
+                    </li>
+                    <li id="settings-nav" class="top-list-item">
+                        <a>Settings</a>
+                    </li>
+                </ul>
+
+                <ul id="icon-bar" class="horizontal-bar">
+                    <li class="icon-list-item">
+                        <img class="icon" src="instagram.png">
+                    </li>
+                    <li class="icon-list-item">
+                        <img class="icon" src="youtube.png">
+                    </li>
+                </ul>
+                
+            </div>
             <div id="center-ui">
                 <div id="button-container">
                     <button onclick="changeColor()" id="btn" class="btn" type="button">Kurtis Quant</button>
