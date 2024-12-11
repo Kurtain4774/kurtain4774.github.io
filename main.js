@@ -11,9 +11,10 @@ let target1 = [0,0,0];
 let target2 = [0,0,0];
 
 let startTime = null
+let menuOpen = false;
 
 function checkTarget(color, target, change){
-    if(change[0] == 0 || Math.abs(color[0] - target[0]) < 1){
+    if(change[0] == 0 || (change[0] > 0 && color[0] > target[0]) || (change[0] < 0 && color[0] < target[0])){
         target = generateNewTarget(target);
         change = [target[0] - color[0], target[1] - color[1], target[2] - color[2]];
 
@@ -27,6 +28,22 @@ function checkTarget(color, target, change){
     }
 
     return [target,change];
+}
+const overlay = document.getElementById('overlay');
+
+function openNav(){
+    document.getElementById("side-nav").style.width = "250px";
+    menuOpen = true;
+    overlay.style.display = 'block';
+
+    
+}
+function closeNav(){
+    document.getElementById("side-nav").style.width = "0px";
+    menuOpen = false;
+    overlay.style.display = 'none';
+
+    
 }
 function updateValues(){
     color1 = updateValue(color1,change1);
@@ -60,6 +77,14 @@ function animate(timestamp){
 
     requestAnimationFrame(animate);
 }
+
+var sideNav = document.querySelector('#side-bar');
+// Listen for click events on body
+document.body.addEventListener('click', function (event) {
+    if (!sideNav.contains(event.target) && menuOpen) {
+        closeNav();
+    }
+});
 
 requestAnimationFrame(animate);
 
@@ -118,7 +143,7 @@ function updateValue(value, change){
 function scroll(event){
     //event.preventDefault();
 
-    let change = event.deltaY / 20.0;
+    let change = -event.deltaY / 15.0;
 
     color1 = updateValue(color1,[change,change,change]);
     color2 = updateValue(color2,[change,change,change]);

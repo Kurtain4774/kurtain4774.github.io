@@ -14,7 +14,7 @@
 
 #button-container{
     width: 30vw;
-    height: 10vh;
+    height: auto;
 
     position: absolute;
     top: 50%;
@@ -31,7 +31,7 @@
     border-radius: 5px; /* this doesn't work */
     border-width: 4px;
     border-style: solid;
-    padding: 5px;
+    padding: 20px;
     transition-duration: 0.4s;
     
 }
@@ -45,6 +45,8 @@
 
     margin: auto;
 
+    padding: 10px auto;
+
     text-decoration: none;
 
     font-size: 24px;
@@ -53,11 +55,9 @@
 
     font-family: cursive;
 
-    width: 75%;
+    width: calc(200px + 10vw);
 
-    height: 50%;
-
-    background-size: 200% auto;
+    height: auto;
 
  
 }
@@ -85,6 +85,8 @@ body{
     font-family: "Roboto", sans-serif;
     position: absolute;
     z-index: 1;
+    background-color: white;
+    color: black;
 
     display: flex;
     justify-content: space-between;
@@ -97,34 +99,113 @@ body{
     overflow: hidden;
 }
 
-.top-list-item{
+.horizontal-bar-item{
     float: left;
 }
 
-.top-list-item a{
+.top-bar-item{
+    margin: 10px;
+    padding: 10px;
+}
+
+.horizontal-bar-item a{
     display: block;
-    color: white;
     text-align: center;
     text-decoration: none;
-    margin: 20px 20px;
-    padding: 10px;
     font-size: 20px;
 }
 
-.top-list-item a:hover{
+.horizontal-bar-item a:hover{
     cursor: pointer;
     text-decoration: underline;
 }
-
+.overlay{
+    position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);  /* Dark background */
+  display: none; /* Hidden by default */
+  z-index: 2; /* Ensure it’s above other content */
+}
 .icon{
-    height: 65px;
-    width: 65px;
+    height: 24px;
+    width: 24px;
 }
 
-.icon-list-item{
-    float: left;
+h1{
+    font-size: 24px;
+    text-align: center;
+    margin: 0;
 }
 
-.icon-list-item img{
-    margin: 10px 15px;
+p{
+    font-size: 16px;
+    color: grey;
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+#top-nav-compact{
+    display: none;
+}
+#top-nav-compact span{
+    display: block;
+}
+#top-nav-compact span:hover{
+    background-color: grey;
+    opacity: 0.5;
+    border-radius: 50%;
+    cursor: pointer;
+}
+#top-nav-compact p{
+    display: block;
+    font-size: 20px;
+    
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+ul{
+    list-style-type: none;
+}
+
+.side-nav{
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    background-color: white;
+    overflow-x: hidden;
+    transition: 1s;
+    padding-top: 20px;
+    font-family: "Roboto", sans-serif;
+}
+
+
+
+.sidenav a{
+    padding: 10px 10px 10px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    display: block;
+    transition: 0.5s;
+}
+
+.sidenav a:hover{
+    color: grey;
+}
+
+@media screen and (max-width: 700px){
+    #top-nav-compact{
+        display: inline;
+    }
+    #top-nav{
+        background-color: none;
+    }
+    #top-nav-full{
+        display: none;
+    }
 }
