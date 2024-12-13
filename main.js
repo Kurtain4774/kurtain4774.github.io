@@ -2,8 +2,12 @@
 let color1 = { value: [0, 0, 0], change: [0, 0, 0], target: [0, 0, 0] };
 let color2 = { value: [0, 0, 0], change: [0, 0, 0], target: [0, 0, 0] };
 
+//color mode variables
+let darkMode = 0;
+let lightMode = 0;
+
 //start time since the window was opened in milliseconds
-let startTime = null
+let startTime = null;
 
 //boolean to keep track of the state of the side nav bar
 let menuOpen = false;
