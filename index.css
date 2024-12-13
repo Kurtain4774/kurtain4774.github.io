@@ -75,6 +75,9 @@ body{
     overflow: hidden;
 }
 
+a { color: inherit; } 
+
+
 @font-face {
     font-family: cursive;
     src: url(fonts/WeddingdayPersonalUseRegular-1Gvo0.ttf);
@@ -117,7 +120,7 @@ body{
 
 .horizontal-bar-item a:hover{
     cursor: pointer;
-    text-decoration: underline;
+    font-weight: 500;
 }
 .overlay{
     position: fixed;
