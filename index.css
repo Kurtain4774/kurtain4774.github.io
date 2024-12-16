@@ -3,25 +3,10 @@
     height: 100vh;
 }
 
-#center-ui{
-    width: 100vw;
-    height: 100vh;
-
-    text-align: center;
-
-    position: relative;
-}
-
 #button-container{
     width: 30vw;
     height: auto;
 
-    position: absolute;
-    top: 50%;
-    left: 50%;
-
-    -ms-transform: translate(-50%,-50%);
-    transform: translate(-50%,-50%);
     background-color: white;
 
     display: flex;
@@ -118,9 +103,33 @@ a { color: inherit; }
     font-size: 20px;
 }
 
+#main-content-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20vh;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+}
+
+.percentage-container{
+    width: auto;
+    height: auto;
+    font-size: 24px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
 .horizontal-bar-item a:hover{
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 450;
+}
+#dark-mode-container{
+    color: white;
+}
+
+#light-mode-container{
+    color: black;
 }
 .overlay{
     position: fixed;
@@ -143,7 +152,7 @@ h1{
     margin: 0;
 }
 
-p{
+#location{
     font-size: 16px;
     color: grey;
     margin: 0;
@@ -212,3 +221,4 @@ ul{
         display: none;
     }
 }
+

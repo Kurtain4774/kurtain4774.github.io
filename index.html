@@ -80,14 +80,36 @@
                 </ul>
                 
             </div>
-            <div id="center-ui">
+            <div id="main-content-container">
+                <div class="percentage-container">
+                    <div id="light-mode-container">
+                        <label>
+                            Light Mode:
+                        </label>
+                        <span id="light-mode-percentage-text">
+                            0%
+                        </span>
+                        
+                    </div>
+                </div>
                 <div id="button-container">
                     <button onclick="changeColor()" id="btn" class="btn" type="button">
                         <h1>Kurtis Quant</h1>
-                        <p>Danville, CA</p>
+                        <p id="location">Danville, CA</p>
                     </button>
                 </div>
+                <div class="percentage-container">
+                    <div id="dark-mode-container">
+                        <label>
+                            Dark Mode:
+                        </label>
+                        <span id="dark-mode-percentage-text">
+                            0%
+                        </span>
+                    </div>
+                </div>
             </div>
+            
         </div>
 
         <script src="main.js"></script>
