@@ -171,9 +171,6 @@ h1{
     display: block;
 }
 #top-nav-compact span:hover{
-    background-color: grey;
-    opacity: 0.5;
-    border-radius: 50%;
     cursor: pointer;
 }
 #top-nav-compact p{
@@ -246,6 +243,9 @@ ul{
 
 }
 
+#dark-mode-container:hover, #light-mode-text:hover, .arrow:hover, #light-mode-container:hover, #dark-mode-text:hover{
+    cursor: pointer;
+}
 
 .light-container a {
     z-index: 2;

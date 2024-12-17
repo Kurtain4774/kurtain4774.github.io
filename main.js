@@ -1,6 +1,35 @@
+//import gradients from './gradients.js';  // Import gradients from the external file
+const gradients = [
+    [46, 49, 146, 27, 255, 255],
+    [212, 20, 90, 251, 176, 59],
+    [0, 146, 69, 252, 238, 33],
+    [238, 156, 167, 255, 221, 225],
+    [97, 67, 133, 81, 99, 149],
+    [2, 170, 189, 0, 205, 172],
+    [255, 81, 47, 221, 36, 118],
+    [255, 95, 109, 255, 195, 113],
+    [17, 153, 142, 56, 239, 125],
+    [198, 234, 141, 254, 144, 175],
+    [234, 141, 141, 168, 144, 254],
+    [216, 181, 255, 30, 174, 152],
+    [255, 97, 210, 254, 144, 144],
+    [191, 240, 152, 111, 214, 255],
+    [78, 101, 255, 146, 239, 253],
+    [169, 241, 223, 255, 187, 187],
+    [195, 55, 100, 29, 38, 113],
+    [147, 165, 207, 228, 239, 233],
+    [134, 143, 150, 89, 97, 100],
+    [9, 32, 63, 83, 120, 149],
+    [255, 236, 210, 252, 182, 159],
+    [161, 196, 253, 194, 233, 251],
+    [118, 75, 162, 102, 126, 234],
+    [253, 252, 251, 226, 209, 195]
+];
 //color 1 is the inside color and color2 is the outside edge gradient color
 let color1 = { value: [0, 0, 0], change: [0, 0, 0], target: [0, 0, 0] };
 let color2 = { value: [0, 0, 0], change: [0, 0, 0], target: [0, 0, 0] };
+
+
 
 //color mode variables
 let darkMode = 0;
@@ -43,10 +72,10 @@ btn.style.backgroundColor = "white";
 btn.style.color = "black";
 
 //function to check if the color has reached its target returns a new target if it has reached its target
-function checkTarget(color, target, change){
+function checkTarget(color, target, change,loc){
     //if we have reached the target make a new one
-    if(change[0] == 0 || (change[0] > 0 && color[0] > target[0]) || (change[0] < 0 && color[0] < target[0])){
-        target = generateNewTarget(target);
+    if(change[0] == 0 || (change[0] > 0 && color[0] >= target[0]) || (change[0] < 0 && color[0] <= target[0])){
+        target = generateNewTarget(color, loc);
         //calculate the change array
         change = [target[0] - color[0], target[1] - color[1], target[2] - color[2]];
 
@@ -86,27 +115,35 @@ function updateValues(){
     //update the values
     color1.value = updateValue(color1.value,color1.change);
     //check if we need a new target value and creates a new one if we do
-    let r1 = checkTarget(color1.value, color1.target, color1.change);
+    let r1 = checkTarget(color1.value, color1.target, color1.change,1);
     //update the new target and change arrays
     color1.target = r1.target;
     color1.change = r1.change;
 
     //do the same with the second color
     color2.value = updateValue(color2.value,color2.change);
-    let r2 = checkTarget(color2.value, color2.target, color2.change);
+    let r2 = checkTarget(color2.value, color2.target, color2.change,2);
     color2.target = r2.target;
     color2.change = r2.change;
     
 }
 
 //return an array of 3 ints that is at least somewhat different than the current color
-function generateNewTarget(current){
-    let c = [0,0,0];
-    do{
-        c = [getRandomInt(256), getRandomInt(256), getRandomInt(256)];
-    } while(Math.abs(c[0] + c[1] + c[2] - current[0] - current[1] - current[2]) < 50);
-    
-    return c;
+function generateNewTarget(color, loc){
+    let rand = getRandomInt(gradients.length);
+
+    let gradientRGB = gradients[rand];
+
+    while(gradientRGB[0] == color[0] || gradientRGB[3] == color[0]){
+        rand = getRandomInt(gradients.length);
+
+        gradientRGB = gradients[rand];
+    }
+        
+    if(loc == 1) 
+        return [gradientRGB[0],gradientRGB[1],gradientRGB[2]];
+    else
+        return [gradientRGB[3],gradientRGB[4],gradientRGB[5]];
 }
 
 //update values and set the colors to the new values
@@ -191,6 +228,8 @@ function updateColor(){
         background.style.background = 'black';
         color1.value = [0,0,0];
         color2.value = [0,0,0];
+
+        button.style.border = '2px solid black';
     }
     
 
@@ -204,6 +243,25 @@ function getRandomInt(max){
 //prints rgb of a color
 function printColor(color){
     console.log(color[0] + " " + color[1] + " " + color[2]);
+}
+
+function lightTheme(){
+    themeSelected = 1;
+    lightModeContainer.classList.toggle('hidden');
+    darkModeContainer.classList.toggle('hidden');
+    background.style.backgroundColor = 'white';
+    buttonContainer.style.border = '2px solid black';
+    btn.style.border = '2px solid black';
+    updateColor();
+}
+
+function darkTheme(){
+    themeSelected = 2;
+    lightModeContainer.classList.toggle('hidden');
+    darkModeContainer.classList.toggle('hidden');
+    background.style.backgroundColor = 'black';
+
+    updateColor();
 }
 
 function reset(){
@@ -221,17 +279,14 @@ function changeColor(){
     if(themeSelected != 0){
         reset();
     }
-    
 
-    let min = 255;
-    do{
-        min = 255;
-        for(let i = 0; i < 3; i++){
-            color1.value[i] = getRandomInt(256);
-            color2.value[i] = getRandomInt(256);
-            min = Math.min(min, color2.value[i] - color1.value[i]);
-        }
-    } while(min < 20);
+    let rand = getRandomInt(gradients.length);
+
+    const gradientRGB = gradients[rand];
+    
+    color1.value = [gradientRGB[0],gradientRGB[1],gradientRGB[2]];
+    color2.value = [gradientRGB[3],gradientRGB[4],gradientRGB[5]];
+
     updateColor();
 
     //also updates the color of the center button
@@ -278,20 +333,10 @@ function scroll(event){
         console.log(lightMode);
     
         if(lightMode == 100){
-            themeSelected = 1;
-            lightModeContainer.classList.toggle('hidden');
-            darkModeContainer.classList.toggle('hidden');
-            background.style.backgroundColor = 'white';
-            buttonContainer.style.border = '2px solid black';
-            btn.style.border = '2px solid black';
-            updateColor();
+            lightTheme();
         }
         if(darkMode == 100){
-            themeSelected = 2;
-            lightModeContainer.classList.toggle('hidden');
-            darkModeContainer.classList.toggle('hidden');
-            background.style.backgroundColor = 'black';
-            updateColor();
+            darkTheme();
         }
     }
     
