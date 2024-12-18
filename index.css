@@ -1,344 +1,287 @@
-:root{
-    --primary-color: white;   
-    --background-color: white; 
-    --text-color: black; 
-    --light-text-color: white; /* Light text for dark mode */
-    --border-color: white; 
-}
-
-body{
+/* Reset body styles and disable text selection */
+body {
   margin: 0;
   overflow: hidden;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-.whole-screen{
-    width: 100vw;
-    height: 100vh;
+/* Full-screen container */
+.whole-screen {
+  width: 100vw;
+  height: 100vh;
 }
 
-#button-container{
-    width: 30vw;
-    height: auto;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+/* Button container styling */
+#button-container {
+  width: 30vw;
+  height: auto;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-#btn{
-    margin: auto;
-    padding: 10px auto;
-    transition-duration: 0.4s;
-    width: calc(200px + 10vw);
-    height: auto;
+/* Button styling with hover effect */
+#btn {
+  margin: auto;
+  padding: 10px auto;
+  transition-duration: 0.4s;
+  width: calc(200px + 10vw);
+  height: auto;
 }
-.clickable:hover{
+
+#btn.clickable:hover {
   cursor: pointer;
 }
-#name{
+
+/* Name styling */
+#name {
   font-family: cursive;
   font-size: 24px;
 }
 
+/* Links inherit color */
+a {
+  color: inherit;
+}
 
-
-
-a { 
-  color: inherit; 
-} 
-
-
+/* Custom font-face for cursive */
 @font-face {
-    font-family: cursive;
-    src: url(fonts/WeddingdayPersonalUseRegular-1Gvo0.ttf);
+  font-family: cursive;
+  src: url(fonts/WeddingdayPersonalUseRegular-1Gvo0.ttf);
 }
 
-#top-nav{
-    width: 100vw;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    position: absolute;
-    z-index: 1;
-    background-color: white;
-    display: flex;
-    justify-content: space-between;
+/* Navigation bar styles */
+#top-nav {
+  width: 100vw;
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
 }
-.vertical-bar{
+
+/* Side bar styles */
+.vertical-bar {
   display: flex;
   flex-direction: column;
 }
-.side-bar-item{
+
+.side-bar-item {
   text-decoration: none;
-  padding: 10px 0px 10px 25px;
+  padding: 10px 0 10px 25px;
 }
-#side-bar-title{
+
+#side-bar-title {
   margin-bottom: 20px;
 }
 
-.horizontal-bar{
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: left;
+.horizontal-bar {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: left;
 }
 
-.top-bar-item{
-    margin: 10px;
-    padding: 10px;
+.top-bar-item {
+  margin: 10px;
+  padding: 10px;
 }
 
-.horizontal-bar-item a{
-    text-decoration: none;
-    font-size: 20px;
+.horizontal-bar-item a, .vertical-bar a {
+  text-decoration: none;
+  font-size: 20px;
 }
 
-#main-content-container{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 15vh;
-    height: 100%;
-    width: 100%;
-    z-index: 1;
+.horizontal-bar-item a:hover, .vertical-bar a:hover {
+  font-weight: 450;
 }
 
-#dark-mode-container, #light-mode-container{
-    transition: color 2s ease;  /* Apply transition to color change */
+/* Main content container */
+#main-content-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15vh;
+  height: 100%;
+  width: 100%;
 }
-.arrow{
-    transition: border 2s ease;  /* Apply transition to color change */
 
+/* Transition containers */
+#dark-mode-container, #light-mode-container {
+  transition: color 2s ease;
 }
-.percentage-container{
-    transition: color 2s ease;  /* Apply transition to color change */
-    color:white;
-    width: auto;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+/* Arrow transition effect */
+.arrow {
+  transition: border 2s ease;
 }
-#side-bar-links{
+
+/* Side-bar links container */
+#side-bar-links {
   margin-top: 20px;
 }
-.horizontal-bar-item a:hover, .vertical-bar a:hover{
-    cursor: pointer;
-    font-weight: 450;
-}
-.overlay{
-    position: fixed;
+
+/* Overlay for modal or pop-up */
+.overlay {
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);  /* Dark background */
+  background-color: rgba(0, 0, 0, 0.5); /* Dark background */
   display: none; /* Hidden by default */
   z-index: 2; /* Ensure it’s above other content */
 }
-.icon{
-    height: 24px;
-    width: 24px;
+
+/* Icon styling */
+.icon {
+  height: 24px;
+  width: 24px;
 }
 
-h1{
-    font-size: 24px;
-    text-align: center;
-    margin: 0;
+/* Header styling */
+h1 {
+  font-size: 24px;
+  text-align: center;
+  margin: 0;
 }
 
-#location{
-    font-size: 16px;
-    color: grey;
-    margin: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+#location {
+  font-size: 16px;
+  color: #333;
+  margin: 0;
 }
 
-#top-nav-compact{
+/* Compact navigation bar for small screens */
+#top-nav-compact {
+  display: none;
+}
+
+#top-nav-compact span {
+  display: block;
+}
+
+/* Unstyled list */
+ul {
+  list-style-type: none;
+}
+
+/* Side navigation styling */
+.side-nav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  background-color: white;
+  overflow-x: hidden;
+  transition: 1s;
+  padding-top: 20px;
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 700px) {
+  #top-nav-compact {
+    display: inline;
+  }
+  
+  #top-nav-full {
     display: none;
-}
-#top-nav-compact span{
-    display: block;
-}
-#top-nav-compact span:hover{
-    cursor: pointer;
-}
-#top-nav-compact p{
-    display: block;
-    font-size: 20px;
-    
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-ul{
-    list-style-type: none;
+  }
 }
 
-.side-nav{
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 3;
-    top: 0;
-    left: 0;
-    background-color: white;
-    overflow-x: hidden;
-    transition: 1s;
-    padding-top: 20px;
-    font-family: "Roboto", sans-serif;
-}
-
-
-
-.sidenav a{
-    padding: 10px 10px 10px 20px;
-    text-decoration: none;
-    font-size: 20px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    display: block;
-    transition: 0.5s;
-}
-
-.sidenav a:hover{
-    color: grey;
-}
-
-@media screen and (max-width: 700px){
-    #top-nav-compact{
-        display: inline;
-    }
-    #top-nav{
-        background-color: none;
-    }
-    #top-nav-full{
-        display: none;
-    }
-}
-
-.light-container{
-    opacity: 1;
-    transition: opacity 2s ease-out; /* Smooth transition for opacity and height */
-}
-
-.dark-container{
-    transition: opacity 2s ease-in-out; /* Smooth transition for opacity and height */
-    opacity: 1;
+/* Light and dark container transitions */
+.light-container, .dark-container {
+  transition: opacity 2s ease-in-out; /* Smooth transition for opacity */
 }
 
 .hidden {
-    opacity: 0; /* Make the element invisible */
-  }
-
-.light-mode{
-    color: black;
-
+  opacity: 0; /* Make the element invisible */
 }
 
-#dark-mode-container:hover, #light-mode-text:hover, .arrow:hover, #light-mode-container:hover, #dark-mode-text:hover{
-    cursor: pointer;
+/* Arrow container styling */
+.arrow-container {
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
 }
 
-.light-container a {
-    z-index: 2;
-    display: inline-block;
-    -webkit-transform: translate(0, 50%);
-    transform: translate(0, 50%);
-    transition: opacity .3s;
-    }
-  .light-container a span {
-      position: absolute;
-      bottom: 50%;
-      left: 50%;
-      width: 24px;
-      height: 24px;
-      margin-left: -12px;
-      border-left: 1px solid white;
-      border-bottom: 1px solid white;
-      -webkit-animation: sdb06 1.5s infinite;
-      animation: sdb06 1.5s infinite;
-      box-sizing: border-box;
-    }
-
-
-.dark-container a {
+.arrow-container a {
   z-index: 2;
   display: inline-block;
-  -webkit-transform: translate(0, -50%);
-  transform: translate(0, -50%);
-  color: #fff;
-  font : normal 400 20px/1 'Josefin Sans', sans-serif;
-  letter-spacing: .1em;
-  text-decoration: none;
   transition: opacity .3s;
-  }
+}
+
+.arrow-container a span {
+  position: absolute;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  border-left: 1px solid;
+  border-bottom: 1px solid;
+  box-sizing: border-box;
+}
+
+/* Light container arrow animation */
+.light-container a {
+  transform: translate(0, 50%);
+}
+
+.light-container a span {
+  position: absolute;
+  bottom: 50%;
+  animation: point-up 1.5s infinite;
+}
+
+/* Dark container arrow animation */
+.dark-container a {
+  transform: translate(0, -50%);
+}
+
 .dark-container a span {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 24px;
-    height: 24px;
-    margin-left: -12px;
-    border-left: 1px solid #fff;
-    border-bottom: 1px solid #fff;
-    -webkit-transform: rotate(-45deg);
-    transform: rotate(-45deg);
-    -webkit-animation: sdb05 1.5s infinite;
-    animation: sdb05 1.5s infinite;
-    box-sizing: border-box;
-  }
-  @-webkit-keyframes sdb05 {
-    0% {
-      -webkit-transform: rotate(-45deg) translate(0, 0);
-      opacity: 0;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      -webkit-transform: rotate(-45deg) translate(-20px, 20px);
-      opacity: 0;
-    }
-  }
-  @keyframes sdb05 {
-    0% {
-      transform: rotate(-45deg) translate(0, 0);
-      opacity: 0;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      transform: rotate(-45deg) translate(-20px, 20px);
-      opacity: 0;
-    }
-  }
+  top: 0;
+  transform: rotate(-45deg);
+  animation: point-down 1.5s infinite;
+}
 
+/* Keyframes for pointing up and down */
+@keyframes point-up {
+  0% {
+    transform: rotate(135deg) translate(0, 0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(135deg) translate(-20px, 20px);
+    opacity: 0;
+  }
+}
 
-  @-webkit-keyframes sdb06 {
-    0% {
-      -webkit-transform: rotate(135deg) translate(0, 0);
-      opacity: 0;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      -webkit-transform: rotate(135deg) translate(-20px, 20px);
-      opacity: 0;
-    }
+@keyframes point-down {
+  0% {
+    transform: rotate(-45deg) translate(0, 0);
+    opacity: 0;
   }
-  @keyframes sdb06 {
-    0% {
-      transform: rotate(135deg) translate(0, 0);
-      opacity: 0;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      transform: rotate(135deg) translate(-20px, 20px);
-      opacity: 0;
-    }
+  50% {
+    opacity: 1;
   }
+  100% {
+    transform: rotate(-45deg) translate(-20px, 20px);
+    opacity: 0;
+  }
+}

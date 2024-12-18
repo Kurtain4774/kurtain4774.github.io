@@ -31,9 +31,9 @@
                 <!-- Side Navigation for Mobile -->
                 <section id="side-nav" class="side-nav vertical-bar">
                     <h1 id="side-bar-title">Menu</h1>
-                    <a class="side-bar-item" href="index.html">Home</a>
-                    <a class="side-bar-item" href="projects.html">Projects</a>
-                    <a class="side-bar-item" href="about.html">About Me</a>
+                    <a class="side-bar-item clickable" href="index.html">Home</a>
+                    <a class="side-bar-item clickable" href="projects.html">Projects</a>
+                    <a class="side-bar-item clickable" href="about.html">About Me</a>
                 </section>
     
                 <!-- Top Navigation (Compact for Mobile & Full for Desktop) -->
@@ -43,7 +43,7 @@
                         <ul id="side" class="horizontal-bar">
                             <!-- Menu Icon Button -->
                             <li id="side-bar" class="horizontal-bar-item top-bar-item">
-                                <span class="material-symbols-outlined" onclick="openNav()">
+                                <span class="material-symbols-outlined clickable" onclick="openNav()">
                                     menu
                                 </span>
                             </li>
@@ -101,12 +101,12 @@
             <main id="main-content-container">
                 <!-- Light Theme Switch -->
                 <section>
-                    <div id="light-container" class="percentage-container light-container">
+                    <div id="light-container" class="light-container arrow-container">
                         <!-- Light Mode Toggle -->
-                        <a onclick="lightTheme()"><span class="arrow"></span></a>
-                        <div onclick="lightTheme()" id="light-mode-container" class="light-mode-container">
+                        <a onclick="lightTheme()"><span class="arrow clickable"></span></a>
+                        <div onclick="lightTheme()" id="light-mode-container" class="light-mode-container clickable">
                             <!-- Light Mode Label and Percentage -->
-                            <label id="light-mode-text">Light</label>
+                            <label id="light-mode-text" class="clickable">Light</label>
                             <span id="light-mode-percentage-text">0%</span>
                         </div>
                     </div>
@@ -125,15 +125,15 @@
                 
                 <!-- Dark Theme Switch -->
                 <section>
-                    <div id="dark-container" class="percentage-container dark-container">
+                    <div id="dark-container" class="dark-container arrow-container">
                         <!-- Dark Mode Toggle -->
-                        <div onclick="darkTheme()" id="dark-mode-container" class="dark-mode-container">
+                        <div onclick="darkTheme()" id="dark-mode-container" class="dark-mode-container clickable">
                             <!-- Dark Mode Label and Percentage -->
-                            <label id="dark-mode-text">Dark</label>
+                            <label class="clickable" id="dark-mode-text">Dark</label>
                             <span id="dark-mode-percentage-text">0%</span>
                         </div>
                         <!-- Dark Mode Arrow Link -->
-                        <a onclick="darkTheme()"><span class="arrow"></span></a>
+                        <a onclick="darkTheme()"><span class="arrow clickable"></span></a>
                     </div>
                 </section>
                 
