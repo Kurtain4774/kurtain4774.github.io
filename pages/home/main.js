@@ -62,7 +62,8 @@ const button = document.getElementById("btn")
 requestAnimationFrame(animate);
 
 //when scrolling call the scroll function
-body.onwheel = scroll;
+window.addEventListener('wheel', scroll, {passive: false});
+window.addEventListener('touchmove', scroll, {passive: false});
 
 //initialize a random starting background gradient color
 changeColor();

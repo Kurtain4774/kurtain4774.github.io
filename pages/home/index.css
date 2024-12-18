@@ -1,7 +1,6 @@
 /* Reset body styles and disable text selection */
 body {
   margin: 0;
-  overflow: hidden;
   -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE10+/Edge */
@@ -35,7 +34,7 @@ body {
   height: auto;
 }
 
-#btn.clickable:hover {
+.clickable:hover {
   cursor: pointer;
 }
 
@@ -160,12 +159,17 @@ h1 {
 }
 
 /* Compact navigation bar for small screens */
-#top-nav-compact {
+#top-nav-full {
   display: none;
 }
 
 #top-nav-compact span {
   display: block;
+  width: 24px;
+  height: 24px;
+}
+#top-nav-compact {
+  display: inline;
 }
 
 /* Unstyled list */
@@ -187,16 +191,7 @@ ul {
   padding-top: 20px;
 }
 
-/* Media query for smaller screens */
-@media screen and (max-width: 700px) {
-  #top-nav-compact {
-    display: inline;
-  }
-  
-  #top-nav-full {
-    display: none;
-  }
-}
+
 
 /* Light and dark container transitions */
 .light-container, .dark-container {
@@ -283,5 +278,16 @@ ul {
   100% {
     transform: rotate(-45deg) translate(-20px, 20px);
     opacity: 0;
+  }
+}
+
+/* Media query for smaller screens */
+@media screen and (min-width: 600px) {
+  #top-nav-full{
+    display: inline;
+  }
+
+  #top-nav-compact {
+    display: none;
   }
 }
