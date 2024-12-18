@@ -1,4 +1,3 @@
-//import gradients from './gradients.js';  // Import gradients from the external file
 const gradients = [
     [46, 49, 146, 27, 255, 255],
     [212, 20, 90, 251, 176, 59],
@@ -29,6 +28,7 @@ const gradients = [
 let color1 = { value: [0, 0, 0], change: [0, 0, 0], target: [0, 0, 0] };
 let color2 = { value: [0, 0, 0], change: [0, 0, 0], target: [0, 0, 0] };
 
+let lastY = 0;
 
 
 //color mode variables
@@ -56,20 +56,20 @@ const darkModeContainer = document.getElementById('dark-container');
 const percentageElements = document.getElementsByClassName('arrow-container');
 const arrows = document.getElementsByClassName('arrow');
 const buttonContainer = document.getElementById("button-container");
-const button = document.getElementById("btn")
+const loc = document.getElementById("location");
+
 
 //start the animation
 requestAnimationFrame(animate);
 
 //when scrolling call the scroll function
 window.addEventListener('wheel', scroll, {passive: false});
-window.addEventListener('touchmove', scroll, {passive: false});
 
 //initialize a random starting background gradient color
 changeColor();
 
 //initialize the center button background and text color
-btn.style.backgroundColor = "white";
+//btn.style.backgroundColor = "white";
 btn.style.color = "black";
 
 //function to check if the color has reached its target returns a new target if it has reached its target
@@ -197,15 +197,15 @@ function updateColor(){
     
     
         background.style.background = `radial-gradient(${c1},${c2})`;
+        btn.style.background = `rgb(${color1.value[0]},${color1.value[1]},${color1.value[2]}, 0.7)`;
     
-        button.style.border =  `2px solid ${c1}`;
+        //btn.style.border =  `2px solid ${c2}`;
     
-        buttonContainer.style.borderImage = `linear-gradient(to right, ${c1},${c2}) 1`
+        //buttonContainer.style.borderImage = `linear-gradient(to right, ${c1},${c2}) 1`
     
         let luminance = 0.2126 * (color1.value[0]/255) + 0.7152 * (color1.value[1]/255) + 0.0722 * (color1.value[2]/255);
     
-        //console.log(luminance);
-    
+        
         if(luminance >= 0.7){
             for(let i = 0; i < percentageElements.length; i++){
                 percentageElements[i].style.color = 'black';
@@ -213,6 +213,8 @@ function updateColor(){
             for(let i = 0; i < arrows.length; i++){
                 arrows[i].style.borderColor = 'black';
             }
+            btn.style.color = 'black';
+            loc.style.color = 'black';
         } else if(luminance <= 0.3){
             for(let i = 0; i < percentageElements.length; i++){
                 percentageElements[i].style.color = 'white';
@@ -220,7 +222,10 @@ function updateColor(){
             for(let i = 0; i < arrows.length; i++){
                 arrows[i].style.borderColor = 'white';
             }
+            btn.style.color = 'white';
+            loc.style.color = 'white';
         }
+        
     } else if(themeSelected == 1){
         background.style.background = 'white';
         color1.value = [255,255,255];
@@ -229,8 +234,6 @@ function updateColor(){
         background.style.background = 'black';
         color1.value = [0,0,0];
         color2.value = [0,0,0];
-
-        button.style.border = '2px solid black';
     }
     
 
@@ -251,8 +254,6 @@ function lightTheme(){
     lightModeContainer.classList.toggle('hidden');
     darkModeContainer.classList.toggle('hidden');
     background.style.backgroundColor = 'white';
-    buttonContainer.style.border = '2px solid black';
-    btn.style.border = '2px solid black';
     updateColor();
 }
 
@@ -292,7 +293,7 @@ function changeColor(){
 
     //also updates the color of the center button
     let c1 = createColor(color1.value);
-    document.getElementById("btn").style.backgroundColor =  `${c1}`;
+    //document.getElementById("btn").style.backgroundColor =  `${c1}`;
 }
 
 //set color to the new value clamp between 0 and 255
@@ -303,6 +304,58 @@ function updateValue(value, change){
 
     return value;
 }
+
+document.addEventListener('touchstart', function(event) {
+    // Get the first touch point's Y position
+    lastY = event.touches[0].pageY;
+  });
+  // Add a touchmove listener to calculate deltaY
+document.addEventListener('touchmove', function(event) {
+    // Get the current Y position of the first touch point
+    const currentY = event.touches[0].pageY;
+    
+    // Calculate the deltaY (difference in Y position)
+    const deltaY = currentY - lastY;
+    
+    if(themeSelected == 0){
+        let change = -deltaY / 2.0;
+
+        color1.value = updateValue(color1.value,[change,change,change]);
+        color2.value = updateValue(color2.value,[change,change,change]);
+    
+        updateColor();
+    
+        change /= 2.5;
+    
+        if(change > 0){
+            lightMode+=change;
+            darkMode-=change;
+        } else {
+            darkMode+= -change;
+            lightMode-= -change;
+        }
+    
+        lightMode = Math.max(Math.min(100,lightMode),0);
+        darkMode = Math.max(Math.min(100,darkMode),0);
+    
+        scrollDelay = Math.min(scrollDelay + 25, 400);
+    
+        updatePercentageText();
+    
+        if(lightMode == 100){
+            lightTheme();
+        }
+        if(darkMode == 100){
+            darkTheme();
+        }
+    }
+  
+    // Update the lastY value for the next move event
+    lastY = currentY;
+  
+    // Prevent the default behavior (optional, if you want to prevent scrolling)
+    event.preventDefault();
+  });
 
 //gets the distance scrolled and update the colors based on the distance
 function scroll(event){
@@ -330,8 +383,6 @@ function scroll(event){
         scrollDelay = Math.min(scrollDelay + 25, 400);
     
         updatePercentageText();
-
-        console.log(lightMode);
     
         if(lightMode == 100){
             lightTheme();
@@ -343,7 +394,7 @@ function scroll(event){
     
 }
 
-
+/*
 //changes color of center button on hover
 btn.addEventListener("mouseenter", function( event ) {   
     let c1 = createColor(color1.value);
@@ -368,3 +419,5 @@ btn.addEventListener("mouseleave", function( event ) {
     event.target.style.backgroundColor = "white";
     event.target.style.color = "black";
 }, false);
+
+*/
