@@ -1,119 +1,147 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
     <head>
+        <!-- Meta Information for the Page -->
         <meta charset="UTF-8">
-        <meta name="description" content="This page changes color">
-        <meta name="keywords" content="ASMR, Color, Random Stuff">
-        <meta name="author" content = "Kurtain">
-        <meta name = "viewport" content="width=device-width, initial-scale=1.0">
-
+        <meta name="description" content="Website Hub for Kurtis Quant">
+        <meta name="keywords" content="Kurtis Quant, Kurtain4774">
+        <meta name="author" content="Kurtis Quant">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <!-- Link to External CSS and Fonts -->
         <link rel="stylesheet" href="index.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        
+        <!-- Material Icons for the menu button -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=menu" />
+        
+        <!-- Google Fonts: Roboto font family -->
         <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     </head> 
 
     <body>
+        <!-- Overlay that may be used for menu or modal effects -->
         <div class="overlay" id="overlay"></div>
 
-        <div id="background">
-            
-            <div id="side-nav" class="side-nav horizontal-bar-item">
-                <a>Home</a>
-                <a>Projects</a>
-                <a>About Me</a>
-            </div>
-
-            <div id="top-nav">
-                <div id="top-nav-compact">
-                    <ul id="side" class="horizontal-bar">
-                        <li id="side-bar" class="horizontal-bar-item top-bar-item">
-                            
-                            <span class="material-symbols-outlined" onclick="openNav()">
-                                menu
-                            </span>
-                        </li>
+        <div class="whole-screen" id="background">
+            <!-- Header Section with Navigation -->
+            <header>
+                <!-- Side Navigation for Mobile -->
+                <section id="side-nav" class="side-nav vertical-bar">
+                    <h1 id="side-bar-title">Menu</h1>
+                    <a class="side-bar-item" href="index.html">Home</a>
+                    <a class="side-bar-item" href="projects.html">Projects</a>
+                    <a class="side-bar-item" href="about.html">About Me</a>
+                </section>
+    
+                <!-- Top Navigation (Compact for Mobile & Full for Desktop) -->
+                <section id="top-nav">
+                    <!-- Compact Top Navigation (For Mobile, shows menu button) -->
+                    <div id="top-nav-compact">
+                        <ul id="side" class="horizontal-bar">
+                            <!-- Menu Icon Button -->
+                            <li id="side-bar" class="horizontal-bar-item top-bar-item">
+                                <span class="material-symbols-outlined" onclick="openNav()">
+                                    menu
+                                </span>
+                            </li>
+                            <!-- Home Link (Visible on all devices) -->
+                            <li class="horizontal-bar-item top-bar-item">
+                                <a>Home</a>
+                            </li>
+                        </ul>
+                    </div>
+    
+                    <!-- Full Top Navigation (For Desktop, shows all links) -->
+                    <nav id="top-nav-full">
+                        <ul class="horizontal-bar">
+                            <!-- Home Navigation Link -->
+                            <li id="home-nav" class="horizontal-bar-item top-bar-item">
+                                <a href="index.html">Home</a>
+                            </li>
+                            <!-- Projects Navigation Link -->
+                            <li id="projects-nav" class="horizontal-bar-item top-bar-item">
+                                <a href="projects.html">Projects</a>
+                            </li>
+                            <!-- About Me Navigation Link -->
+                            <li id="about-nav" class="horizontal-bar-item top-bar-item">
+                                <a href="about.html">About Me</a>
+                            </li>
+                        </ul>
+                    </nav>
+    
+                    <!-- Social Media Icon Bar -->
+                    <ul id="icon-bar" class="horizontal-bar">
+                        <!-- LinkedIn Link -->
                         <li class="horizontal-bar-item top-bar-item">
-                            <a>Home</a>
+                            <a href="https://www.linkedin.com/in/kurtis-quant/" aria-label="LinkedIn">
+                                <img class="icon" src="pictures/linkedin.png" alt="LinkedIn">
+                            </a>
+                        </li>
+                        <!-- GitHub Link -->
+                        <li class="horizontal-bar-item top-bar-item">
+                            <a href="https://github.com/Kurtain4774?tab=overview&from=2024-12-01&to=2024-12-12" aria-label="GitHub">
+                                <img class="icon" src="pictures/github.png" alt="GitHub">
+                            </a>
+                        </li>
+                        <!-- Instagram Link -->
+                        <li class="horizontal-bar-item top-bar-item">
+                            <a href="https://www.instagram.com/kurtain4774/" aria-label="Instagram">
+                                <img class="icon" src="pictures/instagram.png" alt="Instagram">
+                            </a>
                         </li>
                     </ul>
-                </div>
-
-                <div id="top-nav-full">
-                    <ul class="horizontal-bar">
-                        <li id="home-nav" class="horizontal-bar-item top-bar-item">
-                            <a href="index.html">Home</a>
-                        </li>
-                        <li id="projects-nav" class="horizontal-bar-item top-bar-item">
-                            <a href="projects.html">Projects</a>
-                        </li>
-                        <li id="about-nav" class="horizontal-bar-item top-bar-item">
-                            <a href="about.html">About Me</a>
-                        </li>
-                    </ul>
-                </div>
-                
-
-                <ul id="icon-bar" class="horizontal-bar">
-                    <li class="horizontal-bar-item top-bar-item">
-                        <a href="https://www.linkedin.com/in/kurtis-quant/">
-                            <img class="icon" src="pictures/linkedin.png">
-
-                        </a>
-
-                    </li>
-                    <li class="horizontal-bar-item top-bar-item">
-                        <a href="https://github.com/Kurtain4774?tab=overview&from=2024-12-01&to=2024-12-12">
-                            <img class="icon" src="pictures/github.png">
-
-                        </a>
-
-                    </li>
-                    <li class="horizontal-bar-item top-bar-item">
-                        <a href="https://www.instagram.com/kurtain4774/">
-                            <img class="icon" src="pictures/instagram.png">
-
-                        </a>
-                    </li>
-                </ul>
-                
-            </div>
-            <div id="main-content-container">
-                <div id="light-container" class="percentage-container light-container">
-                    <a onclick="lightTheme()"><span class="arrow" ></span></a>
-                    <div onclick="lightTheme()" id="light-mode-container" class="light-mode-container">
-                        <label id="light-mode-text">
-                            Light
-                        </label>
-                        <span id="light-mode-percentage-text">
-                            0%
-                        </span>
-                        
+                    
+                </section>
+            </header>
+            
+            <!-- Main Content Section -->
+            <main id="main-content-container">
+                <!-- Light Theme Switch -->
+                <section>
+                    <div id="light-container" class="percentage-container light-container">
+                        <!-- Light Mode Toggle -->
+                        <a onclick="lightTheme()"><span class="arrow"></span></a>
+                        <div onclick="lightTheme()" id="light-mode-container" class="light-mode-container">
+                            <!-- Light Mode Label and Percentage -->
+                            <label id="light-mode-text">Light</label>
+                            <span id="light-mode-percentage-text">0%</span>
+                        </div>
                     </div>
-                </div>
-                <div id="button-container">
-                    <button onclick="changeColor()" id="btn" class="btn" type="button">
-                        <h1>Kurtis Quant</h1>
-                        <p id="location">📍Danville, CA</p>
-                    </button>
-                </div>
-                <div id="dark-container" class="percentage-container dark-container">
-                    <div onclick="darkTheme()" id="dark-mode-container" class="dark-mode-container">
-                        <label id="dark-mode-text">
-                            Dark
-                        </label>
-                        <span id="dark-mode-percentage-text">
-                            0%
-                        </span>
+                </section>
+                
+                <!-- Main Button Section (Kurtis Quant Name and Location) -->
+                <section>
+                    <div id="button-container">
+                        <!-- Button for main content or interaction -->
+                        <button onclick="changeColor()" id="btn" class="clickable" type="button">
+                            <h1 id="name">Kurtis Quant</h1>
+                            <p id="location">📍Danville, CA</p>
+                        </button>
                     </div>
-                    <a onclick="darkTheme()"><span class="arrow" ></span></a>
-                </div>
-            </div>
+                </section>
+                
+                <!-- Dark Theme Switch -->
+                <section>
+                    <div id="dark-container" class="percentage-container dark-container">
+                        <!-- Dark Mode Toggle -->
+                        <div onclick="darkTheme()" id="dark-mode-container" class="dark-mode-container">
+                            <!-- Dark Mode Label and Percentage -->
+                            <label id="dark-mode-text">Dark</label>
+                            <span id="dark-mode-percentage-text">0%</span>
+                        </div>
+                        <!-- Dark Mode Arrow Link -->
+                        <a onclick="darkTheme()"><span class="arrow"></span></a>
+                    </div>
+                </section>
+                
+            </main>
             
         </div>
 
+        <!-- External JavaScript File -->
         <script src="main.js"></script>
     </body>
 </html>
