@@ -136,17 +136,6 @@ a {
   margin-top: 20px;
 }
 
-/* Overlay for modal or pop-up */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Dark background */
-  display: none; /* Hidden by default */
-  z-index: 2; /* Ensure it’s above other content */
-}
 
 /* Icon styling */
 .icon {

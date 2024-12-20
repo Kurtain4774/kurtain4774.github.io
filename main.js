@@ -40,13 +40,8 @@ let time = 0;
 
 let themeSelected = 0;
 
-//boolean to keep track of the state of the side nav bar
-let menuOpen = false;
 
-//constants that refer to html objects
-const overlay = document.getElementById('overlay');
 const btn = document.querySelector('#btn');
-const sideNav = document.querySelector('#side-bar');
 const body = document.body;
 const background = document.getElementById("background");
 const lightModePercent = document.getElementById('light-mode-percentage-text');
@@ -91,25 +86,6 @@ function checkTarget(color, target, change,loc){
     return {target: target,change: change};
 }
 
-//function opens the side bar nav when called
-function openNav(){
-    //works by giving the side bar element an actual width
-    document.getElementById("side-nav").style.width = "250px";
-    menuOpen = true;
-
-    //puts a dark overlay over the rest of the screen
-    overlay.style.display = 'block';
-}
-
-//function closes the side bar nav when called
-function closeNav(){
-    //reduced the side bar nav width to 0 to make it disappear
-    document.getElementById("side-nav").style.width = "0px";
-    menuOpen = false;
-
-    //remove the overlay
-    overlay.style.display = 'none';
-}
 
 //updates the colors to move towards their target colors
 function updateValues(){
@@ -177,12 +153,6 @@ function updatePercentageText(){
     darkModePercent.textContent = (Math.round(darkMode * 10)/10).toString() + '%';
 }
 
-//Close side nav if the user clicks away from the side nav
-document.body.addEventListener('click', function (event) {
-    if (!sideNav.contains(event.target) && menuOpen) {
-        closeNav();
-    }
-});
 
 //creates an rgb color from 3 values
 function createColor(color){
@@ -393,31 +363,3 @@ function scroll(event){
     }
     
 }
-
-/*
-//changes color of center button on hover
-btn.addEventListener("mouseenter", function( event ) {   
-    let c1 = createColor(color1.value);
-    event.target.style.backgroundColor = `${c1}`;
-    if(color1.value[0] + color1.value[1] + color1.value[2] == 765){
-        event.target.style.backgroundColor = `${createColor([211,211,211])}`;
-
-    }
-
-    let luminance = 0.2126 * (color1.value[0]/255) + 0.7152 * (color1.value[1]/255) + 0.0722 * (color1.value[2]/255);
-
-    if(luminance >= 0.5){
-        event.target.style.color = "black";
-    } else {
-        event.target.style.color = "white";
-
-    }
-  }, false);
-
-//returns it back to default when not hovering
-btn.addEventListener("mouseleave", function( event ) {   
-    event.target.style.backgroundColor = "white";
-    event.target.style.color = "black";
-}, false);
-
-*/
