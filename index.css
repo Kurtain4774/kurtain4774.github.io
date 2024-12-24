@@ -196,6 +196,10 @@ ul {
   transition: opacity 2s ease-in-out; /* Smooth transition for opacity */
 }
 
+.scroll-container{
+  display: none;
+}
+
 .hidden {
   opacity: 0; /* Make the element invisible */
 }
@@ -287,6 +291,12 @@ ul {
 
   #top-nav-compact {
     display: none;
+  }
+}
+
+@media screen and (min-height: 600px) {
+  .scroll-container{
+    display: block;
   }
 }
 

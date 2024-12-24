@@ -52,6 +52,7 @@ const percentageElements = document.getElementsByClassName('arrow-container');
 const arrows = document.getElementsByClassName('arrow');
 const buttonContainer = document.getElementById("button-container");
 const loc = document.getElementById("location");
+const nameText = document.getElementById("name");
 
 
 //start the animation
@@ -183,7 +184,7 @@ function updateColor(){
             for(let i = 0; i < arrows.length; i++){
                 arrows[i].style.borderColor = 'black';
             }
-            btn.style.color = 'black';
+            nameText.style.color = 'black';
             loc.style.color = 'black';
         } else if(luminance <= 0.3){
             for(let i = 0; i < percentageElements.length; i++){
@@ -192,7 +193,7 @@ function updateColor(){
             for(let i = 0; i < arrows.length; i++){
                 arrows[i].style.borderColor = 'white';
             }
-            btn.style.color = 'white';
+            nameText.style.color = 'white';
             loc.style.color = 'white';
         }
         
@@ -224,6 +225,7 @@ function lightTheme(){
     lightModeContainer.classList.toggle('hidden');
     darkModeContainer.classList.toggle('hidden');
     background.style.backgroundColor = 'white';
+    btn.style.backgroundColor = 'white';
     updateColor();
 }
 
@@ -232,7 +234,9 @@ function darkTheme(){
     lightModeContainer.classList.toggle('hidden');
     darkModeContainer.classList.toggle('hidden');
     background.style.backgroundColor = 'black';
-
+    btn.style.backgroundColor = 'white';
+    nameText.style.color = 'black';
+    loc.style.color = 'black';
     updateColor();
 }
 
@@ -330,7 +334,7 @@ document.addEventListener('touchmove', function(event) {
 //gets the distance scrolled and update the colors based on the distance
 function scroll(event){
     if(themeSelected == 0){
-        let change = -event.deltaY / 10.0;
+        let change = -event.deltaY / 5.0;
 
         color1.value = updateValue(color1.value,[change,change,change]);
         color2.value = updateValue(color2.value,[change,change,change]);
