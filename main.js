@@ -53,8 +53,15 @@ const arrows = document.getElementsByClassName('arrow');
 const buttonContainer = document.getElementById("button-container");
 const loc = document.getElementById("location");
 const nameText = document.getElementById("name");
-
-
+const topScrollContainer = document.getElementById("top-scroll-container");
+const bottomScrollContainer = document.getElementById("bottom-scroll-container");
+const topLeft = document.getElementById("top-left-container");
+const topRight = document.getElementById("top-right-container");
+const middleLeft = document.getElementById("middle-left-container");
+const middleRight = document.getElementById("middle-right-container");
+const bottomLeft = document.getElementById("bottom-left-container");
+const bottomRight = document.getElementById("bottom-right-container");
+const centerContainer = document.getElementById("center");
 //start the animation
 requestAnimationFrame(animate);
 
@@ -220,10 +227,42 @@ function printColor(color){
     console.log(color[0] + " " + color[1] + " " + color[2]);
 }
 
+function changeContent(){
+    buttonContainer.style.backgroundColor = 'transparent';
+    buttonContainer.style.width = '100%';
+    buttonContainer.style.padding = '0px';
+    btn.style.margin = '0px';
+    btn.style.padding = '0px';
+    btn.style.height = '100%';
+    btn.style.width = '100%';
+    btn.style.borderRadius = '10px';
+    topLeft.classList.toggle('hidden');
+    topLeft.classList.toggle('animateX');
+    topRight.classList.toggle('hidden');
+    topRight.classList.toggle('animateX');
+    middleLeft.classList.toggle('hidden');
+    middleLeft.classList.toggle('animateX');
+    middleRight.classList.toggle('hidden');
+    middleRight.classList.toggle('animateX');
+    bottomLeft.classList.toggle('hidden');
+    bottomLeft.classList.toggle('animateY');
+    bottomRight.classList.toggle('hidden');
+    bottomRight.classList.toggle('animateY');
+
+}
+
 function lightTheme(){
     themeSelected = 1;
-    lightModeContainer.classList.toggle('hidden');
-    darkModeContainer.classList.toggle('hidden');
+    lightModeContainer.classList.toggle('invisible');
+    darkModeContainer.classList.toggle('invisible');
+    topScrollContainer.classList.remove('scroll-container');
+    bottomScrollContainer.classList.remove('scroll-container');
+    topScrollContainer.style.display = 'none';
+    bottomScrollContainer.style.display = 'none';
+    centerContainer.classList.toggle('center');
+    nameText.style.color = 'black';
+    loc.style.color = 'black';
+    changeContent();
     background.style.backgroundColor = 'white';
     btn.style.backgroundColor = 'white';
     updateColor();
@@ -231,22 +270,58 @@ function lightTheme(){
 
 function darkTheme(){
     themeSelected = 2;
-    lightModeContainer.classList.toggle('hidden');
-    darkModeContainer.classList.toggle('hidden');
+    lightModeContainer.classList.toggle('invisible');
+    darkModeContainer.classList.toggle('invisible');
+    topScrollContainer.classList.remove('scroll-container');
+    bottomScrollContainer.classList.remove('scroll-container');
+    topScrollContainer.style.display = 'none';
+    bottomScrollContainer.style.display = 'none';
+    centerContainer.classList.toggle('center');
     background.style.backgroundColor = 'black';
     btn.style.backgroundColor = 'white';
     nameText.style.color = 'black';
     loc.style.color = 'black';
+    changeContent();
     updateColor();
 }
 
 function reset(){
     requestAnimationFrame(animate);
     themeSelected = 0;
-    lightModeContainer.classList.toggle('hidden');
-    darkModeContainer.classList.toggle('hidden');
     lightMode = 0;
     darkMode = 0;
+
+    buttonContainer.style.backgroundColor = 'white';
+    buttonContainer.style.width = '100vw';
+    buttonContainer.style.padding = '15px';
+    btn.style.margin = 'auto';
+    btn.style.padding = '10px 5px';
+    btn.style.height = 'auto';
+    btn.style.width = 'calc(180px + 20vw)';
+    btn.style.borderRadius = '0px';
+
+    lightModeContainer.classList.remove('invisible');
+    darkModeContainer.classList.remove('invisible');
+    topScrollContainer.classList.add('scroll-container');
+    bottomScrollContainer.classList.add('scroll-container');
+    topScrollContainer.style.display = 'block';
+    bottomScrollContainer.style.display = 'block';
+    centerContainer.classList.remove('center');
+
+
+    topLeft.classList.add('hidden');
+    topLeft.classList.remove('animateX');
+    topRight.classList.add('hidden');
+    topRight.classList.remove('animateX');
+    middleLeft.classList.add('hidden');
+    middleLeft.classList.remove('animateX');
+    middleRight.classList.add('hidden');
+    middleRight.classList.remove('animateX');
+    bottomLeft.classList.add('hidden');
+    bottomLeft.classList.remove('animateY');
+    bottomRight.classList.add('hidden');
+    bottomRight.classList.remove('animateY');
+
     updatePercentageText();
 }
 

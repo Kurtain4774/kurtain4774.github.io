@@ -86,11 +86,7 @@
                 href="https://www.linkedin.com/in/kurtis-quant/"
                 aria-label="LinkedIn"
               >
-                <img
-                  class="icon"
-                  src="pictures/linkedin.png"
-                  alt="LinkedIn"
-                />
+                <img class="icon" src="pictures/linkedin.png" alt="LinkedIn" />
               </a>
             </li>
             <!-- GitHub Link -->
@@ -99,11 +95,7 @@
                 href="https://github.com/Kurtain4774?tab=overview&from=2024-12-01&to=2024-12-12"
                 aria-label="GitHub"
               >
-                <img
-                  class="icon"
-                  src="pictures/github.png"
-                  alt="GitHub"
-                />
+                <img class="icon" src="pictures/github.png" alt="GitHub" />
               </a>
             </li>
             <!-- Instagram Link -->
@@ -126,7 +118,7 @@
       <!-- Main Content Section -->
       <main id="main-content-container">
         <!-- Light Theme Switch -->
-        <section class="scroll-container">
+        <section id="top-scroll-container" class="scroll-container">
           <div id="light-container" class="light-container arrow-container">
             <!-- Light Mode Toggle -->
             <a onclick="lightTheme()"><span class="arrow clickable"></span></a>
@@ -143,8 +135,26 @@
         </section>
 
         <!-- Main Button Section (Kurtis Quant Name and Location) -->
-        <section>
-          <div id="button-container">
+        <section id="center">
+          <div id="top-content-row" class="row">
+            <div id="top-left-container" class="left hidden">
+              <h1>
+                top left
+              </h1>
+            </div>
+            <div id="top-right-container" class="right hidden">
+              <h1>
+                top right
+              </h1>
+            </div>
+            
+          </div>
+          <div id="button-container" class="row">
+            <div id="middle-left-container" class="left hidden">
+              <h1>
+                middle left
+              </h1>
+            </div>
             <!-- Button for main content or interaction -->
             <button
               onclick="changeColor()"
@@ -155,11 +165,29 @@
               <h1 id="name">Kurtis Quant</h1>
               <p id="location">Bay Area, CA</p>
             </button>
+
+            <div id="middle-right-container" class="right hidden">
+              <h1>
+                middle right
+              </h1>
+            </div>
+          </div>
+          <div id="bottom-content-row" class="row">
+            <div id="bottom-left-container" class="bottom hidden">
+              <h1>
+                bottom left
+              </h1>
+            </div>
+            <div id="bottom-right-container" class="bottom hidden">
+              <h1>
+                bottom right
+              </h1>
+            </div>
           </div>
         </section>
 
         <!-- Dark Theme Switch -->
-        <section class="scroll-container">
+        <section id="bottom-scroll-container" class="scroll-container">
           <div id="dark-container" class="dark-container arrow-container">
             <!-- Dark Mode Toggle -->
             <div

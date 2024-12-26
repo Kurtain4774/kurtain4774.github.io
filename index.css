@@ -200,7 +200,7 @@ ul {
   display: none;
 }
 
-.hidden {
+.invisible {
   opacity: 0; /* Make the element invisible */
 }
 
@@ -301,3 +301,104 @@ ul {
 }
 
 
+.row{
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  margin: 5px;
+  justify-content: center;
+}
+#top-content-row{
+  align-items: start;
+}
+#bottom-content-row{
+  align-items: end;
+}
+#middle-left-container{
+  align-self: start;
+  height: 50%;
+}
+#middle-right-container{
+  align-self: end;
+  height: 50%;
+}
+
+.left, .right, .bottom{
+  
+  transition: transform 1s ease;
+  background-color: grey;
+  border-radius: 10px;
+}
+.offset-left{
+  transform: translateX(-10px);
+}
+.left{
+  transform: translateX(-50vw);
+}
+.right{
+  transform: translateX(50vw);
+}
+.bottom{
+  transform: translateY(50vh);
+}
+#top-left-container{
+  height: 100%;
+  flex-basis: 100%;
+  flex-grow: 2;
+  padding-right: 12.75px;
+}
+#top-right-container{
+  height: 150%;
+  margin-left: 10px;
+  flex-basis: 50%;
+  flex-grow: 1;
+}
+#middle-left-container{
+  margin-right: 10px;
+}
+#middle-right-container{
+  margin-left: 10px;
+}
+#middle-left-container, #middle-right-container, #btn{
+  width: 100%;
+  flex-basis: 100%;
+}
+#bottom-left-container{
+  flex-grow: 1;
+  height: 150%;
+  flex-basis: 50%;
+
+  margin-right: 10px;
+}
+#bottom-right-container{
+  flex-grow: 2;
+  height: 100%;
+  flex-basis: 100%;
+  padding-left: 12.75px;
+}
+
+.hidden{
+  visibility: hidden;
+}
+.animateX {
+  display: block; 
+  transform: translateX(0);
+  transition: transform 1s ease;
+}
+.animateY {
+  display: block; 
+  transform: translateY(0);
+  transition: transform 1s ease;
+}
+.center{
+  height: min(80vh, 80vw);
+  width: min(80vh, 80vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.center .row, .center #button-container{
+  height: 100%;
+}
