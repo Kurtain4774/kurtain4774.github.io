@@ -32,6 +32,7 @@ body {
   padding: 10px 5px;
   width: calc(180px + 20vw);
   height: auto;
+  z-index: 1;
 }
 
 .clickable:hover {
@@ -120,9 +121,6 @@ a {
 /* Transition containers */
 #dark-mode-container, #light-mode-container, #location, #name {
   transition: color 1s ease;
-}
-#btn:hover{
-  opacity: 0.8;
 }
 
 
@@ -290,6 +288,9 @@ ul {
   .front-row{
     display: none;
   }
+  .snow{
+    display: none;
+  }
 }
   /* Media query for smaller screens */
 @media screen and (min-width: 600px) {
@@ -330,12 +331,9 @@ ul {
   align-self: end;
   height: 50%;
 }
-
 .left, .right, .bottom{
   
   transition: transform 1s ease;
-  background-color: #232326;
-  color: white;
   border-radius: 10px;
 }
 .offset-left{
@@ -505,3 +503,44 @@ ul {
     opacity: 0;
   }
 }
+
+.snowflake {
+  color: #AEE0F2;
+  font-size: 2em;
+  font-family: Arial, sans-serif;
+  z-index: 0;
+}
+
+
+.slow-drop {
+  position: absolute;
+  bottom: 100%;
+  pointer-events: none;
+  animation: slow-drop 10s linear infinite;
+}
+
+.shake {
+  cursor: default;
+  animation: shake 3s ease-in-out infinite;
+}
+
+@keyframes slow-drop {
+  0% {
+    transform: translateY(0vh);
+  }
+  100% {
+    transform: translateY(110vh);
+  }
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  50%{
+    transform: translateX(10vw);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
