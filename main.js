@@ -277,12 +277,15 @@ function darkTheme(){
     topScrollContainer.style.display = 'none';
     bottomScrollContainer.style.display = 'none';
     centerContainer.classList.toggle('center');
-    background.style.backgroundColor = 'black';
     btn.style.backgroundColor = 'white';
+    btn.style.borderColor = 'transparent';
     nameText.style.color = 'black';
     loc.style.color = 'black';
     changeContent();
     updateColor();
+    makeItRain();
+    background.style.backgroundColor = '#111111';
+
 }
 
 function reset(){
@@ -290,7 +293,7 @@ function reset(){
     themeSelected = 0;
     lightMode = 0;
     darkMode = 0;
-
+    $(".rain").empty();
     buttonContainer.style.backgroundColor = 'white';
     buttonContainer.style.width = '100vw';
     buttonContainer.style.padding = '15px';
@@ -442,3 +445,37 @@ function scroll(event){
     }
     
 }
+
+var makeItRain = function () {
+    //clear out everything
+    $(".rain").empty();
+  
+    var increment = 0;
+    var drops = "";
+  
+    while (increment < 100) {
+      //couple random numbers to use for various randomizations
+      //random number between 98 and 1
+      var randoHundo = Math.floor(Math.random() * (98 - 1 + 1) + 1);
+      //random number between 5 and 2
+      var randoFiver = Math.floor(4 * Math.random() + 2);
+      //increment
+      increment += randoFiver;
+      //add in a new raindrop with various randomizations to certain CSS properties
+      drops +=
+        '<div class="drop" style="left: ' +
+        increment +
+        "%;animation-delay: 0." +
+        randoHundo +
+        "s; animation-duration: 0.5" +
+        randoHundo +
+        's;"><div class="stem" style="animation-delay: 0.' +
+        randoHundo +
+        "s; animation-duration: 0.5" +
+        randoHundo +
+        's;"></div></div>';
+    }
+  
+    $(".rain.front-row").append(drops);
+  };
+  

@@ -112,7 +112,7 @@ a {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 15vh;
+  gap: 5vh;
   height: 100%;
   width: 100%;
 }
@@ -283,7 +283,15 @@ ul {
   }
 }
 
-/* Media query for smaller screens */
+@media screen and (max-width: 600px) {
+  .rain{
+    display: none;
+  }
+  .front-row{
+    display: none;
+  }
+}
+  /* Media query for smaller screens */
 @media screen and (min-width: 600px) {
   #top-nav-full{
     display: inline;
@@ -326,7 +334,8 @@ ul {
 .left, .right, .bottom{
   
   transition: transform 1s ease;
-  background-color: grey;
+  background-color: #232326;
+  color: white;
   border-radius: 10px;
 }
 .offset-left{
@@ -344,14 +353,12 @@ ul {
 #top-left-container{
   height: 100%;
   flex-basis: 100%;
-  flex-grow: 2;
   padding-right: 12.75px;
 }
 #top-right-container{
   height: 150%;
   margin-left: 10px;
   flex-basis: 50%;
-  flex-grow: 1;
 }
 #middle-left-container{
   margin-right: 10px;
@@ -364,14 +371,12 @@ ul {
   flex-basis: 100%;
 }
 #bottom-left-container{
-  flex-grow: 1;
   height: 150%;
   flex-basis: 50%;
 
   margin-right: 10px;
 }
 #bottom-right-container{
-  flex-grow: 2;
   height: 100%;
   flex-basis: 100%;
   padding-left: 12.75px;
@@ -401,4 +406,102 @@ ul {
 
 .center .row, .center #button-container{
   height: 100%;
+}
+
+
+.full{
+  width: 100%;
+  height: 100%;
+}
+.middle-left-content, .middle-right-content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.info-text{
+  margin: 10px 0px;
+}
+.edu-title{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.edu{
+  list-style-type: circle;
+}
+.edu-list{
+  margin:0;
+}
+.compact-pic{
+  height: 100%;
+  width: 100%;
+  background-image: url("/pictures/walker2.png");
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+}
+.column{
+  display: flex;
+  flex-direction: column;
+  padding-left: 15px;
+  padding-right: 15px;
+  align-items: start;
+}
+.content-top-padding{
+  padding-top: 15px;
+}
+.middle-right-content h1{
+  padding: 15px;
+  font-size: 22px;
+}
+
+.rain {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+.drop {
+  position: absolute;
+  bottom: 100%;
+  animation: drop 0.5s linear infinite;
+}
+
+@keyframes drop {
+  0% {
+    transform: translateY(0vh);
+  }
+  75% {
+    transform: translateY(100vh);
+  }
+  100% {
+    transform: translateY(110vh);
+  }
+}
+
+.stem {
+  width: 2px;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.25));
+  animation: stem 0.5s linear infinite;
+}
+
+@keyframes stem {
+  0% {
+    opacity: 1;
+  }
+  65% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
 }

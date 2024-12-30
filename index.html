@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="index.css" />
     <link rel="stylesheet" href="nav.css" />
 
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
     <!-- Google Fonts: Roboto font family -->
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
@@ -24,6 +27,8 @@
     <div class="whole-screen" id="background">
       <!-- Overlay that may be used for menu or modal effects -->
       <div class="overlay" id="overlay"></div>
+      <div class="rain front-row"></div>
+
       <!-- Header Section with Navigation -->
       <header>
         <!-- Side Navigation for Mobile -->
@@ -138,22 +143,35 @@
         <section id="center">
           <div id="top-content-row" class="row">
             <div id="top-left-container" class="left hidden">
-              <h1>
-                top left
-              </h1>
+              <div class="full">
+                <div class="column">
+                  <h1 class="content-top-padding">Who Am I?</h1>
+                  <p class="info-text">Hi! I'm Kurtis, a web designer who enjoys creating visually pleasing websites.</p>
+
+                  <p class="info-text">In my free time, I enjoy watching anime and playing TeamFight Tactics</p>
+
+                  <p class="info-text">If you are looking to hire a web developer, feel free to contact me!</p>
+                </div>
+                
+              </div>
             </div>
             <div id="top-right-container" class="right hidden">
-              <h1>
-                top right
-              </h1>
+              <div class="full">
+                <div class="compact-pic">
+
+                </div>
+              </div>
             </div>
             
           </div>
           <div id="button-container" class="row">
             <div id="middle-left-container" class="left hidden">
-              <h1>
-                middle left
-              </h1>
+              <div class="full">
+                <div class="middle-left-content">
+                  <h1>Full Stack Developer</h1>
+                </div>
+                
+              </div>
             </div>
             <!-- Button for main content or interaction -->
             <button
@@ -167,21 +185,32 @@
             </button>
 
             <div id="middle-right-container" class="right hidden">
-              <h1>
-                middle right
-              </h1>
+              <div class="full">
+                <div class="middle-right-content">
+                  <h1>"The Biggest Mistake You Can Make in Life is Giving Up."</h1>
+                </div>
+              </div>
             </div>
           </div>
           <div id="bottom-content-row" class="row">
             <div id="bottom-left-container" class="bottom hidden">
-              <h1>
-                bottom left
-              </h1>
+              <div class="full">
+                <h1 class="content-top-padding">Technologies I Have Worked With</h1>
+              </div>
             </div>
             <div id="bottom-right-container" class="bottom hidden">
-              <h1>
-                bottom right
-              </h1>
+              <div class="full">
+                <div class="column">
+                  <h1 class="content-top-padding bottom-right-float-left">Education</h1>
+                  <p class="edu-title">Colorado School of Mines</p>
+                  <ul class="edu-list">
+                    <li class="edu">B.S., Computer Science</li>
+                    <li class="edu">Summa Cum Laude (GPA 3.9)</li>
+                  </ul>
+                  
+                </div>
+                  
+              </div>
             </div>
           </div>
         </section>
