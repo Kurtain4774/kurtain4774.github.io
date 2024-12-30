@@ -53,9 +53,7 @@ const buttonContainer = document.getElementById("button-container");
 const loc = document.getElementById("location");
 const nameText = document.getElementById("name");
 const topScrollContainer = document.getElementById("top-scroll-container");
-const bottomScrollContainer = document.getElementById(
-  "bottom-scroll-container"
-);
+const bottomScrollContainer = document.getElementById("bottom-scroll-container");
 const topLeft = document.getElementById("top-left-container");
 const topRight = document.getElementById("top-right-container");
 const middleLeft = document.getElementById("middle-left-container");

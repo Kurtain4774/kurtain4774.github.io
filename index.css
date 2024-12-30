@@ -21,9 +21,11 @@ body {
   height: auto;
   background-color: white;
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
-  padding: 15px;
+  padding: 16px;
 }
 
 /* Button styling with hover effect */
@@ -33,6 +35,7 @@ body {
   width: calc(180px + 20vw);
   height: auto;
   z-index: 1;
+  border: 0px transparent;
 }
 
 .clickable:hover {
@@ -113,7 +116,7 @@ a {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 5vh;
+  gap: 15vh;
   height: 100%;
   width: 100%;
 }
@@ -340,13 +343,13 @@ ul {
   transform: translateX(-10px);
 }
 .left{
-  transform: translateX(-50vw);
+  transform: translateX(-100vw);
 }
 .right{
-  transform: translateX(50vw);
+  transform: translateX(100vw);
 }
 .bottom{
-  transform: translateY(50vh);
+  transform: translateY(100vh);
 }
 #top-left-container{
   height: 100%;
@@ -382,6 +385,9 @@ ul {
 
 .hidden{
   visibility: hidden;
+  position: absolute;
+    top: -9999px;
+    left: -9999px;
 }
 .animateX {
   display: block; 
