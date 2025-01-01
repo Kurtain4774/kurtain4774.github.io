@@ -25,8 +25,8 @@ const gradients = [
   [253, 252, 251, 226, 209, 195],
 ];
 //color 1 is the inside color and color2 is the outside edge gradient color
-let color1 = { value: [0, 0, 0], change: [0, 0, 0], target: [0, 0, 0] };
-let color2 = { value: [0, 0, 0], change: [0, 0, 0], target: [0, 0, 0] };
+let backgroundColor = [{ value: [0, 0, 0], change: [0, 0, 0], target: [0, 0, 0] },
+                       { value: [0, 0, 0], change: [0, 0, 0], target: [0, 0, 0] }];
 
 let lastY = 0;
 
@@ -102,18 +102,18 @@ function checkTarget(color, target, change, loc) {
 //updates the colors to move towards their target colors
 function updateValues() {
   //update the values
-  color1.value = updateValue(color1.value, color1.change);
+  backgroundColor[0].value = updateValue(backgroundColor[0].value, backgroundColor[0].change);
   //check if we need a new target value and creates a new one if we do
-  let r1 = checkTarget(color1.value, color1.target, color1.change, 1);
+  let r1 = checkTarget(backgroundColor[0].value, backgroundColor[0].target, backgroundColor[0].change, 1);
   //update the new target and change arrays
-  color1.target = r1.target;
-  color1.change = r1.change;
+  backgroundColor[0].target = r1.target;
+  backgroundColor[0].change = r1.change;
 
   //do the same with the second color
-  color2.value = updateValue(color2.value, color2.change);
-  let r2 = checkTarget(color2.value, color2.target, color2.change, 2);
-  color2.target = r2.target;
-  color2.change = r2.change;
+  backgroundColor[1].value = updateValue(backgroundColor[1].value, backgroundColor[1].change);
+  let r2 = checkTarget(backgroundColor[1].value, backgroundColor[1].target, backgroundColor[1].change, 2);
+  backgroundColor[1].target = r2.target;
+  backgroundColor[1].change = r2.change;
 }
 
 //return an array of 3 ints that is at least somewhat different than the current color
@@ -133,7 +133,7 @@ function generateNewTarget(color, loc) {
 }
 
 //update values and set the colors to the new values
-function animate(timestamp) {
+function animate() {
   time++;
   if (scrollDelay > 0) {
     scrollDelay--;
@@ -170,20 +170,20 @@ function createColor(color) {
 //function sets the css values to the newly updated js values
 function updateColor() {
   if (themeSelected == 0) {
-    let c1 = createColor(color1.value);
-    let c2 = createColor(color2.value);
+    let c1 = createColor(backgroundColor[0].value);
+    let c2 = createColor(backgroundColor[1].value);
 
     background.style.background = `radial-gradient(${c1},${c2})`;
-    btn.style.background = `rgb(${color1.value[0]},${color1.value[1]},${color1.value[2]}, 0.7)`;
+    btn.style.background = `rgb(${backgroundColor[0].value[0]},${backgroundColor[0].value[1]},${backgroundColor[0].value[2]}, 0.7)`;
 
     //btn.style.border =  `2px solid ${c2}`;
 
     //buttonContainer.style.borderImage = `linear-gradient(to right, ${c1},${c2}) 1`
 
     let luminance =
-      0.2126 * (color1.value[0] / 255) +
-      0.7152 * (color1.value[1] / 255) +
-      0.0722 * (color1.value[2] / 255);
+      0.2126 * (backgroundColor[0].value[0] / 255) +
+      0.7152 * (backgroundColor[0].value[1] / 255) +
+      0.0722 * (backgroundColor[0].value[2] / 255);
 
     if (luminance >= 0.7) {
       for (let i = 0; i < percentageElements.length; i++) {
@@ -206,12 +206,12 @@ function updateColor() {
     }
   } else if (themeSelected == 1) {
     background.style.background = "white";
-    color1.value = [255, 255, 255];
-    color2.value = [255, 255, 255];
+    backgroundColor[0].value = [255, 255, 255];
+    backgroundColor[1].value = [255, 255, 255];
   } else if (themeSelected == 2) {
     background.style.background = "black";
-    color1.value = [0, 0, 0];
-    color2.value = [0, 0, 0];
+    backgroundColor[0].value = [0, 0, 0];
+    backgroundColor[1].value = [0, 0, 0];
   }
 }
 
@@ -357,13 +357,13 @@ function changeColor() {
 
   const gradientRGB = gradients[rand];
 
-  color1.value = [gradientRGB[0], gradientRGB[1], gradientRGB[2]];
-  color2.value = [gradientRGB[3], gradientRGB[4], gradientRGB[5]];
+  backgroundColor[0].value = [gradientRGB[0], gradientRGB[1], gradientRGB[2]];
+  backgroundColor[1].value = [gradientRGB[3], gradientRGB[4], gradientRGB[5]];
 
   updateColor();
 
   //also updates the color of the center button
-  let c1 = createColor(color1.value);
+  let c1 = createColor(backgroundColor[0].value);
   //document.getElementById("btn").style.backgroundColor =  `${c1}`;
 }
 
@@ -391,8 +391,8 @@ document.addEventListener("touchmove", function (event) {
   if (themeSelected == 0) {
     let change = -deltaY / 2.0;
 
-    color1.value = updateValue(color1.value, [change, change, change]);
-    color2.value = updateValue(color2.value, [change, change, change]);
+    backgroundColor[0].value = updateValue(backgroundColor[0].value, [change, change, change]);
+    backgroundColor[1].value = updateValue(backgroundColor[1].value, [change, change, change]);
 
     updateColor();
 
@@ -433,8 +433,8 @@ function scroll(event) {
   if (themeSelected == 0) {
     let change = -event.deltaY / 5.0;
 
-    color1.value = updateValue(color1.value, [change, change, change]);
-    color2.value = updateValue(color2.value, [change, change, change]);
+    backgroundColor[0].value = updateValue(backgroundColor[0].value, [change, change, change]);
+    backgroundColor[1].value = updateValue(backgroundColor[1].value, [change, change, change]);
 
     updateColor();
 
