@@ -54,12 +54,16 @@ const loc = document.getElementById("location");
 const nameText = document.getElementById("name");
 const topScrollContainer = document.getElementById("top-scroll-container");
 const bottomScrollContainer = document.getElementById("bottom-scroll-container");
-const topLeft = document.getElementById("top-left-container");
-const topRight = document.getElementById("top-right-container");
-const middleLeft = document.getElementById("middle-left-container");
-const middleRight = document.getElementById("middle-right-container");
-const bottomLeft = document.getElementById("bottom-left-container");
-const bottomRight = document.getElementById("bottom-right-container");
+
+const boxes = {
+  topLeft: document.getElementById("top-left-container"),
+  topRight: document.getElementById("top-right-container"),
+  middleLeft: document.getElementById("middle-left-container"),
+  middleRight: document.getElementById("middle-right-container"),
+  bottomLeft: document.getElementById("bottom-left-container"),
+  bottomRight: document.getElementById("bottom-right-container"),
+}
+
 const centerContainer = document.getElementById("center");
 //start the animation
 requestAnimationFrame(animate);
@@ -234,124 +238,70 @@ function changeContent() {
   btn.style.height = "100%";
   btn.style.width = "100%";
   btn.style.borderRadius = "10px";
-  topLeft.classList.toggle("hidden");
-  topLeft.classList.toggle("animateX");
-  topRight.classList.toggle("hidden");
-  topRight.classList.toggle("animateX");
-  middleLeft.classList.toggle("hidden");
-  middleLeft.classList.toggle("animateX");
-  middleRight.classList.toggle("hidden");
-  middleRight.classList.toggle("animateX");
-  bottomLeft.classList.toggle("hidden");
-  bottomLeft.classList.toggle("animateY");
-  bottomRight.classList.toggle("hidden");
-  bottomRight.classList.toggle("animateY");
+
+  for (const key in boxes) {
+    boxes[key].classList.remove("hidden");
+    boxes[key].classList.add("animatePos");
+  }
+}
+
+function changeTheme(){
+  lightModeContainer.classList.toggle("invisible");
+  darkModeContainer.classList.toggle("invisible");
+
+  topScrollContainer.classList.remove("scroll-container");
+  bottomScrollContainer.classList.remove("scroll-container");
+  topScrollContainer.style.display = "none";
+  bottomScrollContainer.style.display = "none";
+  centerContainer.classList.toggle("center");
+  btn.classList.remove("clickable");
+  btn.removeAttribute("onclick");
+  nameText.style.color = "black";
+  loc.style.color = "black";
 }
 
 function lightTheme() {
   themeSelected = 1;
   topNav.style.backgroundColor = "#f0f0f0";
-  lightModeContainer.classList.toggle("invisible");
-  darkModeContainer.classList.toggle("invisible");
-  topScrollContainer.classList.remove("scroll-container");
-  bottomScrollContainer.classList.remove("scroll-container");
-  topScrollContainer.style.display = "none";
-  bottomScrollContainer.style.display = "none";
-  centerContainer.classList.toggle("center");
-  btn.classList.remove("clickable");
-  nameText.style.color = "black";
-  loc.style.color = "black";
+  
+  changeTheme();
   changeContent();
+  
+  
+  
   background.style.backgroundColor = "white";
   btn.style.backgroundColor = "#f0f0f0";
-  btn.style.color = "black";
-  btn.style.borderColor = "transparent";
 
   updateColor();
   snow();
-  btn.removeAttribute("onclick");
-  const boxes = document.querySelectorAll(".box");
-  boxes.forEach((box) => {
-    box.style.backgroundColor = "#f2f2f2";
-    box.style.color = "black";
-  });
+  
+  for (const key in boxes) {
+    boxes[key].style.backgroundColor = "#f2f2f2";
+    boxes[key].style.color = "black";
+  }
 }
 
 function darkTheme() {
   themeSelected = 2;
-  lightModeContainer.classList.toggle("invisible");
-  darkModeContainer.classList.toggle("invisible");
-  topScrollContainer.classList.remove("scroll-container");
-  bottomScrollContainer.classList.remove("scroll-container");
-  topScrollContainer.style.display = "none";
-  bottomScrollContainer.style.display = "none";
-  centerContainer.classList.toggle("center");
-  btn.style.backgroundColor = "white";
-  btn.style.borderColor = "transparent";
-  btn.classList.remove("clickable");
-  nameText.style.color = "black";
-  loc.style.color = "black";
+  
+  changeTheme();
   changeContent();
+
+  btn.style.backgroundColor = "white";
+  background.style.backgroundColor = "#111111";
+
   updateColor();
   makeItRain();
-  background.style.backgroundColor = "#111111";
-  btn.removeAttribute("onclick");
 
-  const boxes = document.querySelectorAll(".box");
-  boxes.forEach((box) => {
-    box.style.backgroundColor = "#232326";
-    box.style.color = "white";
-  });
-  
-}
 
-function reset() {
-  requestAnimationFrame(animate);
-  themeSelected = 0;
-  lightMode = 0;
-  darkMode = 0;
-  btn.addEventListener("click", changeColor());
-  btn.classList.add('clickable');
-  $(".rain").empty();
-  $(".snow").empty();
-  buttonContainer.style.backgroundColor = "white";
-  buttonContainer.style.width = "100vw";
-  buttonContainer.style.padding = "15px";
-  btn.style.margin = "auto";
-  btn.style.padding = "10px 5px";
-  btn.style.height = "auto";
-  btn.style.width = "calc(180px + 20vw)";
-  btn.style.borderRadius = "0px";
-
-  lightModeContainer.classList.remove("invisible");
-  darkModeContainer.classList.remove("invisible");
-  topScrollContainer.classList.add("scroll-container");
-  bottomScrollContainer.classList.add("scroll-container");
-  topScrollContainer.style.display = "block";
-  bottomScrollContainer.style.display = "block";
-  centerContainer.classList.remove("center");
-
-  topLeft.classList.add("hidden");
-  topLeft.classList.remove("animateX");
-  topRight.classList.add("hidden");
-  topRight.classList.remove("animateX");
-  middleLeft.classList.add("hidden");
-  middleLeft.classList.remove("animateX");
-  middleRight.classList.add("hidden");
-  middleRight.classList.remove("animateX");
-  bottomLeft.classList.add("hidden");
-  bottomLeft.classList.remove("animateY");
-  bottomRight.classList.add("hidden");
-  bottomRight.classList.remove("animateY");
-
-  updatePercentageText();
+  for (const key in boxes) {
+    boxes[key].style.backgroundColor = "#232326";
+    boxes[key].style.color = "white";
+  }
 }
 
 //generates a new gradient
 function changeColor() {
-  if (themeSelected != 0) {
-    reset();
-  }
 
   let rand = getRandomInt(gradients.length);
 
@@ -498,17 +448,13 @@ var makeItRain = function () {
 };
 
 var snow = function () {
-  //clear out everything
   $(".snow").empty();
 
   var x = 0;
   var drops = "";
 
   while (x < 100) {
-    //couple random numbers to use for various randomizations
-    //random number between 98 and 1
     var randoHundo = 1+ Math.random() * 10;
-    //random number between 5 and 2
     var randoFiver = Math.floor(6 * Math.random() + 3);
     //increment
     x += randoFiver;

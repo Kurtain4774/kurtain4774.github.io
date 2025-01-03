@@ -389,13 +389,9 @@ ul {
     top: -9999px;
     left: -9999px;
 }
-.animateX {
+.animatePos {
   display: block; 
   transform: translateX(0);
-  transition: transform 1s ease;
-}
-.animateY {
-  display: block; 
   transform: translateY(0);
   transition: transform 1s ease;
 }
