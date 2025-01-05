@@ -246,6 +246,13 @@ function changeContent() {
 }
 
 function changeTheme(){
+  for (const key in boxes) {
+    boxes[key].classList.remove("left");
+    boxes[key].classList.remove("right");
+    boxes[key].classList.remove("bottom");
+
+  }
+
   lightModeContainer.classList.toggle("invisible");
   darkModeContainer.classList.toggle("invisible");
 
@@ -258,7 +265,6 @@ function changeTheme(){
   btn.removeAttribute("onclick");
   nameText.style.color = "black";
   loc.style.color = "black";
-  //body.style.overflow = 'auto';
 }
 
 function lightTheme() {
