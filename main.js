@@ -258,6 +258,7 @@ function changeTheme(){
   btn.removeAttribute("onclick");
   nameText.style.color = "black";
   loc.style.color = "black";
+  //body.style.overflow = 'auto';
 }
 
 function lightTheme() {
