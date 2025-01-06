@@ -39,6 +39,7 @@ let time = 0;
 
 let themeSelected = 0;
 
+const mainContent = document.getElementById("main-content-container");
 const btn = document.querySelector("#btn");
 const topNav = document.getElementById("top-nav");
 const body = document.body;
@@ -262,6 +263,11 @@ function changeTheme(){
   bottomScrollContainer.style.display = "none";
   centerContainer.classList.toggle("center");
   btn.classList.remove("clickable");
+  buttonContainer.classList.remove("row");
+  mainContent.classList.remove("flex-center-content");
+  mainContent.classList.remove("main-content-container");
+  mainContent.classList.add("flex-start-content");
+  buttonContainer.classList.add("name-plate");
   btn.removeAttribute("onclick");
   nameText.style.color = "black";
   loc.style.color = "black";
