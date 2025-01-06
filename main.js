@@ -267,6 +267,7 @@ function changeTheme(){
   mainContent.classList.remove("flex-center-content");
   mainContent.classList.remove("main-content-container");
   mainContent.classList.add("flex-start-content");
+  buttonContainer.classList.remove("row");
   buttonContainer.classList.add("name-plate");
   btn.removeAttribute("onclick");
   nameText.style.color = "black";
@@ -275,21 +276,21 @@ function changeTheme(){
 
 function lightTheme() {
   themeSelected = 1;
-  topNav.style.backgroundColor = "#f0f0f0";
-  
+  topNav.style.backgroundColor = "#d1d0cf";
+
   changeTheme();
   changeContent();
   
   
   
   background.style.backgroundColor = "white";
-  btn.style.backgroundColor = "#f0f0f0";
+  btn.style.backgroundColor = "#d1d0cf";
 
   updateColor();
   snow();
   
   for (const key in boxes) {
-    boxes[key].style.backgroundColor = "#f2f2f2";
+    boxes[key].style.backgroundColor = "#dadde0";
     boxes[key].style.color = "black";
   }
 }

@@ -32,13 +32,14 @@ html{
 /* Button container styling */
 #button-container {
   width: 100vw;
-  height: auto;
   background-color: white;
   padding: 16px;
   order: 1;
+  
 }
 .name-plate{
   height: 5em;
+  transform-style: preserve-3d;
 }
 #top-left-container{
   order: 2;
@@ -117,6 +118,18 @@ a {
   text-decoration: none;
   font-size: 20px;
 }
+.tech-row{
+  display: flex;
+  flex-direction: row;
+}
+.tech-grid{
+  display: grid;
+  grid-auto-rows: 60px;
+  grid-template-columns: repeat(auto-fit, minmax(125px,1fr));
+  gap: 5px;
+
+  padding: 15px;
+}
 
 .horizontal-bar-item a:hover {
   font-weight: 450;
@@ -130,6 +143,7 @@ a {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  height: auto;
 }
 .my-tech-logo-container{
   margin: 10px;
@@ -516,7 +530,7 @@ ul {
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
   
   .rain{
     display: none;
@@ -551,7 +565,7 @@ ul {
 }
 
 /* Screen width more than 600px */
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 800px) {
   #top-nav-full{
     display: inline;
   }
@@ -562,6 +576,13 @@ ul {
   .flex-start-content{
     justify-content: center;
     margin: 0;
+  }
+  .name-plate{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: auto;
   }
 
   .left{
@@ -580,7 +601,7 @@ ul {
 
   .center{
     width: 90vw;
-    max-width: 800px;
+    max-width: 1000px;
     height: auto;
     max-height: min(800px,90%);
     display: grid;
@@ -629,5 +650,14 @@ ul {
 @media screen and (min-height: 600px) {
   .scroll-container{
     display: block;
+  }
+}
+
+@media screen and (min-width: 800px) and (max-width: 1000px) {
+  .tech-grid{
+    grid-template-columns: repeat(auto-fit, minmax(90px,1fr));
+  }
+  .logo-text{
+    display: none;
   }
 }
