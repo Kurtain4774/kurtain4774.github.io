@@ -415,8 +415,7 @@ ul {
 .column{
   display: flex;
   flex-direction: column;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding: 15px 15px;
   align-items: start;
 }
 .content-top-padding{
