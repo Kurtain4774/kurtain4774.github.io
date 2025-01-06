@@ -392,7 +392,7 @@ function scroll(event) {
 
     backgroundColor[0].value = updateValue(backgroundColor[0].value, [change, change, change]);
     backgroundColor[1].value = updateValue(backgroundColor[1].value, [change, change, change]);
-
+    
     updateColor();
 
     change /= 2.5;
