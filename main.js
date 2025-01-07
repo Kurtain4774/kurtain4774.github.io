@@ -28,7 +28,7 @@ const gradients = [
 let backgroundColor = [{ value: [0, 0, 0], change: [0, 0, 0], target: [0, 0, 0] },
                        { value: [0, 0, 0], change: [0, 0, 0], target: [0, 0, 0] }];
 
-let lastY = 0;
+let lastTouchY = 0;
 
 //color mode variables
 let darkMode = 0;
@@ -39,8 +39,7 @@ let time = 0;
 
 let themeSelected = 0;
 
-const mainContent = document.getElementById("main-content-container");
-const btn = document.querySelector("#btn");
+const btn = document.getElementById("btn");
 const topNav = document.getElementById("top-nav");
 const body = document.body;
 const background = document.getElementById("background");
@@ -56,24 +55,11 @@ const nameText = document.getElementById("center-name-text");
 const topScrollContainer = document.getElementById("top-scroll-container");
 const bottomScrollContainer = document.getElementById("bottom-scroll-container");
 
-const boxes = {
-  topLeft: document.getElementById("top-left-container"),
-  topRight: document.getElementById("top-right-container"),
-  middleLeft: document.getElementById("middle-left-container"),
-  middleRight: document.getElementById("middle-right-container"),
-  bottomLeft: document.getElementById("bottom-left-container"),
-  bottomRight: document.getElementById("bottom-right-container"),
-}
-
-const centerContainer = document.getElementById("center");
 //start the animation
 requestAnimationFrame(animate);
 
 //when scrolling call the scroll function
 window.addEventListener("wheel", scroll, { passive: false });
-
-//set base theme
-localStorage.setItem('theme', 'light');
 
 //initialize a random starting background gradient color
 changeColor();
@@ -137,7 +123,7 @@ function generateNewTarget(color, loc) {
 }
 
 //update values and set the colors to the new values
-function animate(x) {
+function animate() {
   time++;
   if (scrollDelay > 0) {
     scrollDelay--;
@@ -146,8 +132,8 @@ function animate(x) {
     updateValues();
     updateColor();
     if (time % 10 == 0) {
-      lightMode = Math.round(Math.max(lightMode - time / 50, 0));
-      darkMode = Math.round(Math.max(darkMode - time / 50, 0));
+      lightMode = Math.floor(Math.max(lightMode - time / 50, 0));
+      darkMode = Math.floor(Math.max(darkMode - time / 50, 0));
     }
 
     updatePercentageText();
@@ -235,84 +221,18 @@ function printColor(color) {
   console.log(color[0] + " " + color[1] + " " + color[2]);
 }
 
-function changeContent() {
-  btn.classList.add("name-plate-content");
-  btn.classList.remove("btn");
-  for (const key in boxes) {
-    boxes[key].classList.remove("hidden");
-    boxes[key].classList.add("animate-center-box");
-  }
-}
-
-function changeTheme(){
-  for (const key in boxes) {
-    boxes[key].classList.remove("left");
-    boxes[key].classList.remove("right");
-    boxes[key].classList.remove("bottom");
-  }
-
-  lightModeContainer.classList.add("remove");
-  darkModeContainer.classList.add("remove");
-  topScrollContainer.classList.add("remove");
-  bottomScrollContainer.classList.add("remove");
-  topScrollContainer.classList.remove("scroll-container");
-  bottomScrollContainer.classList.remove("scroll-container");
-
-  centerContainer.classList.add("center");
-
-  btn.classList.remove("clickable");
-  btn.removeAttribute("onclick");
-
-  mainContent.classList.remove("flex-center-content");
-  mainContent.classList.remove("main-content-container");
-  mainContent.classList.add("flex-start-content");
-
-  buttonContainer.classList.remove("row");
-  buttonContainer.classList.add("name-plate");
-
-  changeToBlackText(nameText);
-  changeToBlackText(loc);
-}
-
 function lightTheme() {
-  themeSelected = 1;
-  topNav.classList.add("light-theme-top-nav");
-  topNav.classList.remove("base-theme-top-nav");
-
-  changeTheme();
-  changeContent();
-  
-  updateColor();
-  snow();
-  for (const key in boxes) {
-    boxes[key].classList.add("light-theme-box");
-  }
-
   localStorage.setItem('theme', 'light');
+  window.location.href = "./pages/about/about.html";
 }
 
 function darkTheme() {
-  themeSelected = 2;
-  
-  changeTheme();
-  changeContent();
-
-  btn.style.backgroundColor = "white";
-
-  updateColor();
-  makeItRain();
-
-
-  for (const key in boxes) {
-    boxes[key].classList.add("dark-theme-box");
-  }
-
   localStorage.setItem('theme', 'dark');
+   window.location.href = "./pages/about/about.html";
 }
 
 //generates a new gradient
 function changeColor() {
-
   let rand = getRandomInt(gradients.length);
 
   const gradientRGB = gradients[rand];
@@ -334,7 +254,7 @@ function updateValue(value, change) {
 
 document.addEventListener("touchstart", function (event) {
   // Get the first touch point's Y position
-  lastY = event.touches[0].pageY;
+  lastTouchY = event.touches[0].pageY;
 });
 // Add a touchmove listener to calculate deltaY
 document.addEventListener("touchmove", function (event) {
@@ -342,43 +262,16 @@ document.addEventListener("touchmove", function (event) {
   const currentY = event.touches[0].pageY;
 
   // Calculate the deltaY (difference in Y position)
-  const deltaY = currentY - lastY;
+  const deltaY = currentY - lastTouchY;
 
   if (themeSelected == 0) {
     let change = -deltaY / 2.0;
 
-    backgroundColor[0].value = updateValue(backgroundColor[0].value, [change, change, change]);
-    backgroundColor[1].value = updateValue(backgroundColor[1].value, [change, change, change]);
-
-    updateColor();
-
-    change /= 2.5;
-
-    if (change > 0) {
-      lightMode += change;
-      darkMode -= change;
-    } else {
-      darkMode += -change;
-      lightMode -= -change;
-    }
-
-    lightMode = Math.max(Math.min(100, lightMode), 0);
-    darkMode = Math.max(Math.min(100, darkMode), 0);
-
-    scrollDelay = Math.min(scrollDelay + 25, 400);
-
-    updatePercentageText();
-
-    if (lightMode == 100) {
-      lightTheme();
-    }
-    if (darkMode == 100) {
-      darkTheme();
-    }
+    scrollDetected(change);
   }
 
   // Update the lastY value for the next move event
-  lastY = currentY;
+  lastTouchY = currentY;
 
   // Prevent the default behavior (optional, if you want to prevent scrolling)
   event.preventDefault();
@@ -389,90 +282,37 @@ function scroll(event) {
   if (themeSelected == 0) {
     let change = -event.deltaY / 5.0;
 
-    backgroundColor[0].value = updateValue(backgroundColor[0].value, [change, change, change]);
-    backgroundColor[1].value = updateValue(backgroundColor[1].value, [change, change, change]);
-    
-    updateColor();
-
-    change /= 2.5;
-
-    if (change > 0) {
-      lightMode += change;
-      darkMode -= change;
-    } else {
-      darkMode += -change;
-      lightMode -= -change;
-    }
-
-    lightMode = Math.max(Math.min(100, lightMode), 0);
-    darkMode = Math.max(Math.min(100, darkMode), 0);
-
-    scrollDelay = Math.min(scrollDelay + 25, 400);
-
-    updatePercentageText();
-
-    if (lightMode == 100) {
-      lightTheme();
-    }
-    if (darkMode == 100) {
-      darkTheme();
-    }
+    scrollDetected(change);
   }
 }
 
-var makeItRain = function () {
-  //clear out everything
-  $(".rain").empty();
+function scrollDetected(change){
+  backgroundColor[0].value = updateValue(backgroundColor[0].value, [change, change, change]);
+  backgroundColor[1].value = updateValue(backgroundColor[1].value, [change, change, change]);
 
-  var increment = 0;
-  var drops = "";
+  updateColor();
 
-  while (increment < 100) {
-    //couple random numbers to use for various randomizations
-    //random number between 98 and 1
-    var randoHundo = Math.floor(Math.random() * (98 - 1 + 1) + 1);
-    //random number between 5 and 2
-    var randoFiver = Math.floor(5 * Math.random() + 10);
-    //increment
-    increment += randoFiver;
-    //add in a new raindrop with various randomizations to certain CSS properties
-    drops +=
-      '<div class="drop" style="left: ' +
-      increment +
-      "%;animation-delay: 1." +
-      randoHundo +
-      "s; animation-duration: 0.9" +
-      randoHundo +
-      's;"><div class="stem" style="animation-delay: 1.' +
-      randoHundo +
-      "s; animation-duration: 0.9" +
-      randoHundo +
-      's;"></div></div>';
+  change /= 2.5;
+
+  if (change > 0) {
+    lightMode += change;
+    darkMode -= change;
+  } else {
+    darkMode += -change;
+    lightMode -= -change;
   }
 
-  $(".rain.front-row").append(drops);
-};
+  lightMode = Math.max(Math.min(100, lightMode), 0);
+  darkMode = Math.max(Math.min(100, darkMode), 0);
 
-var snow = function () {
-  $(".snow").empty();
+  scrollDelay = Math.min(scrollDelay + 25, 400);
 
-  var x = 0;
-  var drops = "";
+  updatePercentageText();
 
-  while (x < 100) {
-    var randoHundo = 1+ Math.random() * 10;
-    var randoFiver = Math.floor(6 * Math.random() + 3);
-    //increment
-    x += randoFiver;
-    //add in a new raindrop with various randomizations to certain CSS properties
-    drops += `
-  <div class="slow-drop snowflake" style="left: ${x}%; animation-delay: ${randoHundo}s; animation-duration: 10s;">
-    <div class="horizontal-shake" style="animation-delay: ${randoHundo}s; animation-duration: 3.5s;">
-      ❅
-    </div>
-  </div>
-`;
+  if (lightMode == 100) {
+    lightTheme();
   }
-
-  $(".snow").append(drops);
-};
+  if (darkMode == 100) {
+    darkTheme();
+  }
+}

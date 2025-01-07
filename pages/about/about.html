@@ -10,6 +10,8 @@
 
     <link rel="stylesheet" href="about.css" />
     <link rel="stylesheet" href="../../nav.css" />
+    <link rel="stylesheet" href="../../index.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <!-- Google Fonts: Roboto font family -->
     <link
@@ -21,16 +23,17 @@
   <body>
     <div class="whole-screen" id="background">
       <div class="overlay" id="overlay"></div>
-
+<!-- Rainy background for  -->
+<div class="rain"></div>
+<!-- Overlay that may be used for menu or modal effects -->
+<div class="snow"></div>
       <header>
         <!-- Side Navigation for Mobile -->
         <section id="side-nav" class="side-nav vertical-bar">
           <h1 id="side-bar-title">Menu</h1>
           <a class="side-bar-item clickable" href="../../index.html">Home</a>
-          <a class="side-bar-item clickable" href="../projects/projects.html"
-            >Projects</a
-          >
-          <a class="side-bar-item clickable" href="about.html">About Me</a>
+          <a class="side-bar-item clickable" href="../projects/projects.html">Projects</a>
+          <a class="side-bar-item clickable active-class" href="about.html">About Me</a>
         </section>
 
         <!-- Top Navigation (Compact for Mobile & Full for Desktop) -->
@@ -118,7 +121,115 @@
         </section>
       </header>
 
-      <main id="main-content-container"></main>
+      <main id="main-content-container"  class="flex-start-content">
+        <section id="center" class="center">
+          <div id="top-left-container" class="left hidden box">
+            <div class="full">
+              <div class="center-text-flex-column">
+                <h1>About Me</h1>
+                <p>Hi! I'm Kurtis, a web designer who enjoys creating visually pleasing websites.</p>
+
+                <p">In my free time, I enjoy watching anime and playing TeamFight Tactics</p>
+
+                <p>If you are looking to hire a web developer, feel free to contact me!</p>
+              </div>
+              
+            </div>
+          </div>
+          <div id="top-right-container" class="right hidden box">
+            <div class="full">
+              <div class="compact-pic">
+
+              </div>
+            </div>
+          </div>
+          <div id="middle-left-container" class="left hidden box">
+            <div class="full">
+              <div class="middle-left-content">
+                <h1>Full Stack Developer</h1>
+              </div>
+              
+            </div>
+          </div>
+          <div id="button-container" class="name-plate">
+            
+            <!-- Button for main content or interaction -->
+            <a
+              onclick="changeColor()"
+              id="btn"
+              class="btn center-text-flex"
+              type="button"
+            >
+              <h1 id="center-name-text">Kurtis Quant</h1>
+              <p id="location">Bay Area, CA</p>
+          </a>
+
+            
+          </div>
+          <div id="middle-right-container" class="right hidden box">
+            <div class="full">
+              <div class="middle-right-content">
+                <h1>"The Biggest Mistake You Can Make in Life is Giving Up."</h1>
+              </div>
+            </div>
+          </div>
+          <div id="bottom-left-container" class="bottom hidden box">
+            <div class="full">
+              <h1 class="center-text-offset-top-padding">Technologies</h1>
+              <div class="tech-grid">
+                <div class="tech-row">
+                  <img class="logo-img" src="../../pictures/html-logo.png">
+                  <p class="logo-text">HTML5</p>
+                </div>
+                <div class="tech-row">
+                  <img class="logo-img" src="../../pictures/css-logo.png">
+                  <p class="logo-text">CSS3</p>
+                </div>
+                <div class="tech-row">
+                  <img class="logo-img" src="../../pictures/js-logo.png">
+                  <p class="logo-text">JavaScript</p>
+                </div>
+                <div class="tech-row">
+                  <img class="logo-img" src="../../pictures/react-logo.png">
+                  <p class="logo-text">React.js</p>
+                </div>
+                <div class="tech-row">
+                  <img class="logo-img" src="../../pictures/express-logo.png">
+                  <p class="logo-text">Express.js</p>
+                </div>
+                <div class="tech-row">
+                  <img class="logo-img" src="../../pictures/java-logo.png">
+                  <p class="logo-text">Java</p>
+                </div>
+                <div class="tech-row">
+                  <img class="logo-img" src="../../pictures/sql-logo.png">
+                  <p class="logo-text">SQL</p>
+                </div>
+                
+              </div>
+                    
+              
+            </div>
+          </div>
+          <div id="bottom-right-container" class="bottom hidden box">
+            <div class="full">
+              <div class="center-text-flex-column">
+                <h1 class="bottom-right-float-left">Education</h1>
+                <p class="edu-title">Colorado School of Mines</p>
+                <ul class="edu-list">
+                  <li class="edu">B.S., Computer Science</li>
+                  <li class="edu">Summa Cum Laude (GPA 3.9)</li>
+                </ul>
+                
+              </div>
+                
+            </div>
+          </div>
+
+
+
+        </section>
+      </main>
     </div>
     <script src="../../nav.js"></script>
     <script src="about.js"></script>
