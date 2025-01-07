@@ -72,6 +72,9 @@ requestAnimationFrame(animate);
 //when scrolling call the scroll function
 window.addEventListener("wheel", scroll, { passive: false });
 
+//set base theme
+localStorage.setItem('theme', 'light');
+
 //initialize a random starting background gradient color
 changeColor();
 
@@ -284,6 +287,8 @@ function lightTheme() {
   for (const key in boxes) {
     boxes[key].classList.add("light-theme-box");
   }
+
+  localStorage.setItem('theme', 'light');
 }
 
 function darkTheme() {
@@ -301,6 +306,8 @@ function darkTheme() {
   for (const key in boxes) {
     boxes[key].classList.add("dark-theme-box");
   }
+
+  localStorage.setItem('theme', 'dark');
 }
 
 //generates a new gradient
