@@ -52,7 +52,7 @@ const percentageElements = document.getElementsByClassName("arrow-container");
 const arrows = document.getElementsByClassName("arrow");
 const buttonContainer = document.getElementById("button-container");
 const loc = document.getElementById("location");
-const nameText = document.getElementById("name");
+const nameText = document.getElementById("center-name-text");
 const topScrollContainer = document.getElementById("top-scroll-container");
 const bottomScrollContainer = document.getElementById("bottom-scroll-container");
 
@@ -74,10 +74,6 @@ window.addEventListener("wheel", scroll, { passive: false });
 
 //initialize a random starting background gradient color
 changeColor();
-
-//initialize the center button background and text color
-//btn.style.backgroundColor = "white";
-btn.style.color = "black";
 
 //function to check if the color has reached its target returns a new target if it has reached its target
 function checkTarget(color, target, change, loc) {
@@ -138,12 +134,11 @@ function generateNewTarget(color, loc) {
 }
 
 //update values and set the colors to the new values
-function animate() {
+function animate(x) {
   time++;
   if (scrollDelay > 0) {
     scrollDelay--;
     time = 0;
-    //console.log(scrollDelay);
   } else {
     updateValues();
     updateColor();
@@ -172,6 +167,15 @@ function createColor(color) {
   return `rgb(${color[0]},${color[1]},${color[2]})`;
 }
 
+function changeToBlackText(element){
+  element.classList.add("black-text");
+  element.classList.remove("white-text");
+}
+function changeToWhiteText(element){
+  element.classList.add("white-text");
+  element.classList.remove("black-text");
+}
+
 //function sets the css values to the newly updated js values
 function updateColor() {
   if (themeSelected == 0) {
@@ -181,10 +185,6 @@ function updateColor() {
     background.style.background = `radial-gradient(${c1},${c2})`;
     btn.style.background = `rgb(${backgroundColor[0].value[0]},${backgroundColor[0].value[1]},${backgroundColor[0].value[2]}, 0.7)`;
 
-    //btn.style.border =  `2px solid ${c2}`;
-
-    //buttonContainer.style.borderImage = `linear-gradient(to right, ${c1},${c2}) 1`
-
     let luminance =
       0.2126 * (backgroundColor[0].value[0] / 255) +
       0.7152 * (backgroundColor[0].value[1] / 255) +
@@ -192,29 +192,31 @@ function updateColor() {
 
     if (luminance >= 0.7) {
       for (let i = 0; i < percentageElements.length; i++) {
-        percentageElements[i].style.color = "black";
+        changeToBlackText(percentageElements[i]);
       }
       for (let i = 0; i < arrows.length; i++) {
-        arrows[i].style.borderColor = "black";
+        arrows[i].classList.add("black-border");
+        arrows[i].classList.remove("white-border");
       }
-      nameText.style.color = "black";
-      loc.style.color = "black";
+      changeToBlackText(nameText);
+      changeToBlackText(loc);
     } else if (luminance <= 0.3) {
       for (let i = 0; i < percentageElements.length; i++) {
-        percentageElements[i].style.color = "white";
+        changeToWhiteText(percentageElements[i]);
       }
       for (let i = 0; i < arrows.length; i++) {
-        arrows[i].style.borderColor = "white";
+        arrows[i].classList.add("white-border");
+        arrows[i].classList.remove("black-border");
       }
-      nameText.style.color = "white";
-      loc.style.color = "white";
+      changeToWhiteText(nameText);
+      changeToWhiteText(loc);
     }
   } else if (themeSelected == 1) {
-    background.style.background = "white";
+    background.classList.add("white-background");
     backgroundColor[0].value = [255, 255, 255];
     backgroundColor[1].value = [255, 255, 255];
   } else if (themeSelected == 2) {
-    background.style.background = "black";
+    background.classList.add("black-background");
     backgroundColor[0].value = [0, 0, 0];
     backgroundColor[1].value = [0, 0, 0];
   }
@@ -231,18 +233,11 @@ function printColor(color) {
 }
 
 function changeContent() {
-  buttonContainer.style.backgroundColor = "transparent";
-  buttonContainer.style.width = "100%";
-  buttonContainer.style.padding = "0px";
-  btn.style.margin = "0px";
-  btn.style.padding = "0px";
-  btn.style.height = "100%";
-  btn.style.width = "100%";
-  btn.style.borderRadius = "10px";
-
+  btn.classList.add("name-plate-content");
+  btn.classList.remove("btn");
   for (const key in boxes) {
     boxes[key].classList.remove("hidden");
-    boxes[key].classList.add("animatePos");
+    boxes[key].classList.add("animate-center-box");
   }
 }
 
@@ -251,47 +246,43 @@ function changeTheme(){
     boxes[key].classList.remove("left");
     boxes[key].classList.remove("right");
     boxes[key].classList.remove("bottom");
-
   }
 
-  lightModeContainer.classList.toggle("invisible");
-  darkModeContainer.classList.toggle("invisible");
-
+  lightModeContainer.classList.add("remove");
+  darkModeContainer.classList.add("remove");
+  topScrollContainer.classList.add("remove");
+  bottomScrollContainer.classList.add("remove");
   topScrollContainer.classList.remove("scroll-container");
   bottomScrollContainer.classList.remove("scroll-container");
-  topScrollContainer.style.display = "none";
-  bottomScrollContainer.style.display = "none";
-  centerContainer.classList.toggle("center");
+
+  centerContainer.classList.add("center");
+
   btn.classList.remove("clickable");
-  buttonContainer.classList.remove("row");
+  btn.removeAttribute("onclick");
+
   mainContent.classList.remove("flex-center-content");
   mainContent.classList.remove("main-content-container");
   mainContent.classList.add("flex-start-content");
+
   buttonContainer.classList.remove("row");
   buttonContainer.classList.add("name-plate");
-  btn.removeAttribute("onclick");
-  nameText.style.color = "black";
-  loc.style.color = "black";
+
+  changeToBlackText(nameText);
+  changeToBlackText(loc);
 }
 
 function lightTheme() {
   themeSelected = 1;
-  topNav.style.backgroundColor = "#d1d0cf";
+  topNav.classList.add("light-theme-top-nav");
+  topNav.classList.remove("base-theme-top-nav");
 
   changeTheme();
   changeContent();
   
-  
-  
-  background.style.backgroundColor = "white";
-  btn.style.backgroundColor = "#d1d0cf";
-
   updateColor();
   snow();
-  
   for (const key in boxes) {
-    boxes[key].style.backgroundColor = "#dadde0";
-    boxes[key].style.color = "black";
+    boxes[key].classList.add("light-theme-box");
   }
 }
 
@@ -302,15 +293,13 @@ function darkTheme() {
   changeContent();
 
   btn.style.backgroundColor = "white";
-  background.style.backgroundColor = "#111111";
 
   updateColor();
   makeItRain();
 
 
   for (const key in boxes) {
-    boxes[key].style.backgroundColor = "#232326";
-    boxes[key].style.color = "white";
+    boxes[key].classList.add("dark-theme-box");
   }
 }
 
@@ -325,10 +314,6 @@ function changeColor() {
   backgroundColor[1].value = [gradientRGB[3], gradientRGB[4], gradientRGB[5]];
 
   updateColor();
-
-  //also updates the color of the center button
-  let c1 = createColor(backgroundColor[0].value);
-  //document.getElementById("btn").style.backgroundColor =  `${c1}`;
 }
 
 //set color to the new value clamp between 0 and 255
@@ -475,7 +460,7 @@ var snow = function () {
     //add in a new raindrop with various randomizations to certain CSS properties
     drops += `
   <div class="slow-drop snowflake" style="left: ${x}%; animation-delay: ${randoHundo}s; animation-duration: 10s;">
-    <div class="shake" style="animation-delay: ${randoHundo}s; animation-duration: 3.5s;">
+    <div class="horizontal-shake" style="animation-delay: ${randoHundo}s; animation-duration: 3.5s;">
       ❅
     </div>
   </div>

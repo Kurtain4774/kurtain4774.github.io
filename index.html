@@ -34,7 +34,7 @@
       <!-- Header Section with Navigation -->
       <header>
         <!-- Side Navigation for Mobile -->
-        <section id="side-nav" class="side-nav vertical-bar">
+        <section id="side-nav" class="side-nav">
           <h1 id="side-bar-title">Menu</h1>
           <a class="side-bar-item clickable" href="index.html">Home</a>
           <a class="side-bar-item clickable" href="pages/projects/projects.html"
@@ -46,7 +46,7 @@
         </section>
 
         <!-- Top Navigation (Compact for Mobile & Full for Desktop) -->
-        <section id="top-nav">
+        <section id="top-nav" class="base-theme-top-nav">
           <!-- Compact Top Navigation (For Mobile, shows menu button) -->
           <div id="top-nav-compact">
             <ul id="side" class="horizontal-bar">
@@ -145,13 +145,13 @@
         <section id="center">
           <div id="top-left-container" class="left hidden box">
             <div class="full">
-              <div class="column">
-                <h1 class="content-top-padding">About Me</h1>
-                <p class="info-text">Hi! I'm Kurtis, a web designer who enjoys creating visually pleasing websites.</p>
+              <div class="center-text-flex-column">
+                <h1>About Me</h1>
+                <p>Hi! I'm Kurtis, a web designer who enjoys creating visually pleasing websites.</p>
 
-                <p class="info-text">In my free time, I enjoy watching anime and playing TeamFight Tactics</p>
+                <p">In my free time, I enjoy watching anime and playing TeamFight Tactics</p>
 
-                <p class="info-text">If you are looking to hire a web developer, feel free to contact me!</p>
+                <p>If you are looking to hire a web developer, feel free to contact me!</p>
               </div>
               
             </div>
@@ -174,15 +174,15 @@
           <div id="button-container" class="row">
             
             <!-- Button for main content or interaction -->
-            <button
+            <a
               onclick="changeColor()"
               id="btn"
-              class="clickable"
+              class="clickable btn center-text-flex"
               type="button"
             >
-              <h1 id="name">Kurtis Quant</h1>
+              <h1 id="center-name-text">Kurtis Quant</h1>
               <p id="location">Bay Area, CA</p>
-            </button>
+          </a>
 
             
           </div>
@@ -195,7 +195,7 @@
           </div>
           <div id="bottom-left-container" class="bottom hidden box">
             <div class="full">
-              <h1 class="content-top-padding">Technologies</h1>
+              <h1 class="center-text-offset-top-padding">Technologies</h1>
               <div class="tech-grid">
                 <div class="tech-row">
                   <img class="logo-img" src="pictures/html-logo.png">
@@ -233,7 +233,7 @@
           </div>
           <div id="bottom-right-container" class="bottom hidden box">
             <div class="full">
-              <div class="column">
+              <div class="center-text-flex-column">
                 <h1 class="bottom-right-float-left">Education</h1>
                 <p class="edu-title">Colorado School of Mines</p>
                 <ul class="edu-list">
