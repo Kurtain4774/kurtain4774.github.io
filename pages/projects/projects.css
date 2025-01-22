@@ -21,6 +21,8 @@ body{
 }
 h1{
     text-align: center;
+    margin: 14px 0px;
+    font-weight: normal;
 }
 
 .whole-screen{
@@ -30,9 +32,27 @@ h1{
 .clickable:hover{
     cursor: pointer;
 }
+.project-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .project{
     display: flex;
     flex-direction: column;
     width: auto;
     height: auto;
+    margin-left: min(100px, 6vw);
+    margin-right: min(100px, 6vw);
+    padding-bottom: 20px;
+    gap: 1em;
+}
+
+.project-title{
+    text-align: left;
+    margin: 0;
+}
+.project-preview{
+    max-width: 100%;
+    max-height: 60vh;
 }
