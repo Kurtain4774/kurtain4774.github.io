@@ -1,277 +1,209 @@
-<!DOCTYPE html>
-
-<html lang="en">
+<!doctype html>
+<html lang="en" data-theme="light">
   <head>
-    <!-- Meta Information for the Page -->
     <meta charset="UTF-8" />
-    <meta name="description" content="Website Hub for Kurtis Quant" />
-    <meta name="keywords" content="Kurtis Quant, Kurtain4774" />
-    <meta name="author" content="Kurtis Quant" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Portfolio of Kurtis Quant, a Full-Stack Developer specializing in modern web technologies."
+    />
+    <title>Kurtis Quant | Full-Stack Developer</title>
 
-    <!-- Link to External CSS and Fonts -->
-    <link rel="stylesheet" href="index.css" />
-    <link rel="stylesheet" href="nav.css" />
-
-    <!-- jquery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-    <!-- Google Fonts: Roboto font family -->
+    <link rel="apple-touch-icon" href="favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
       rel="stylesheet"
     />
+
+    <link rel="stylesheet" href="styles.css" />
+
+    <meta property="og:title" content="Kurtis Quant | Portfolio" />
+    <meta
+      property="og:description"
+      content="Full-Stack Developer building performant web applications."
+    />
+    <meta property="og:url" content="https://kurtain4774.github.io/" />
   </head>
-
   <body>
-    <div class="whole-screen" id="background">
-      <!-- Overlay that may be used for menu or modal effects -->
-      <div class="overlay" id="overlay"></div>
-      <!-- Rainy background for  -->
-      <div class="rain"></div>
-      <!-- Overlay that may be used for menu or modal effects -->
-      <div class="snow"></div>
-      <!-- Header Section with Navigation -->
-      <header>
-        <!-- Side Navigation for Mobile -->
-        <section id="side-nav" class="side-nav">
-          <h1 id="side-bar-title" class="nav-header">Menu</h1>
-          <a class="side-bar-item clickable active-class" href="index.html">Home</a>
-          <a class="side-bar-item clickable" href="pages/projects/projects.html"
-            >Projects</a
-          >
-          <a class="side-bar-item clickable" href="pages/about/about.html"
-            >About Me</a
-          >
-        </section>
+    <a href="#main-content" class="skip-link">Skip to content</a>
 
-        <!-- Top Navigation (Compact for Mobile & Full for Desktop) -->
-        <section id="top-nav" class="base-theme-top-nav">
-          <!-- Compact Top Navigation (For Mobile, shows menu button) -->
-          <div id="top-nav-compact">
-            <ul id="side" class="horizontal-bar">
-              <!-- Menu Icon Button -->
-              <li id="side-bar" class="horizontal-bar-item top-bar-item">
-                <a onclick="openNav()">
-                  <img
-                    class="icon clickable"
-                    src="pictures/menu.png"
-                    alt="Menu"
-                  />
-                </a>
-              </li>
+    <header class="navbar">
+      <div class="nav-container">
+        <div class="logo">KQ</div>
 
-              <li class="compact-horizontal-bar-item top-bar-item">
-                <a>Home</a>
-              </li>
-            </ul>
-          </div>
+        <nav class="nav-links">
+          <a href="#projects">Projects</a>
+          <a href="#skills">Skills</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </nav>
 
-          <!-- Full Top Navigation (For Desktop, shows all links) -->
-          <nav id="top-nav-full">
-            <ul class="horizontal-bar">
-              <!-- Home Navigation Link -->
-              <li id="home-nav" class="horizontal-bar-item top-bar-item">
-                <a href="index.html">Home</a>
-              </li>
-              <!-- Projects Navigation Link -->
-              <li id="projects-nav" class="horizontal-bar-item top-bar-item">
-                <a href="pages/projects/projects.html">Projects</a>
-              </li>
-              <!-- About Me Navigation Link -->
-              <li id="about-nav" class="horizontal-bar-item top-bar-item">
-                <a href="pages/about/about.html">About Me</a>
-              </li>
-            </ul>
-          </nav>
+        <button
+          id="themeToggle"
+          class="theme-switcher"
+          aria-label="Switch to dark mode"
+        >
+          <span class="theme-icon">🌙</span>
+          <span class="theme-text">Dark Mode</span>
+        </button>
+      </div>
+    </header>
 
-          <!-- Social Media Icon Bar -->
-          <ul id="icon-bar" class="horizontal-bar">
-            <!-- LinkedIn Link -->
-            <li class="horizontal-bar-item top-bar-item">
-              <a
-                href="https://www.linkedin.com/in/kurtis-quant/"
-                aria-label="LinkedIn"
-              >
-                <img class="icon" src="pictures/linkedin.png" alt="LinkedIn" />
-              </a>
-            </li>
-            <!-- GitHub Link -->
-            <li class="horizontal-bar-item top-bar-item">
-              <a
-                href="https://github.com/Kurtain4774?tab=overview&from=2024-12-01&to=2024-12-12"
-                aria-label="GitHub"
-              >
-                <img class="icon" src="pictures/github.png" alt="GitHub" />
-              </a>
-            </li>
-            <!-- Instagram Link -->
-            <li class="horizontal-bar-item top-bar-item">
-              <a
-                href="https://www.instagram.com/kurtain4774/"
-                aria-label="Instagram"
-              >
-                <img
-                  class="icon"
-                  src="pictures/instagram.png"
-                  alt="Instagram"
-                />
-              </a>
-            </li>
-          </ul>
-        </section>
-      </header>
+    <main id="main-content">
+      <section class="hero">
+        <div class="hero-content">
+          <h1>Hi, I'm <span class="text-gradient">Kurtis Quant</span></h1>
+          <p>
+            Full-Stack Developer building <strong>performant</strong> and
+            <strong>scalable</strong> web applications.
+          </p>
 
-      <!-- Main Content Section -->
-      <main id="main-content-container" class="flex-center-content main-content-container-start">
-        <!-- Light Theme Switch -->
-        <section id="top-scroll-container" class="scroll-container">
-          <div id="light-container" class="light-container arrow-container">
-            <!-- Light Mode Toggle -->
-            <a onclick="lightTheme()"><span class="arrow clickable"></span></a>
-            <div
-              onclick="lightTheme()"
-              id="light-mode-container"
-              class="light-mode-container clickable"
-            >
-              <!-- Light Mode Label and Percentage -->
-              <label id="light-mode-text" class="clickable">Light</label>
-              <span id="light-mode-percentage-text">0%</span>
-            </div>
-          </div>
-        </section>
-
-        <!-- Main Button Section (Kurtis Quant Name and Location) -->
-        <section id="center">
-          <div id="top-left-container" class="left hidden box">
-            <div class="full">
-              <div class="center-text-flex-column">
-                <h1>About Me</h1>
-                <p>Hi! I'm Kurtis, a web designer who enjoys creating visually pleasing websites.</p>
-
-                <p">In my free time, I enjoy watching anime and playing TeamFight Tactics</p>
-
-                <p>If you are looking to hire a web developer, feel free to contact me!</p>
-              </div>
-              
-            </div>
-          </div>
-          <div id="top-right-container" class="right hidden box">
-            <div class="full">
-              <div class="compact-pic">
-
-              </div>
-            </div>
-          </div>
-          <div id="middle-left-container" class="left hidden box">
-            <div class="full">
-              <div class="middle-left-content">
-                <h1>Full Stack Developer</h1>
-              </div>
-              
-            </div>
-          </div>
-          <div id="button-container" class="row">
-            
-            <!-- Button for main content or interaction -->
+          <div class="hero-buttons">
+            <a href="#projects" class="btn">View Projects</a>
             <a
-              onclick="changeColor()"
-              id="btn"
-              class="clickable btn center-text-flex"
-              type="button"
+              href="https://github.com/Kurtain4774"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-outline"
+              >GitHub</a
             >
-              <h1 id="center-name-text">Kurtis Quant</h1>
-              <p id="location">Bay Area, CA</p>
-          </a>
-
-            
           </div>
-          <div id="middle-right-container" class="right hidden box">
-            <div class="full">
-              <div class="middle-right-content">
-                <h1>"The Biggest Mistake You Can Make in Life is Giving Up."</h1>
+        </div>
+      </section>
+
+      <section id="projects" class="projects">
+        <div class="section-container">
+          <h2>Featured Projects</h2>
+          <div class="project-grid">
+            <article class="project-card">
+              <h3>HabitFlow</h3>
+              <p>
+                Full-stack habit tracker with authentication, streak tracking,
+                and dashboards.
+              </p>
+              <span class="tech-stack"
+                >Next.js • Express • Prisma • PostgreSQL</span
+              >
+              <div class="links">
+                <a
+                  href="https://habit-tracker-nu-flame.vercel.app/"
+                  class="project-link"
+                  >Live Demo →</a
+                >
+                <a
+                  href="https://github.com/Kurtain4774/habit-tracker"
+                  class="project-link secondary"
+                  >Source Code</a
+                >
               </div>
+            </article>
+
+            <article class="project-card">
+              <h3>Portfolio Website</h3>
+              <p>
+                Personal developer portfolio optimized for performance and
+                accessibility.
+              </p>
+              <span class="tech-stack">HTML5 • CSS3 • JavaScript</span>
+              <div class="links">
+                <a href="https://kurtain4774.github.io/" class="project-link"
+                  >Live Demo →</a
+                >
+                <a
+                  href="https://github.com/Kurtain4774"
+                  class="project-link secondary"
+                  >Source Code</a
+                >
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="skills" class="skills">
+        <div class="section-container">
+          <h2>Technical Toolkit</h2>
+          <div class="skills-grid">
+            <div class="skill-category">
+              <h3>Frontend</h3>
+              <ul>
+                <li>React / Next.js</li>
+                <li>TypeScript</li>
+                <li>Tailwind CSS</li>
+              </ul>
+            </div>
+            <div class="skill-category">
+              <h3>Backend</h3>
+              <ul>
+                <li>Node.js / Express</li>
+                <li>PostgreSQL</li>
+                <li>Prisma ORM</li>
+              </ul>
+            </div>
+            <div class="skill-category">
+              <h3>Tools</h3>
+              <ul>
+                <li>Git / GitHub</li>
+                <li>Vercel</li>
+                <li>Docker</li>
+              </ul>
             </div>
           </div>
-          <div id="bottom-left-container" class="bottom hidden box">
-            <div class="full">
-              <h1 class="center-text-offset-top-padding">Technologies</h1>
-              <div class="tech-grid">
-                <div class="tech-row">
-                  <img class="logo-img" src="pictures/html-logo.png">
-                  <p class="logo-text">HTML5</p>
-                </div>
-                <div class="tech-row">
-                  <img class="logo-img" src="pictures/css-logo.png">
-                  <p class="logo-text">CSS3</p>
-                </div>
-                <div class="tech-row">
-                  <img class="logo-img" src="pictures/js-logo.png">
-                  <p class="logo-text">JavaScript</p>
-                </div>
-                <div class="tech-row">
-                  <img class="logo-img" src="pictures/react-logo.png">
-                  <p class="logo-text">React.js</p>
-                </div>
-                <div class="tech-row">
-                  <img class="logo-img" src="pictures/express-logo.png">
-                  <p class="logo-text">Express.js</p>
-                </div>
-                <div class="tech-row">
-                  <img class="logo-img" src="pictures/java-logo.png">
-                  <p class="logo-text">Java</p>
-                </div>
-                <div class="tech-row">
-                  <img class="logo-img" src="pictures/sql-logo.png">
-                  <p class="logo-text">SQL</p>
-                </div>
-                
-              </div>
-                    
-              
-            </div>
-          </div>
-          <div id="bottom-right-container" class="bottom hidden box">
-            <div class="full">
-              <div class="center-text-flex-column">
-                <h1 class="bottom-right-float-left">Education</h1>
-                <p class="edu-title">Colorado School of Mines</p>
-                <ul class="edu-list">
-                  <li class="edu">B.S., Computer Science</li>
-                  <li class="edu">Summa Cum Laude (GPA 3.9)</li>
-                </ul>
-                
-              </div>
-                
-            </div>
-          </div>
+        </div>
+      </section>
 
+      <section id="about" class="about">
+        <div class="section-container">
+          <h2>About Me</h2>
+          <p>
+            I’m a developer who bridges the gap between clean design and robust
+            engineering. I enjoy solving complex state management problems and
+            optimizing database queries.
+          </p>
+        </div>
+      </section>
 
+      <section id="contact" class="contact">
+        <div class="section-container contact-content">
+          <h2>Get In Touch</h2>
+          <p>Currently open to new opportunities and collaborations.</p>
 
-        </section>
-
-        <!-- Dark Theme Switch -->
-        <section id="bottom-scroll-container" class="scroll-container">
-          <div id="dark-container" class="dark-container arrow-container">
-            <!-- Dark Mode Toggle -->
-            <div
-              onclick="darkTheme()"
-              id="dark-mode-container"
-              class="dark-mode-container clickable"
+          <div class="contact-actions">
+            <a href="mailto:kmquant@yahoo.com" class="btn email-cta"
+              >Email Me</a
             >
-              <!-- Dark Mode Label and Percentage -->
-              <label class="clickable" id="dark-mode-text">Dark</label>
-              <span id="dark-mode-percentage-text">0%</span>
-            </div>
-            <!-- Dark Mode Arrow Link -->
-            <a onclick="darkTheme()"><span class="arrow clickable"></span></a>
-          </div>
-        </section>
-      </main>
-    </div>
 
-    <!-- External JavaScript File -->
-    <script src="main.js"></script>
-    <script src="nav.js"></script>
+            <div class="email-copy-container">
+              <span id="emailAddr">kmquant@yahoo.com</span>
+              <button onclick="copyEmail()" id="copyBtn">Copy</button>
+            </div>
+          </div>
+
+          <div class="social-icons">
+            <a
+              href="https://github.com/Kurtain4774"
+              target="_blank"
+              rel="noopener noreferrer"
+              >GitHub</a
+            >
+            <a
+              href="https://www.linkedin.com/in/kurtis-quant"
+              target="_blank"
+              rel="noopener noreferrer"
+              >LinkedIn</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Kurtis Quant. Built with passion and clean code.</p>
+    </footer>
+
+    <script src="script.js"></script>
   </body>
 </html>

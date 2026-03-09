@@ -1,0 +1,253 @@
+/* 1. Global Variables & Themes */
+:root {
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --bg: #ffffff;
+  --bg-secondary: #f8fafc;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --card-bg: #ffffff;
+  --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  --bg: #020617;
+  --bg-secondary: #0f172a;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border: #1e293b;
+  --card-bg: #1e293b;
+  --nav-bg: rgba(2, 6, 23, 0.8);
+  --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* 2. Reset & Base */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.section-container { max-width: 1100px; margin: 0 auto; padding: 80px 24px; }
+h2 { font-size: 2.5rem; margin-bottom: 3rem; text-align: center; }
+
+/* 3. Navigation */
+.navbar {
+  position: fixed; top: 0; width: 100%; height: 70px;
+  background: var(--nav-bg); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border); z-index: 1000;
+  display: flex; align-items: center;
+}
+.nav-container {
+  width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 24px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.logo { font-weight: 800; font-size: 1.5rem; color: var(--primary); }
+.nav-links a { margin-left: 2rem; font-weight: 500; }
+.nav-links a:hover { color: var(--primary); }
+
+/* Theme Switcher Button */
+.theme-switcher {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  padding: 6px 12px; border-radius: 20px; cursor: pointer;
+  color: var(--text); font-weight: 600; font-size: 0.8rem;
+}
+
+/* 4. Hero */
+.hero {
+  height: 100vh; display: flex; align-items: center; justify-content: center;
+  text-align: center; background: radial-gradient(circle at top right, var(--bg-secondary), var(--bg));
+}
+.hero h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; margin-bottom: 1.5rem; }
+.text-gradient {
+  background: linear-gradient(to right, var(--primary), #a855f7);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero p { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem; }
+
+/* 5. Buttons */
+.btn, .btn-outline { padding: 12px 28px; border-radius: 12px; font-weight: 600; display: inline-block; cursor: pointer; transition: var(--transition); }
+.btn { background: var(--primary); color: white; border: none; }
+.btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+.btn-outline { border: 1px solid var(--border); background: transparent; margin-left: 1rem; }
+.btn-outline:hover { border-color: var(--primary); background: var(--bg-secondary); }
+
+/* 6. Projects */
+.project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+.project-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  padding: 2rem; border-radius: 20px; box-shadow: var(--shadow); transition: var(--transition);
+}
+.project-card:hover { transform: translateY(-8px); border-color: var(--primary); }
+.tech-stack { display: block; margin: 1.5rem 0; font-family: monospace; color: var(--primary); font-size: 0.85rem; }
+.project-link { font-weight: 600; color: var(--primary); margin-right: 1.2rem; }
+.project-link.secondary { color: var(--text-muted); }
+
+/* 7. Skills */
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+.skill-category { background: var(--bg-secondary); padding: 2rem; border-radius: 20px; }
+.skill-category h3 { color: var(--primary); margin-bottom: 1rem; }
+.skill-category ul { list-style: none; }
+
+/* 8. Contact & Footer */
+.contact { text-align: center; }
+.social-icons { margin-top: 2rem; }
+.social-icons a { margin: 0 1rem; color: var(--text-muted); font-weight: 600; }
+footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); color: var(--text-muted); }
+
+/* 9. Utilities */
+.skip-link { position: absolute; top: -100px; left: 0; background: var(--primary); color: white; padding: 1rem; z-index: 2000; }
+.skip-link:focus { top: 0; }
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .btn-outline { margin-left: 0; margin-top: 1rem; width: 100%; text-align: center; }
+  .btn { width: 100%; text-align: center; }
+  .theme-text { display: none; }
+}
+
+button, .btn, .btn-outline {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 1. Remove default underlines and purple "visited" color */
+a, 
+a:visited, 
+a:hover, 
+a:active {
+  text-decoration: none; /* Removes the underline */
+  color: inherit;       /* Forces the link to use the parent text color */
+}
+
+/* 2. Specific fix for your navigation and project links */
+.nav-links a,
+.project-link,
+.social-icons a {
+  color: var(--text);   /* Use your defined variable */
+  text-decoration: none;
+}
+
+/* 3. High-end Hover State (Optional but Recommended) */
+/* Instead of an underline, we use a slight color shift or opacity change */
+.nav-links a:hover,
+.project-link:hover {
+  color: var(--primary); /* Turns blue instead of purple */
+  transition: color 0.2s ease;
+}
+
+/* 4. Special Case: The 'Live Demo' link */
+/* If you want this to stand out without an underline */
+.project-link {
+  font-weight: 600;
+  color: var(--primary);
+}
+/* 1. Spacing for the main button */
+.email-cta {
+    margin: 2rem 0; /* Adds 32px of space above and below the button */
+    display: inline-block;
+}
+
+/* 2. The Copy Email Pill */
+.email-copy-container {
+    display: inline-flex;
+    align-items: center;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    padding: 6px 6px 6px 16px; /* More padding on the left for the email text */
+    border-radius: 30px;
+    margin: 1rem auto;
+    max-width: fit-content;
+}
+
+#emailAddr {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-right: 12px;
+    color: var(--text-muted);
+}
+
+/* The Copy Button inside the pill */
+#copyBtn {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#copyBtn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+/* Center the entire contact section content */
+.contact-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* This centers children horizontally */
+    text-align: center;  /* This centers the text inside the p and h2 */
+}
+
+/* Container for the button and the copy pill */
+.contact-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem; /* Adds consistent space between the button and the pill */
+    margin: 2rem 0;
+}
+
+/* Removes the mobile tap highlight for a cleaner 'App' feel */
+button, 
+.btn, 
+.btn-outline, 
+.project-card,
+.theme-switcher {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure the "Email Me" button doesn't have stray margins affecting centering */
+.email-cta {
+    margin: 0; 
+    width: fit-content;
+}
+
+/* The Copy Pill needs to be flex to keep the text and button on one line */
+.email-copy-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    padding: 6px 6px 6px 16px;
+    border-radius: 30px;
+    width: fit-content; /* Prevents it from stretching to full width */
+}
+
+/* Social icons alignment */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+/* Responsive: stack them on small mobile */
+@media (max-width: 480px) {
+    .contact-links {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
