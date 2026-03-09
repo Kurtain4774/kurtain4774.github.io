@@ -1,104 +1,200 @@
 /**
- * Kurtis Quant Portfolio Logic
- * Handles: Theme Toggling, LocalStorage Persistence, and Smooth Scroll observers
+ * Kurtis Quant Portfolio Script
+ * Features:
+ * - Page load animation
+ * - Scroll reveal animations
+ * - Theme toggle with persistence
+ * - Mobile navigation
+ * - Copy email interaction
+ * - Tab focus title change
  */
 
-const themeToggle = document.getElementById('themeToggle');
-const htmlElement = document.documentElement;
+document.addEventListener("DOMContentLoaded", () => {
+  initTheme();
+  setupThemeToggle();
+  setupScrollAnimations();
+  setupMobileMenu();
+  setupCopyEmail();
+  setupTabFocusTitle();
+  setupPageLoadAnimation();
+});
 
-// 1. Initialize Theme from LocalStorage or System Preference
-const savedTheme = localStorage.getItem('theme');
-const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+/* =========================
+   THEME SYSTEM
+========================= */
 
-// Set initial theme
-if (savedTheme) {
-    htmlElement.setAttribute('data-theme', savedTheme);
+function initTheme() {
+  const root = document.documentElement;
+  const savedTheme = localStorage.getItem("theme");
+  const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  if (savedTheme) {
+    root.setAttribute("data-theme", savedTheme);
     updateToggleIcon(savedTheme);
-} else if (systemPrefersDark) {
-    htmlElement.setAttribute('data-theme', 'dark');
-    updateToggleIcon('dark');
+  } else if (systemPrefersDark) {
+    root.setAttribute("data-theme", "dark");
+    updateToggleIcon("dark");
+  }
 }
 
-// 2. Theme Toggle Event Listener
-themeToggle.addEventListener('click', () => {
-    const currentTheme = htmlElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    // Apply theme
-    htmlElement.setAttribute('data-theme', newTheme);
-    
-    // Save preference
-    localStorage.setItem('theme', newTheme);
-    
-    // Update UI
-    updateToggleIcon(newTheme);
-});
+function setupThemeToggle() {
+  const toggle = document.getElementById("themeToggle");
+  const root = document.documentElement;
 
-// Helper function for icon swap
+  if (!toggle) return;
+
+}
+
 function updateToggleIcon(theme) {
-    themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+  const toggle = document.getElementById("themeToggle");
+
+  if (!toggle) return;
+
+  toggle.textContent = theme === "dark" ? "Light Mode" : "Dark Mode";
 }
 
-// 3. Scroll Reveal Animation (Optional but Professional)
-// This makes sections fade in as you scroll down
-const observerOptions = {
-    threshold: 0.1
-};
+/* =========================
+   PAGE LOAD ANIMATION
+========================= */
 
-const observer = new IntersectionObserver((entries) => {
+function setupPageLoadAnimation() {
+  document.body.classList.add("page-loaded");
+}
+
+/* =========================
+   SCROLL REVEAL ANIMATIONS
+========================= */
+
+function setupScrollAnimations() {
+  const sections = document.querySelectorAll("section");
+
+  if (!sections.length) return;
+
+  const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
+      if (entry.isIntersecting) {
+        entry.target.classList.add("reveal-visible");
+        obs.unobserve(entry.target);
+      }
     });
-}, observerOptions);
+  }, { threshold: 0.15 });
 
-// Apply initial hidden state and observe sections
-document.querySelectorAll('section').forEach(section => {
-    section.style.opacity = '0';
-    section.style.transform = 'translateY(20px)';
-    section.style.transition = 'all 0.6s ease-out';
+  sections.forEach(section => {
+    section.classList.add("reveal");
     observer.observe(section);
+  });
+}
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+function setupMobileMenu() {
+  const menuBtn = document.getElementById("menuBtn");
+  const navLinks = document.querySelector(".nav-links");
+
+  if (!menuBtn || !navLinks) return;
+
+  menuBtn.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
+  });
+
+  document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("active");
+    });
+  });
+}
+
+/* =========================
+   COPY EMAIL BUTTON
+========================= */
+
+function setupCopyEmail() {
+  const btn = document.getElementById("copyBtn");
+  const emailEl = document.getElementById("emailAddr");
+
+  if (!btn || !emailEl) return;
+
+  btn.addEventListener("click", () => {
+    const email = emailEl.innerText;
+
+    navigator.clipboard.writeText(email).then(() => {
+      const original = btn.innerText;
+
+      btn.innerText = "Copied!";
+      btn.style.background = "var(--primary)";
+      btn.style.color = "white";
+
+      setTimeout(() => {
+        btn.innerText = original;
+        btn.style.background = "";
+        btn.style.color = "";
+      }, 2000);
+    }).catch(err => {
+      console.error("Clipboard copy failed:", err);
+    });
+  });
+}
+
+/* =========================
+   TAB TITLE CHANGE
+========================= */
+
+function setupTabFocusTitle() {
+  const originalTitle = document.title;
+
+  window.addEventListener("blur", () => {
+    document.title = "Come back! | KQ Portfolio";
+  });
+
+  window.addEventListener("focus", () => {
+    document.title = originalTitle;
+  });
+}
+
+const glow = document.querySelector(".cursor-glow");
+
+window.addEventListener("mousemove", (e) => {
+  glow.style.left = e.clientX + "px";
+  glow.style.top = e.clientY + "px";
 });
 
-function copyEmail() {
-    const email = document.getElementById('emailAddr').innerText;
-    navigator.clipboard.writeText(email);
-    const btn = document.getElementById('copyBtn');
-    btn.innerText = "Copied!";
-    setTimeout(() => { btn.innerText = "Copy"; }, 2000);
-}
-function copyEmail() {
-    const email = document.getElementById('emailAddr').innerText;
-    const btn = document.getElementById('copyBtn');
-    
-    navigator.clipboard.writeText(email).then(() => {
-        // Visual Feedback
-        const originalText = btn.innerText;
-        btn.innerText = "Copied!";
-        btn.style.background = "var(--primary)";
-        btn.style.color = "white";
+document.querySelectorAll(".btn, .btn-outline").forEach(button => {
 
-        // Reset after 2 seconds
-        setTimeout(() => {
-            btn.innerText = originalText;
-            btn.style.background = "";
-            btn.style.color = "";
-        }, 2000);
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
-    });
+  button.addEventListener("mousemove", e => {
+    const rect = button.getBoundingClientRect();
+
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    button.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+  });
+
+  button.addEventListener("mouseleave", () => {
+    button.style.transform = "translate(0,0)";
+  });
+
+});
+
+const toggle = document.getElementById("themeToggle");
+const root = document.documentElement;
+
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme === "dark") {
+  root.setAttribute("data-theme", "dark");
+  toggle.checked = true;
 }
 
-// Add this to your script.js
-window.onblur = () => { document.title = "Come back! | KQ Portfolio"; }
-window.onfocus = () => { document.title = "Kurtis Quant | Portfolio"; }
+toggle.addEventListener("change", () => {
 
-// 4. Close Mobile Nav on link click (If you add a mobile menu later)
-document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-        // Logic to close mobile menu would go here
-        console.log(`Navigating to ${link.getAttribute('href')}`);
-    });
+  if (toggle.checked) {
+    root.setAttribute("data-theme", "dark");
+    localStorage.setItem("theme", "dark");
+  } else {
+    root.setAttribute("data-theme", "light");
+    localStorage.setItem("theme", "light");
+  }
+
 });

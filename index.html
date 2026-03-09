@@ -9,8 +9,8 @@
     />
     <title>Kurtis Quant | Full-Stack Developer</title>
 
-    <link rel="apple-touch-icon" href="favicon.svg">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -28,9 +28,11 @@
     <meta property="og:url" content="https://kurtain4774.github.io/" />
   </head>
   <body>
+    <div class="cursor-glow"></div>
     <a href="#main-content" class="skip-link">Skip to content</a>
 
     <header class="navbar">
+      <button id="menuBtn" class="menu-btn">☰</button>
       <div class="nav-container">
         <div class="logo">KQ</div>
 
@@ -41,14 +43,14 @@
           <a href="#contact">Contact</a>
         </nav>
 
-        <button
-          id="themeToggle"
-          class="theme-switcher"
-          aria-label="Switch to dark mode"
-        >
-          <span class="theme-icon">🌙</span>
-          <span class="theme-text">Dark Mode</span>
-        </button>
+        <div class="theme-toggle">
+  <span class="theme-label">Dark Mode</span>
+
+  <label class="switch">
+    <input type="checkbox" id="themeToggle">
+    <span class="slider"></span>
+  </label>
+</div>
       </div>
     </header>
 
@@ -159,9 +161,12 @@
         <div class="section-container">
           <h2>About Me</h2>
           <p>
-            I’m a developer who bridges the gap between clean design and robust
-            engineering. I enjoy solving complex state management problems and
-            optimizing database queries.
+            I'm a full-stack developer focused on building clean, performant web
+            applications using modern tools like Next.js, TypeScript, and
+            PostgreSQL. I recently built HabitFlow, a full-stack habit tracking
+            application with authentication, streak tracking, and a dashboard
+            system. I enjoy designing systems that are both intuitive for users
+            and scalable for real-world usage.
           </p>
         </div>
       </section>
