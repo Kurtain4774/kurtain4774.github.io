@@ -15,10 +15,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const descEl  = document.getElementById("project-desc");
   const linkEl  = document.getElementById("project-link");
   const liveEl  = document.getElementById("project-live");
+  const mobileProjectsShowcase = document.getElementById("mobile-projects-showcase");
   const interiorEl = document.querySelector(".overlay-interior");
   const neonEl = document.querySelector(".overlay-neon");
   const contactForm = document.getElementById("contact-form");
   const contactStatus = document.getElementById("contact-status");
+  const mobileContactForm = document.getElementById("mobile-contact-form");
+  const mobileContactStatus = document.getElementById("mobile-contact-status");
+  const mobileHeroQuery = window.matchMedia("(max-width: 768px)");
 
   const updateProjectMeta = (p) => {
     titleEl.textContent = p.title;
@@ -27,11 +31,74 @@ document.addEventListener("DOMContentLoaded", () => {
     liveEl.href = p.liveUrl;
   };
 
+  const renderMobileProjects = () => {
+    if (!mobileProjectsShowcase) return;
+
+    const fragment = document.createDocumentFragment();
+    projects.forEach((project) => {
+      const article = document.createElement("article");
+      article.className = "mobile-project-card";
+
+      const frame = document.createElement("a");
+      frame.className = "mobile-project-frame";
+      frame.href = project.liveUrl;
+      frame.target = "_blank";
+      frame.rel = "noopener";
+      frame.setAttribute("aria-label", `Open ${project.title} live app`);
+
+      const image = document.createElement("img");
+      image.src = project.image;
+      image.alt = `${project.title} screenshot`;
+      image.loading = "eager";
+      frame.appendChild(image);
+
+      const panel = document.createElement("div");
+      panel.className = "mobile-project-panel";
+
+      const title = document.createElement("h3");
+      title.textContent = project.title;
+
+      const description = document.createElement("p");
+      description.textContent = project.description;
+
+      const links = document.createElement("div");
+      links.className = "mobile-project-links";
+
+      const live = document.createElement("a");
+      live.href = project.liveUrl;
+      live.target = "_blank";
+      live.rel = "noopener";
+      live.textContent = "Live App";
+
+      const learn = document.createElement("a");
+      learn.href = project.link;
+      learn.target = "_blank";
+      learn.rel = "noopener";
+      learn.textContent = "Learn More";
+
+      links.append(live, learn);
+      panel.append(title, description, links);
+      article.append(frame, panel);
+      fragment.appendChild(article);
+    });
+
+    mobileProjectsShowcase.replaceChildren(fragment);
+  };
+
   const hero = new HeroAnimator(rainCanvas);
   const aboutParticles = aboutCanvas && aboutSection
     ? new AboutParticleSystem(aboutCanvas, aboutSection)
     : null;
   const grid = new PixelGrid(pixelCanvas, projects, updateProjectMeta);
+  renderMobileProjects();
+  const cloudCanvas = document.getElementById("cloud-canvas");
+  const cloudMist = cloudCanvas && typeof CloudMistAnimator !== "undefined"
+    ? new CloudMistAnimator(cloudCanvas)
+    : null;
+  const birdCanvas = document.getElementById("bird-canvas");
+  const birdFlock = birdCanvas && typeof BirdFlock !== "undefined"
+    ? new BirdFlock(birdCanvas)
+    : null;
   let interiorCueTimer = null;
   let interiorFlickerTimer = null;
   let neonFlickerTimer = null;
@@ -135,11 +202,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
   scheduleNameNeonFlicker(neonReflickerDelay);
 
+  // Per-section visibility map. Animations only run while their section is on
+  // screen (or, for PixelGrid, while a transition is mid-flight).
+  const sectionIds = ["hero", "about", "projects", "contact"];
+  const sectionVisible = Object.create(null);
+  sectionIds.forEach(id => { sectionVisible[id] = false; });
+  // Start hero visible so rain/overlays don't lag the very first paint.
+  sectionVisible.hero = true;
+
+  const sectionEls = {};
+  sectionIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      sectionEls[id] = el;
+      if (sectionVisible[id]) el.classList.add("is-visible");
+    }
+  });
+
+  if ("IntersectionObserver" in window) {
+    const visibilityObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        const id = entry.target.id;
+        if (!(id in sectionVisible)) continue;
+        sectionVisible[id] = entry.isIntersecting;
+        entry.target.classList.toggle("is-visible", entry.isIntersecting);
+        if (id === "contact") {
+          document.body.classList.toggle("in-sky", entry.isIntersecting);
+        }
+      }
+    }, { rootMargin: "10% 0px", threshold: 0 });
+    sectionIds.forEach(id => {
+      if (sectionEls[id]) visibilityObserver.observe(sectionEls[id]);
+    });
+  } else {
+    // Fallback: assume everything is visible.
+    sectionIds.forEach(id => {
+      sectionVisible[id] = true;
+      if (sectionEls[id]) sectionEls[id].classList.add("is-visible");
+    });
+  }
+
   // shared rAF
   let running = false;
   let animationFrameId = null;
   let lastFrameTime = null;
+  let contactFrameCarry = 2;
   const targetFrameMs = 1000 / 60;
+  const contactFrameStep = 3;
   const loop = (now) => {
     animationFrameId = null;
     if (!running) return;
@@ -147,9 +256,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const delta = Math.min(Math.max(elapsed / targetFrameMs, 0.25), 2.5);
     lastFrameTime = now;
 
-    hero.step(delta);
-    if (aboutParticles) aboutParticles.step(delta);
-    grid.step(delta);
+    if (sectionVisible.hero && !mobileHeroQuery.matches) hero.step(delta);
+    if (aboutParticles && sectionVisible.about) aboutParticles.step(delta);
+    // Keep PixelGrid stepping when projects is visible OR while a transition
+    // is in flight, so scrolling away mid-transition still resolves cleanly.
+    if (sectionVisible.projects || grid.state !== 0) grid.step(delta);
+    if (sectionVisible.contact) {
+      contactFrameCarry += delta;
+      if (contactFrameCarry >= contactFrameStep) {
+        const contactDelta = Math.min(contactFrameCarry, contactFrameStep);
+        if (birdFlock) birdFlock.step(contactDelta);
+        contactFrameCarry = 0;
+      }
+    } else {
+      contactFrameCarry = contactFrameStep;
+    }
     animationFrameId = requestAnimationFrame(loop);
   };
   const startAnimationLoop = () => {
@@ -241,15 +362,116 @@ document.addEventListener("DOMContentLoaded", () => {
     el.addEventListener("click", () => handleAction(el.dataset.action));
   });
 
-  document.querySelectorAll(".skill-card[data-particle-color]").forEach(card => {
-    card.addEventListener("click", () => {
-      if (!aboutParticles) return;
+  const skillCards = Array.from(document.querySelectorAll(".skill-card[data-particle-color]"));
+  const stackAngles = [-4.5, 3.5, -2.25, 5, -3.25, 2.75, -5.25, 3, -1.75, 4.25, -3.75, 2];
+  const stackOffsets = [
+    [0, 0],
+    [3, 2],
+    [-4, 4],
+    [5, 6],
+    [-2, 8],
+    [4, 10],
+    [-5, 12],
+    [2, 14],
+    [-3, 16],
+    [5, 18],
+    [-1, 20],
+    [3, 22]
+  ];
+  let mobileSkillStackFrame = null;
+  let activeMobileSkillIndex = -1;
 
-      document.querySelectorAll(".skill-card.is-active").forEach(activeCard => {
-        activeCard.classList.remove("is-active");
-      });
-      card.classList.add("is-active");
-      aboutParticles.setColor(card.dataset.particleColor);
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+  const clearMobileSkillStack = () => {
+    activeMobileSkillIndex = -1;
+    skillCards.forEach((card) => {
+      card.classList.remove("is-mobile-stack-top");
+      card.removeAttribute("aria-hidden");
+      card.removeAttribute("tabindex");
+      [
+        "--stack-angle",
+        "--stack-entry",
+        "--stack-lift",
+        "--stack-opacity",
+        "--stack-scale",
+        "--stack-x",
+        "--stack-y",
+        "--stack-z"
+      ].forEach(prop => card.style.removeProperty(prop));
+    });
+  };
+
+  const setActiveSkill = (card) => {
+    if (!card) return;
+
+    document.querySelectorAll(".skill-card.is-active").forEach(activeCard => {
+      activeCard.classList.remove("is-active");
+    });
+    card.classList.add("is-active");
+    if (aboutParticles) aboutParticles.setColor(card.dataset.particleColor);
+  };
+
+  const updateMobileSkillStack = () => {
+    mobileSkillStackFrame = null;
+    if (!aboutSection || !skillCards.length) return;
+
+    if (!mobileHeroQuery.matches) {
+      clearMobileSkillStack();
+      return;
+    }
+
+    const rect = aboutSection.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1;
+    const scrollRange = Math.max(rect.height - viewportHeight, 1);
+    const progress = clamp(-rect.top / scrollRange, 0, 1);
+    const stackPosition = progress * (skillCards.length - 1);
+    const topIndex = Math.min(Math.ceil(stackPosition), skillCards.length - 1);
+
+    skillCards.forEach((card, index) => {
+      const entry = index === 0 ? 1 : clamp(stackPosition - index + 1, 0, 1);
+      const isVisible = entry > 0.001;
+      const isTopCard = index === topIndex;
+      const [x, y] = stackOffsets[index % stackOffsets.length];
+      const settledDepth = Math.max(0, topIndex - index);
+      const depthShift = Math.min(settledDepth, 6) * 2;
+
+      card.classList.toggle("is-mobile-stack-top", isTopCard);
+      card.setAttribute("aria-hidden", isTopCard ? "false" : "true");
+      card.tabIndex = isTopCard ? 0 : -1;
+      card.style.setProperty("--stack-angle", `${stackAngles[index % stackAngles.length]}deg`);
+      card.style.setProperty("--stack-entry", entry.toFixed(3));
+      card.style.setProperty("--stack-lift", `${((1 - entry) * 58).toFixed(2)}px`);
+      card.style.setProperty("--stack-opacity", isVisible ? "1" : "0");
+      card.style.setProperty("--stack-scale", (0.98 + entry * 0.02 - Math.min(settledDepth, 5) * 0.006).toFixed(3));
+      card.style.setProperty("--stack-x", `${(x - depthShift).toFixed(2)}px`);
+      card.style.setProperty("--stack-y", `${(y + depthShift).toFixed(2)}px`);
+      card.style.setProperty("--stack-z", String(index + 1));
+    });
+
+    if (activeMobileSkillIndex !== topIndex) {
+      activeMobileSkillIndex = topIndex;
+      setActiveSkill(skillCards[topIndex]);
+    }
+  };
+
+  const scheduleMobileSkillStack = () => {
+    if (mobileSkillStackFrame !== null) return;
+    mobileSkillStackFrame = requestAnimationFrame(updateMobileSkillStack);
+  };
+
+  updateMobileSkillStack();
+  window.addEventListener("scroll", scheduleMobileSkillStack, { passive: true });
+  window.addEventListener("resize", scheduleMobileSkillStack);
+  if (typeof mobileHeroQuery.addEventListener === "function") {
+    mobileHeroQuery.addEventListener("change", scheduleMobileSkillStack);
+  } else if (typeof mobileHeroQuery.addListener === "function") {
+    mobileHeroQuery.addListener(scheduleMobileSkillStack);
+  }
+
+  skillCards.forEach(card => {
+    card.addEventListener("click", () => {
+      setActiveSkill(card);
     });
   });
 
@@ -465,16 +687,80 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  if (mobileContactForm) {
+    let sendingMobileContact = false;
+
+    const setMobileContactStatus = (message, isError = false) => {
+      if (!mobileContactStatus) return;
+
+      mobileContactStatus.textContent = message;
+      mobileContactStatus.classList.toggle("is-error", isError);
+    };
+
+    mobileContactForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (sendingMobileContact) return;
+
+      const formData = new FormData(mobileContactForm);
+      const nameInput = document.getElementById("mobile-contact-name");
+      const emailInput = document.getElementById("mobile-contact-email");
+      const messageInput = document.getElementById("mobile-contact-message");
+      const submitButton = mobileContactForm.querySelector("button[type='submit']");
+
+      const name = String(formData.get("name") || "").trim();
+      const email = String(formData.get("email") || "").trim();
+      const message = String(formData.get("message") || "").trim();
+
+      if (!name) {
+        setMobileContactStatus("Name is required.", true);
+        if (nameInput) nameInput.focus();
+        return;
+      }
+      if (!email || (emailInput && !emailInput.validity.valid)) {
+        setMobileContactStatus("Valid email is required.", true);
+        if (emailInput) emailInput.focus();
+        return;
+      }
+      if (!message) {
+        setMobileContactStatus("Message is required.", true);
+        if (messageInput) messageInput.focus();
+        return;
+      }
+
+      const subject = `Portfolio contact from ${name}`;
+      const body = [
+        `Name: ${name}`,
+        `Email: ${email}`,
+        "",
+        message
+      ].join("\n");
+      const mailtoUrl = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+      sendingMobileContact = true;
+      if (submitButton) submitButton.disabled = true;
+      setMobileContactStatus("Opening your email app.", false);
+
+      window.setTimeout(() => {
+        window.location.href = mailtoUrl;
+        sendingMobileContact = false;
+        if (submitButton) submitButton.disabled = false;
+      }, prefersReducedMotion.matches ? 0 : 250);
+    });
+  }
+
   // Trigger explosion / speed up if animating
-  document.getElementById("arrow-trigger").addEventListener("click", () => grid.explode(1));
-  document.getElementById("arrow-trigger-left").addEventListener("click", () => grid.explode(-1));
-  document.getElementById("next-btn").addEventListener("click", () => grid.explode(1));
-  document.getElementById("prev-btn").addEventListener("click", () => grid.explode(-1));
-  pixelCanvas.addEventListener("click", () => {
-    if (grid.state !== 0) {
-      grid.speed = 4;
-    } else {
-      window.open(projects[grid.currentIndex].liveUrl, "_blank", "noopener");
-    }
-  });
+  const nextTrigger = document.getElementById("arrow-trigger");
+  const prevTrigger = document.getElementById("arrow-trigger-left");
+
+  if (nextTrigger) nextTrigger.addEventListener("click", () => grid.explode(1));
+  if (prevTrigger) prevTrigger.addEventListener("click", () => grid.explode(-1));
+  if (pixelCanvas) {
+    pixelCanvas.addEventListener("click", () => {
+      if (grid.state !== 0) {
+        grid.speed = 4;
+      } else {
+        window.open(projects[grid.currentIndex].liveUrl, "_blank", "noopener");
+      }
+    });
+  }
 });

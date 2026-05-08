@@ -29,6 +29,23 @@
       <div class="overlay overlay-interior"></div>
     </div>
 
+    <div class="mobile-hero-panel" aria-labelledby="mobile-hero-title">
+      <div class="mobile-hero-particles" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="mobile-hero-card">
+        <h1 id="mobile-hero-title">Kurtis Quant</h1>
+        <p>Full Stack Developer</p>
+      </div>
+    </div>
+
     <div class="zone zone-projects" data-action="projects" aria-label="Projects">
       <div class="zone-hint"><kbd class="hint-key">E</kbd> View Projects</div>
     </div>
@@ -199,13 +216,17 @@
         <a id="project-live" href="#" target="_blank" rel="noopener">Live</a>
       </div>
     </div>
-    <div class="mobile-nav-projects">
-      <button class="next-btn" id="prev-btn">&larr; Prev</button>
-      <button class="next-btn" id="next-btn">Next &rarr;</button>
-    </div>
+    <div class="mobile-projects-showcase" id="mobile-projects-showcase" aria-label="Project showcase"></div>
   </section>
 
   <section id="contact" aria-labelledby="contact-title">
+    <div class="sky-decor" aria-hidden="true">
+      <canvas id="cloud-canvas"></canvas>
+      <canvas id="bird-canvas"></canvas>
+      <div class="cloud-layer cloud-layer--back"></div>
+      <div class="cloud-layer cloud-layer--mid"></div>
+      <div class="cloud-layer cloud-layer--front"></div>
+    </div>
     <div class="contact-content">
       <div class="contact-copy">
         <p class="section-kicker">Contact</p>
@@ -214,7 +235,7 @@
           Send a note about a project, role, collaboration, or anything else worth talking through.
         </p>
         <div class="social-links" aria-label="Profile and resume links">
-          <a class="social-link resume-link" href="./assets/Kurtis_Quant_Resume.pdf" download="Kurtis_Quant_Resume.pdf" aria-label="Download resume">
+          <a class="social-link resume-link" href="./assets/Resume.pdf" download="Kurtis_Quant_Resume.pdf" aria-label="Download resume">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M13 3v9.17l3.59-3.58L18 10l-6 6-6-6 1.41-1.41L11 12.17V3h2z"></path>
               <path d="M5 19h14v2H5v-2z"></path>
@@ -304,6 +325,14 @@
           <p id="contact-status" class="contact-status" role="status" aria-live="assertive"></p>
         </div>
       </form>
+
+      <form id="mobile-contact-form" class="mobile-contact-form" action="mailto:kurtismquant@gmail.com" method="post" enctype="text/plain" novalidate>
+        <input id="mobile-contact-name" name="name" type="text" autocomplete="name" placeholder="Name" aria-label="Name" required />
+        <input id="mobile-contact-email" name="email" type="email" autocomplete="email" placeholder="Email" aria-label="Email" required />
+        <textarea id="mobile-contact-message" name="message" rows="5" placeholder="Message" aria-label="Message" required></textarea>
+        <button type="submit">Send</button>
+        <p id="mobile-contact-status" class="mobile-contact-status" role="status" aria-live="assertive"></p>
+      </form>
     </div>
   </section>
 
@@ -311,6 +340,8 @@
   <script src="pixelGrid.js" defer></script>
   <script src="aboutParticles.js" defer></script>
   <script src="hero.js" defer></script>
+  <script src="cloudMist.js" defer></script>
+  <script src="birdFlock.js" defer></script>
   <script src="main.js" defer></script>
 </body>
 </html>

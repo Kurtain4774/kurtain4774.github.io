@@ -15,18 +15,28 @@ class PixelGrid {
     this.tiles = [];
     this.images = [];
 
+    this.idleDirty = true;
+    this._resizeScheduled = false;
+
     this.preloadImages().then(() => {
       this.resize();
       this.buildTiles(this.images[this.currentIndex]);
       this.placeAtHome();
+      this.idleDirty = true;
       this.onProjectChange(this.projects[this.currentIndex]);
     });
 
     window.addEventListener("resize", () => {
-      if (this.state !== STATE.IDLE || !this.images[this.currentIndex]) return;
-      this.resize();
-      this.buildTiles(this.images[this.currentIndex]);
-      this.placeAtHome();
+      if (this._resizeScheduled) return;
+      this._resizeScheduled = true;
+      requestAnimationFrame(() => {
+        this._resizeScheduled = false;
+        if (this.state !== STATE.IDLE || !this.images[this.currentIndex]) return;
+        this.resize();
+        this.buildTiles(this.images[this.currentIndex]);
+        this.placeAtHome();
+        this.idleDirty = true;
+      });
     });
   }
 
@@ -43,17 +53,20 @@ class PixelGrid {
   }
 
   resize() {
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     const rect = this.canvas.getBoundingClientRect();
-    this.canvas.width = rect.width * dpr;
-    this.canvas.height = rect.height * dpr;
-    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-    this.ctx.scale(dpr, dpr);
+    this.canvas.width = Math.round(rect.width * dpr);
+    this.canvas.height = Math.round(rect.height * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     this.w = rect.width;
     this.h = rect.height;
   }
 
   sampleColors(img) {
+    if (!this.w || !this.h || !img || !img.width || !img.height) {
+      return { cols: 0, rows: 0, colors: [] };
+    }
+
     // Step 1: downsample source to 1500x938 so we never read pixels from the full 2K image.
     const SW = 1500, SH = 938;
     const pre = document.createElement("canvas");
@@ -144,6 +157,7 @@ class PixelGrid {
 
     this.state = STATE.SCRAMBLING;
     this.frame = 0;
+    this.idleDirty = true;
     for (const t of this.tiles) {
       t.sx = this.w * 0.15 + Math.random() * this.w * 0.7;
       t.sy = this.h * 0.15 + Math.random() * this.h * 0.7;
@@ -169,6 +183,8 @@ class PixelGrid {
   }
 
   drawImage(img) {
+    if (!this.w || !this.h || !img || !img.width || !img.height) return;
+
     const ctx = this.ctx;
     const scale = Math.min(this.w / img.width, this.h / img.height);
     const dw = img.width * scale;
@@ -182,13 +198,19 @@ class PixelGrid {
 
   step(delta = 1) {
     const ctx = this.ctx;
-    ctx.clearRect(0, 0, this.w, this.h);
 
     if (this.state === STATE.IDLE) {
+      // Idle: only redraw the still image when something invalidates it
+      // (initial load, resize, end of transition).
+      if (!this.idleDirty) return;
+      ctx.clearRect(0, 0, this.w, this.h);
       const img = this.images[this.currentIndex];
       if (img && img.complete) this.drawImage(img);
+      this.idleDirty = false;
       return;
     }
+
+    ctx.clearRect(0, 0, this.w, this.h);
 
     if (this.state === STATE.SCRAMBLING) {
       let allSettled = true;
@@ -222,6 +244,7 @@ class PixelGrid {
       if (settled) {
         this.placeAtHome();
         this.state = STATE.IDLE;
+        this.idleDirty = true;
         return;
       }
     }

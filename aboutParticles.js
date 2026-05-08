@@ -29,6 +29,7 @@ class AboutParticleSystem {
     this.color = { r: 255, g: 255, b: 255 };
     this.targetColor = { r: 255, g: 255, b: 255 };
     this.reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    this.mobileView = window.matchMedia("(max-width: 768px)");
 
     this.resize();
     this.bindEvents();
@@ -152,10 +153,14 @@ class AboutParticleSystem {
     this.ctx.clearRect(0, 0, this.width, this.height);
     this.updateParticles(delta);
     this.updateCursorParticle(delta);
-    this.applyCursorInfluence(delta);
-    this.drawLines();
+    if (!this.mobileView.matches) {
+      this.applyCursorInfluence(delta);
+      this.drawLines();
+    }
     this.drawParticles();
-    this.drawCursorParticle();
+    if (!this.mobileView.matches) {
+      this.drawCursorParticle();
+    }
   }
 
   updateParticles(delta = 1) {
@@ -278,8 +283,22 @@ class AboutParticleSystem {
   drawParticles() {
     const visibilityRadius = 1800;
     const { r, g, b } = this.color;
+    const simpleMobileParticles = this.mobileView.matches;
 
     this.particles.forEach((particle) => {
+      if (simpleMobileParticles) {
+        const shimmer = 0.72 + Math.sin(particle.twinkle) * 0.18;
+        const alpha = Math.min(0.72, 0.42 * shimmer);
+
+        this.ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        this.ctx.shadowBlur = 6;
+        this.ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        this.ctx.beginPath();
+        this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        this.ctx.fill();
+        return;
+      }
+
       const mouse = this.particleMouseStrength(particle, visibilityRadius);
       const glow = mouse.strength * mouse.strength;
       const nearBoost = Math.max(0, 1 - mouse.distance / 500);
