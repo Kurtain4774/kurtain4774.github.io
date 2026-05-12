@@ -377,6 +377,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let heroDragStartX = 0;
     let heroDragStartY = 0;
     let heroStartScrollLeft = 0;
+    let heroPanStartTarget = null;
 
     heroPanorama.querySelectorAll("img").forEach((img) => {
       img.draggable = false;
@@ -393,6 +394,7 @@ document.addEventListener("DOMContentLoaded", () => {
       heroDragStartX = e.clientX;
       heroDragStartY = e.clientY;
       heroStartScrollLeft = heroPanorama.scrollLeft;
+      heroPanStartTarget = e.target;
       heroPanorama.setPointerCapture?.(e.pointerId);
       if (e.pointerType === "mouse") e.preventDefault();
     });
@@ -421,7 +423,14 @@ document.addEventListener("DOMContentLoaded", () => {
         window.setTimeout(() => {
           suppressHeroClick = false;
         }, 0);
+      } else if (heroPanStartTarget) {
+        const clickedZone = heroPanStartTarget.closest?.(".zone");
+        if (clickedZone) {
+          dismissHeroHotspots();
+          handleAction(clickedZone.dataset.action);
+        }
       }
+      heroPanStartTarget = null;
     };
 
     heroPanorama.addEventListener("pointerup", stopHeroPan);
@@ -967,6 +976,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const socialHint = document.getElementById("social-hint");
+  document.querySelectorAll(".social-link").forEach(link => {
+    link.addEventListener("click", () => {
+      if (birdFlock) birdFlock.addBoids(15);
+      if (socialHint && !socialHint.classList.contains("is-hidden")) {
+        socialHint.classList.add("is-hidden");
+      }
+    });
+  });
+
   const backToTop = document.getElementById("back-to-top");
   if (backToTop) {
     const contactSection = document.getElementById("contact");
@@ -976,5 +995,117 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     observer.observe(contactSection);
     backToTop.addEventListener("click", () => scrollToSection("hero"));
+  }
+
+  // ===== Settings popup =====
+  const settingsBtn     = document.getElementById("settings-btn");
+  const settingsPopup   = document.getElementById("settings-popup");
+  const settingsClose   = document.getElementById("settings-close");
+  const settingsToggle  = document.getElementById("settings-particles-toggle");
+  const settingsCount   = document.getElementById("settings-particle-count");
+  const settingsCountDisplay = document.getElementById("settings-count-display");
+  const settingsAboutColor    = document.getElementById("settings-about-color");
+  const settingsProjectsColor = document.getElementById("settings-projects-color");
+  const settingsContactColor  = document.getElementById("settings-contact-color");
+
+  const allParticleSystems = () =>
+    [aboutParticles, projectParticles, heroMobileParticles, contactMobileParticles].filter(Boolean);
+
+  const openSettingsPopup = () => {
+    if (!settingsPopup) return;
+    settingsPopup.hidden = false;
+    settingsBtn.setAttribute("aria-expanded", "true");
+    settingsClose && settingsClose.focus();
+  };
+
+  const closeSettingsPopup = () => {
+    if (!settingsPopup) return;
+    settingsPopup.hidden = true;
+    settingsBtn.setAttribute("aria-expanded", "false");
+    settingsBtn && settingsBtn.focus();
+  };
+
+  if (settingsBtn) {
+    settingsBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      settingsPopup.hidden ? openSettingsPopup() : closeSettingsPopup();
+    });
+  }
+
+  if (settingsClose) {
+    settingsClose.addEventListener("click", closeSettingsPopup);
+  }
+
+  if (settingsPopup) {
+    settingsPopup.addEventListener("click", (e) => e.stopPropagation());
+  }
+
+  document.addEventListener("click", () => {
+    if (settingsPopup && !settingsPopup.hidden) closeSettingsPopup();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && settingsPopup && !settingsPopup.hidden) {
+      e.stopPropagation();
+      closeSettingsPopup();
+    }
+  });
+
+  const settingsCountRow = document.getElementById("settings-count-row");
+  const settingsColorRows = settingsPopup
+    ? Array.from(settingsPopup.querySelectorAll(".settings-row")).filter(
+        r => r.querySelector(".settings-color-input")
+      )
+    : [];
+
+  const applyParticlesEnabled = (enabled) => {
+    allParticleSystems().forEach(ps => ps.setEnabled(enabled));
+    if (birdCanvas) {
+      birdCanvas.style.visibility = enabled ? "" : "hidden";
+      if (!enabled) {
+        const ctx = birdCanvas.getContext("2d");
+        if (ctx) ctx.clearRect(0, 0, birdCanvas.width, birdCanvas.height);
+      }
+    }
+    const disabledRows = [settingsCountRow, ...settingsColorRows];
+    disabledRows.forEach(row => {
+      if (row) row.classList.toggle("settings-disabled", !enabled);
+    });
+  };
+
+  if (settingsToggle) {
+    settingsToggle.addEventListener("change", () => {
+      applyParticlesEnabled(settingsToggle.checked);
+    });
+  }
+
+  if (settingsCount) {
+    settingsCount.addEventListener("input", () => {
+      const count = parseInt(settingsCount.value, 10);
+      if (settingsCountDisplay) settingsCountDisplay.textContent = String(count);
+      allParticleSystems().forEach(ps => ps.setCountOverride(count));
+    });
+  }
+
+  if (settingsAboutColor) {
+    settingsAboutColor.addEventListener("input", () => {
+      const color = settingsAboutColor.value;
+      if (aboutParticles) aboutParticles.setColor(color);
+      if (heroMobileParticles) heroMobileParticles.setColor(color);
+    });
+  }
+
+  if (settingsProjectsColor) {
+    settingsProjectsColor.addEventListener("input", () => {
+      if (projectParticles) projectParticles.setColor(settingsProjectsColor.value);
+    });
+  }
+
+  if (settingsContactColor) {
+    settingsContactColor.addEventListener("input", () => {
+      const color = settingsContactColor.value;
+      if (contactMobileParticles) contactMobileParticles.setColor(color);
+      if (birdFlock) birdFlock.setColor(color);
+    });
   }
 });

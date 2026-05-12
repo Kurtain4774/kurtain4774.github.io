@@ -28,6 +28,8 @@ class AboutParticleSystem {
     };
     this.color = { r: 255, g: 255, b: 255 };
     this.targetColor = { r: 255, g: 255, b: 255 };
+    this.enabled = true;
+    this.countOverride = null;
     this.reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     this.mobileView = window.matchMedia("(max-width: 768px)");
 
@@ -73,7 +75,7 @@ class AboutParticleSystem {
     this.cursorParticle.targetX = this.mouse.x;
     this.cursorParticle.targetY = this.mouse.y;
 
-    this.particleCount = this.getParticleCountForArea();
+    this.particleCount = this.countOverride !== null ? this.countOverride : this.getParticleCountForArea();
 
     if (this.particles.length === 0) {
       this.createParticles(this.particleCount);
@@ -121,6 +123,17 @@ class AboutParticleSystem {
     }
   }
 
+  setEnabled(enabled) {
+    this.enabled = enabled;
+    if (!enabled) this.ctx.clearRect(0, 0, this.width, this.height);
+  }
+
+  setCountOverride(n) {
+    this.countOverride = (n === null) ? null : Math.max(20, Math.min(500, n));
+    this.particleCount = this.countOverride !== null ? this.countOverride : this.getParticleCountForArea();
+    this.syncParticleCount();
+  }
+
   setColor(hexColor) {
     const parsedColor = this.hexToRgb(hexColor);
     if (!parsedColor) return;
@@ -144,6 +157,7 @@ class AboutParticleSystem {
 
   step(delta = 1) {
     if (!this.ctx || this.width === 0 || this.height === 0) return;
+    if (!this.enabled) return;
 
     const colorEase = this.easeAmount(0.08, delta);
     this.color.r += (this.targetColor.r - this.color.r) * colorEase;

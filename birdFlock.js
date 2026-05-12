@@ -78,8 +78,15 @@ class BirdFlock {
   }
 
   getCountForWidth() {
-    if (this.reducedMotion.matches) return 4;
-    return this.width <= 768 ? 8 : 100;
+    if (this.reducedMotion.matches) return 2;
+    return this.width <= 768 ? 3 : 8;
+  }
+
+  addBoids(n = 15) {
+    if (this.reducedMotion.matches) return;
+    const cap = this.width <= 768 ? 40 : 160;
+    this.count = Math.min(this.count + n, cap);
+    this.syncCount();
   }
 
   createBoid(x, y) {

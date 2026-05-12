@@ -13,7 +13,48 @@
     <a href="#projects">Projects</a>
     <a href="#contact">Contact</a>
     <a href="https://github.com/Kurtain4774" target="_blank" rel="noopener">GitHub</a>
+    <button type="button" id="settings-btn" class="nav-settings-btn" aria-label="Open particle settings" aria-expanded="false" aria-haspopup="dialog">Settings</button>
   </nav>
+
+  <div id="settings-popup" class="settings-popup" role="dialog" aria-label="Particle Settings" aria-modal="true" hidden>
+    <div class="settings-header">
+      <span class="settings-title">Particle Settings</span>
+      <button type="button" id="settings-close" class="settings-close-btn" aria-label="Close settings">&#215;</button>
+    </div>
+
+    <div class="settings-section-label">Display</div>
+
+    <div class="settings-row">
+      <label for="settings-particles-toggle" class="settings-row-label">Enable Particles</label>
+      <div class="settings-toggle-wrap">
+        <input type="checkbox" id="settings-particles-toggle" class="settings-toggle-input" checked role="switch">
+        <label for="settings-particles-toggle" class="settings-toggle-track" aria-hidden="true"></label>
+      </div>
+    </div>
+
+    <div class="settings-row" id="settings-count-row">
+      <label for="settings-particle-count" class="settings-row-label">Count</label>
+      <div class="settings-slider-wrap">
+        <input type="range" id="settings-particle-count" class="settings-slider" min="20" max="500" step="10" value="150">
+        <span id="settings-count-display" class="settings-slider-val">150</span>
+      </div>
+    </div>
+
+    <div class="settings-section-label">Colors</div>
+
+    <div class="settings-row">
+      <label for="settings-about-color" class="settings-row-label">About</label>
+      <input type="color" id="settings-about-color" class="settings-color-input" value="#ffffff">
+    </div>
+    <div class="settings-row">
+      <label for="settings-projects-color" class="settings-row-label">Projects</label>
+      <input type="color" id="settings-projects-color" class="settings-color-input" value="#ffffff">
+    </div>
+    <div class="settings-row">
+      <label for="settings-contact-color" class="settings-row-label">Contact</label>
+      <input type="color" id="settings-contact-color" class="settings-color-input" value="#ffffff">
+    </div>
+  </div>
 
   <section id="hero">
     <div class="hero-panorama" aria-label="Scrollable ramen shop scene">
@@ -113,15 +154,6 @@
           </div>
           <span>React</span>
         </button>
-        <button class="skill-card" type="button" style="--accent: #ffffff;" data-particle-color="#ffffff" aria-label="Set particles to Next.js white">
-          <div class="skill-icon" aria-hidden="true">
-            <svg viewBox="0 0 48 48" role="img">
-              <circle cx="24" cy="24" r="17"></circle>
-              <path d="M17 32V16l15 19V16"></path>
-            </svg>
-          </div>
-          <span>Next.js</span>
-        </button>
         <button class="skill-card" type="button" style="--accent: #73cf54;" data-particle-color="#73cf54" aria-label="Set particles to Node.js green">
           <div class="skill-icon" aria-hidden="true">
             <svg viewBox="0 0 48 48" role="img">
@@ -134,9 +166,8 @@
         <button class="skill-card" type="button" style="--accent: #d6d6d6;" data-particle-color="#d6d6d6" aria-label="Set particles to Express silver">
           <div class="skill-icon" aria-hidden="true">
             <svg viewBox="0 0 48 48" role="img">
-              <path d="M11 28h26"></path>
-              <path d="M14 20h16c4 0 7 3 7 8s-3 8-7 8H14z"></path>
-              <text x="23" y="31">ex</text>
+              <path d="M11 24h26"></path>
+              <path d="M11 16h26M11 32h18"></path>
             </svg>
           </div>
           <span>Express</span>
@@ -150,14 +181,14 @@
           </div>
           <span>MongoDB</span>
         </button>
-        <button class="skill-card" type="button" style="--accent: #7c8fa6;" data-particle-color="#7c8fa6" aria-label="Set particles to Prisma slate">
+        <button class="skill-card" type="button" style="--accent: #ffffff;" data-particle-color="#ffffff" aria-label="Set particles to Next.js white">
           <div class="skill-icon" aria-hidden="true">
             <svg viewBox="0 0 48 48" role="img">
-              <path d="M18 38 30 8l8 30H18z"></path>
-              <path d="M30 8v30"></path>
+              <circle cx="24" cy="24" r="17"></circle>
+              <path d="M17 32V16l15 19V16"></path>
             </svg>
           </div>
-          <span>Prisma</span>
+          <span>Next.js</span>
         </button>
         <button class="skill-card" type="button" style="--accent: #38bdf8;" data-particle-color="#38bdf8" aria-label="Set particles to Tailwind cyan">
           <div class="skill-icon" aria-hidden="true">
@@ -168,14 +199,17 @@
           </div>
           <span>Tailwind CSS</span>
         </button>
-        <button class="skill-card" type="button" style="--accent: #ff5f8f;" data-particle-color="#ff5f8f" aria-label="Set particles to JWT pink">
+        <button class="skill-card" type="button" style="--accent: #f05032;" data-particle-color="#f05032" aria-label="Set particles to Git orange">
           <div class="skill-icon" aria-hidden="true">
             <svg viewBox="0 0 48 48" role="img">
-              <path d="M24 8 38 16v16L24 40 10 32V16z"></path>
-              <path d="M24 8v32M10 16l28 16M38 16 10 32"></path>
+              <circle cx="14" cy="12" r="5"></circle>
+              <circle cx="14" cy="36" r="5"></circle>
+              <circle cx="34" cy="22" r="5"></circle>
+              <path d="M14 17v14"></path>
+              <path d="M14 17c0-2 4-4 8-2s8 5 8 7"></path>
             </svg>
           </div>
-          <span>JWT Auth</span>
+          <span>Git &amp; GitHub</span>
         </button>
         <button class="skill-card" type="button" style="--accent: #c084fc;" data-particle-color="#c084fc" aria-label="Set particles to REST API violet">
           <div class="skill-icon" aria-hidden="true">
@@ -187,23 +221,14 @@
           </div>
           <span>REST APIs</span>
         </button>
-        <button class="skill-card" type="button" style="--accent: #ff4655;" data-particle-color="#ff4655" aria-label="Set particles to Riot Games red">
+        <button class="skill-card" type="button" style="--accent: #3178c6;" data-particle-color="#3178c6" aria-label="Set particles to TypeScript blue">
           <div class="skill-icon" aria-hidden="true">
             <svg viewBox="0 0 48 48" role="img">
-              <path d="M11 12h26l-5 24H16z"></path>
-              <path d="M18 18h12M17 25h15M16 32h12"></path>
+              <rect x="8" y="8" width="32" height="32" rx="5"></rect>
+              <text x="24" y="30">TS</text>
             </svg>
           </div>
-          <span>Riot Games API</span>
-        </button>
-        <button class="skill-card" type="button" style="--accent: #9fffe0;" data-particle-color="#9fffe0" aria-label="Set particles to Full Stack mint">
-          <div class="skill-icon" aria-hidden="true">
-            <svg viewBox="0 0 48 48" role="img">
-              <rect x="9" y="12" width="30" height="24" rx="3"></rect>
-              <path d="M9 20h30M17 12v24M25 20v16"></path>
-            </svg>
-          </div>
-          <span>Full Stack</span>
+          <span>TypeScript</span>
         </button>
       </div>
     </div>
@@ -278,6 +303,7 @@
             <span>LinkedIn</span>
           </a>
         </div>
+        <p class="social-hint" id="social-hint">Click a link to attract more birds</p>
       </div>
 
       <form id="contact-form" class="contact-form terminal-contact-form" action="mailto:kurtismquant@gmail.com" method="post" enctype="text/plain" novalidate>
