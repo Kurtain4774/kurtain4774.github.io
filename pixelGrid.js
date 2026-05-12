@@ -1,6 +1,9 @@
 const STATE = { IDLE: 0, SCRAMBLING: 1, REFORMING: 2 };
 const TILE = 10;
 const GAP = 0;
+const FULL_TRANSITION_FRAMES = 120;
+const SCRAMBLE_FRAMES = FULL_TRANSITION_FRAMES / 2;
+const REFORM_FRAMES = FULL_TRANSITION_FRAMES / 2;
 
 class PixelGrid {
   constructor(canvas, projects, onProjectChange) {
@@ -17,27 +20,27 @@ class PixelGrid {
 
     this.idleDirty = true;
     this._resizeScheduled = false;
+    this._resizeAfterTransition = false;
 
     this.preloadImages().then(() => {
-      this.resize();
-      this.buildTiles(this.images[this.currentIndex]);
-      this.placeAtHome();
-      this.idleDirty = true;
+      this.refreshLayout();
       this.onProjectChange(this.projects[this.currentIndex]);
     });
 
-    window.addEventListener("resize", () => {
-      if (this._resizeScheduled) return;
-      this._resizeScheduled = true;
-      requestAnimationFrame(() => {
-        this._resizeScheduled = false;
-        if (this.state !== STATE.IDLE || !this.images[this.currentIndex]) return;
-        this.resize();
-        this.buildTiles(this.images[this.currentIndex]);
-        this.placeAtHome();
-        this.idleDirty = true;
-      });
-    });
+    window.addEventListener("resize", () => this.scheduleResize());
+
+    if ("ResizeObserver" in window) {
+      const resizeObserver = new ResizeObserver(() => this.scheduleResize());
+      resizeObserver.observe(this.canvas);
+      if (this.canvas.parentElement) resizeObserver.observe(this.canvas.parentElement);
+    }
+
+    const mobileQuery = window.matchMedia("(max-width: 768px)");
+    if (typeof mobileQuery.addEventListener === "function") {
+      mobileQuery.addEventListener("change", () => this.scheduleResize());
+    } else if (typeof mobileQuery.addListener === "function") {
+      mobileQuery.addListener(() => this.scheduleResize());
+    }
   }
 
   preloadImages() {
@@ -55,11 +58,40 @@ class PixelGrid {
   resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     const rect = this.canvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return false;
+
     this.canvas.width = Math.round(rect.width * dpr);
     this.canvas.height = Math.round(rect.height * dpr);
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     this.w = rect.width;
     this.h = rect.height;
+    return true;
+  }
+
+  scheduleResize() {
+    if (this._resizeScheduled) return;
+    this._resizeScheduled = true;
+    requestAnimationFrame(() => {
+      this._resizeScheduled = false;
+      this.refreshLayout();
+    });
+  }
+
+  refreshLayout() {
+    const img = this.images[this.currentIndex];
+    if (!img) return false;
+
+    if (this.state !== STATE.IDLE) {
+      this._resizeAfterTransition = true;
+      return false;
+    }
+
+    if (!this.resize()) return false;
+
+    this.buildTiles(img);
+    this.placeAtHome();
+    this.idleDirty = true;
+    return true;
   }
 
   sampleColors(img) {
@@ -115,7 +147,10 @@ class PixelGrid {
       y: r * step,
       sx: c * step,
       sy: r * step,
+      fromX: c * step,
+      fromY: r * step,
       pr: cr, pg: cg, pb: cb,
+      fromR: cr, fromG: cg, fromB: cb,
       tr: cr, tg: cg, tb: cb,
       opacity: 1
     }));
@@ -127,7 +162,10 @@ class PixelGrid {
       t.y = t.homeY;
       t.sx = t.homeX;
       t.sy = t.homeY;
+      t.fromX = t.homeX;
+      t.fromY = t.homeY;
       t.pr = t.tr; t.pg = t.tg; t.pb = t.tb;
+      t.fromR = t.tr; t.fromG = t.tg; t.fromB = t.tb;
       t.opacity = 1;
     }
   }
@@ -159,12 +197,21 @@ class PixelGrid {
     this.frame = 0;
     this.idleDirty = true;
     for (const t of this.tiles) {
+      t.fromX = t.homeX;
+      t.fromY = t.homeY;
+      t.fromR = t.pr;
+      t.fromG = t.pg;
+      t.fromB = t.pb;
       t.sx = this.w * 0.15 + Math.random() * this.w * 0.7;
       t.sy = this.h * 0.15 + Math.random() * this.h * 0.7;
     }
   }
 
   startReform() {
+    for (const t of this.tiles) {
+      t.fromX = t.x;
+      t.fromY = t.y;
+    }
     this.currentIndex = this.nextIndex;
     const nextImg = this.images[this.currentIndex];
     if (nextImg) {
@@ -192,8 +239,12 @@ class PixelGrid {
     ctx.drawImage(img, (this.w - dw) / 2, (this.h - dh) / 2, dw, dh);
   }
 
-  easeAmount(amount, delta) {
-    return 1 - Math.pow(1 - amount, delta);
+  easeOutCubic(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  lerp(a, b, t) {
+    return a + (b - a) * t;
   }
 
   step(delta = 1) {
@@ -202,6 +253,10 @@ class PixelGrid {
     if (this.state === STATE.IDLE) {
       // Idle: only redraw the still image when something invalidates it
       // (initial load, resize, end of transition).
+      if (!this.w || !this.h) {
+        this.refreshLayout();
+        if (!this.w || !this.h) return;
+      }
       if (!this.idleDirty) return;
       ctx.clearRect(0, 0, this.w, this.h);
       const img = this.images[this.currentIndex];
@@ -213,38 +268,39 @@ class PixelGrid {
     ctx.clearRect(0, 0, this.w, this.h);
 
     if (this.state === STATE.SCRAMBLING) {
-      let allSettled = true;
-      const moveEase = this.easeAmount(0.05, delta);
-      const colorEase = this.easeAmount(0.05, delta);
+      this.frame += delta * this.speed;
+      const progress = Math.min(1, this.frame / SCRAMBLE_FRAMES);
+      const moveProgress = this.easeOutCubic(progress);
+      const colorProgress = Math.min(1, this.frame / FULL_TRANSITION_FRAMES);
       for (const t of this.tiles) {
-        t.x += (t.sx - t.x) * moveEase;
-        t.y += (t.sy - t.y) * moveEase;
-        t.pr += (t.tr - t.pr) * colorEase;
-        t.pg += (t.tg - t.pg) * colorEase;
-        t.pb += (t.tb - t.pb) * colorEase;
-        if (Math.abs(t.sx - t.x) > 1 || Math.abs(t.sy - t.y) > 1) allSettled = false;
+        t.x = this.lerp(t.fromX, t.sx, moveProgress);
+        t.y = this.lerp(t.fromY, t.sy, moveProgress);
+        t.pr = this.lerp(t.fromR, t.tr, colorProgress);
+        t.pg = this.lerp(t.fromG, t.tg, colorProgress);
+        t.pb = this.lerp(t.fromB, t.tb, colorProgress);
       }
-      this.frame += delta;
-      if (this.frame > 60 || allSettled) this.startReform();
+      if (progress >= 1) this.startReform();
     } else if (this.state === STATE.REFORMING) {
-      let settled = true;
-      const moveEase = this.easeAmount(0.05, delta);
-      const colorEase = this.easeAmount(0.05, delta);
+      this.frame += delta * this.speed;
+      const progress = Math.min(1, this.frame / REFORM_FRAMES);
+      const moveProgress = this.easeOutCubic(progress);
+      const colorProgress = Math.min(1, (SCRAMBLE_FRAMES + this.frame) / FULL_TRANSITION_FRAMES);
       for (const t of this.tiles) {
-        t.x += (t.homeX - t.x) * moveEase;
-        t.y += (t.homeY - t.y) * moveEase;
-        t.pr += (t.tr - t.pr) * colorEase;
-        t.pg += (t.tg - t.pg) * colorEase;
-        t.pb += (t.tb - t.pb) * colorEase;
-        t.opacity = Math.min(1, t.opacity + 0.01 * delta);
-        if (Math.abs(t.x - t.homeX) > 2 || Math.abs(t.y - t.homeY) >2 || t.opacity < 0.95) {
-          settled = false;
-        }
+        t.x = this.lerp(t.fromX, t.homeX, moveProgress);
+        t.y = this.lerp(t.fromY, t.homeY, moveProgress);
+        t.pr = this.lerp(t.fromR, t.tr, colorProgress);
+        t.pg = this.lerp(t.fromG, t.tg, colorProgress);
+        t.pb = this.lerp(t.fromB, t.tb, colorProgress);
+        t.opacity = 1;
       }
-      if (settled) {
+      if (progress >= 1) {
         this.placeAtHome();
         this.state = STATE.IDLE;
         this.idleDirty = true;
+        if (this._resizeAfterTransition) {
+          this._resizeAfterTransition = false;
+          this.refreshLayout();
+        }
         return;
       }
     }

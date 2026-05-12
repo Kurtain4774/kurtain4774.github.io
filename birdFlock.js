@@ -22,10 +22,12 @@ class BirdFlock {
     this.wSep = 1.6;
     this.wAlign = 1.0;
     this.wCoh = 0.9;
-    this.wWander = 0.05;
+    this.wWander = 0.012;
     this.wBoundary = 1.4;
     this.boundaryMargin = 60;
-    this.color = "rgba(176, 196, 240, 0.32)";
+    this.color = { r: 255, g: 255, b: 255 };
+    this.targetColor = { r: 255, g: 255, b: 255 };
+    this.colorAlpha = 0.35;
 
     this.reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -40,6 +42,39 @@ class BirdFlock {
       });
     };
     window.addEventListener("resize", this.handleResize);
+  }
+
+  setColor(hexColor) {
+    const parsedColor = this.hexToRgb(hexColor);
+    if (!parsedColor) return;
+
+    this.targetColor = parsedColor;
+    if (this.reducedMotion.matches) {
+      this.color = { ...parsedColor };
+      this.render();
+    }
+  }
+
+  hexToRgb(hexColor) {
+    const clean = String(hexColor || "").replace("#", "").trim();
+    if (clean.length !== 6) return null;
+
+    return {
+      r: parseInt(clean.slice(0, 2), 16),
+      g: parseInt(clean.slice(2, 4), 16),
+      b: parseInt(clean.slice(4, 6), 16)
+    };
+  }
+
+  easeAmount(amount, delta) {
+    return 1 - Math.pow(1 - amount, delta);
+  }
+
+  updateColor(delta = 1) {
+    const colorEase = this.easeAmount(0.08, delta);
+    this.color.r += (this.targetColor.r - this.color.r) * colorEase;
+    this.color.g += (this.targetColor.g - this.color.g) * colorEase;
+    this.color.b += (this.targetColor.b - this.color.b) * colorEase;
   }
 
   getCountForWidth() {
@@ -57,6 +92,7 @@ class BirdFlock {
       vy: Math.sin(angle) * speed,
       dirX: Math.cos(angle),
       dirY: Math.sin(angle),
+      wanderAngle: Math.random() * Math.PI * 2,
       sepX: 0,
       sepY: 0,
       sepCount: 0,
@@ -113,10 +149,11 @@ class BirdFlock {
     if (!this.ctx || this.width === 0 || this.height === 0) return;
     if (this.reducedMotion.matches) return;
 
+    this.updateColor(delta);
+
     const boids = this.boids;
     const n = boids.length;
     const margin = this.boundaryMargin;
-    this.frame++;
 
     for (let i = 0; i < n; i++) {
       const b = boids[i];
@@ -232,15 +269,9 @@ class BirdFlock {
       if (b.y < margin) ay += this.wBoundary * this.maxForce * (1 - b.y / margin);
       else if (b.y > this.height - margin) ay -= this.wBoundary * this.maxForce * (1 - (this.height - b.y) / margin);
 
-      if ((this.frame + i) % 3 === 0) {
-        const wAngle = (Math.random() - 0.5) * this.wWander;
-        const cosW = Math.cos(wAngle);
-        const sinW = Math.sin(wAngle);
-        const nvx = b.vx * cosW - b.vy * sinW;
-        const nvy = b.vx * sinW + b.vy * cosW;
-        b.vx = nvx;
-        b.vy = nvy;
-      }
+      b.wanderAngle += (Math.random() - 0.5) * 0.05 * delta;
+      ax += Math.cos(b.wanderAngle) * this.wWander;
+      ay += Math.sin(b.wanderAngle) * this.wWander;
 
       b.vx += ax * delta;
       b.vy += ay * delta;
@@ -278,8 +309,11 @@ class BirdFlock {
   render() {
     const ctx = this.ctx;
     const size = this.size;
+    const r = Math.round(this.color.r);
+    const g = Math.round(this.color.g);
+    const b = Math.round(this.color.b);
     ctx.clearRect(0, 0, this.width, this.height);
-    ctx.fillStyle = this.color;
+    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.colorAlpha})`;
     ctx.beginPath();
 
     for (let i = 0; i < this.boids.length; i++) {

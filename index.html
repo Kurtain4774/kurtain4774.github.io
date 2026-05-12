@@ -16,44 +16,56 @@
   </nav>
 
   <section id="hero">
-    <div class="hero-scene">
-      <img id="hero-img" src="./assets/hero.png" alt="Ramen shop at night" />
-      <canvas id="rain-canvas"></canvas>
+    <div class="hero-panorama" aria-label="Scrollable ramen shop scene">
+      <div class="hero-scene">
+        <img id="hero-img" src="./assets/hero.png" alt="Ramen shop at night" draggable="false" />
+        <canvas id="rain-canvas"></canvas>
 
-      <div class="overlay overlay-neon"></div>
-      <div class="overlay overlay-neon-awning"></div>
-      <div class="overlay overlay-neon-roof"></div>
-      <div class="overlay overlay-lantern overlay-lantern-1"></div>
-      <div class="overlay overlay-lantern overlay-lantern-2"></div>
-      <div class="overlay overlay-vending"></div>
-      <div class="overlay overlay-interior"></div>
+        <div class="overlay overlay-neon"></div>
+        <div class="overlay overlay-neon-awning"></div>
+        <div class="overlay overlay-neon-roof"></div>
+        <div class="overlay overlay-lantern overlay-lantern-1"></div>
+        <div class="overlay overlay-lantern overlay-lantern-2"></div>
+        <div class="overlay overlay-vending"></div>
+        <div class="overlay overlay-interior"></div>
+
+        <div class="zone zone-projects" data-action="projects" aria-label="Projects">
+          <div class="zone-hint"><kbd class="hint-key">E</kbd> View Projects</div>
+        </div>
+        <div class="zone zone-shop" data-action="about" aria-label="About Me">
+          <div class="zone-hint"><kbd class="hint-key">E</kbd> About Me</div>
+        </div>
+        <div class="zone zone-github" data-action="github" aria-label="GitHub">
+          <div class="zone-hint"><kbd class="hint-key">E</kbd> Open GitHub</div>
+        </div>
+
+        <div class="hotspot-overlay" aria-hidden="true">
+          <div class="hotspot hotspot-projects">
+            <span class="hotspot-ring"></span>
+            <span class="hotspot-dot"></span>
+            <span class="hotspot-label">Projects</span>
+          </div>
+          <div class="hotspot hotspot-about">
+            <span class="hotspot-ring"></span>
+            <span class="hotspot-dot"></span>
+            <span class="hotspot-label">About Me</span>
+          </div>
+          <div class="hotspot hotspot-github">
+            <span class="hotspot-ring"></span>
+            <span class="hotspot-dot"></span>
+            <span class="hotspot-label">GitHub</span>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <canvas id="hero-mobile-particles" aria-hidden="true"></canvas>
+
     <div class="mobile-hero-panel" aria-labelledby="mobile-hero-title">
-      <div class="mobile-hero-particles" aria-hidden="true">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
       <div class="mobile-hero-card">
         <h1 id="mobile-hero-title">Kurtis Quant</h1>
         <p>Full Stack Developer</p>
       </div>
-    </div>
-
-    <div class="zone zone-projects" data-action="projects" aria-label="Projects">
-      <div class="zone-hint"><kbd class="hint-key">E</kbd> View Projects</div>
-    </div>
-    <div class="zone zone-shop" data-action="about" aria-label="About Me">
-      <div class="zone-hint"><kbd class="hint-key">E</kbd> About Me</div>
-    </div>
-    <div class="zone zone-github" data-action="github" aria-label="GitHub">
-      <div class="zone-hint"><kbd class="hint-key">E</kbd> Open GitHub</div>
     </div>
 
     <div class="mobile-nav">
@@ -198,34 +210,39 @@
   </section>
 
   <section id="projects">
-    <h2>Projects</h2>
-    <div class="pixel-wrap">
-      <canvas id="pixel-canvas"></canvas>
-      <div class="arrow-trigger arrow-trigger-left" id="arrow-trigger-left" aria-label="Previous project">
-        <span class="arrow">&lsaquo;</span>
+    <canvas id="projects-particles" aria-hidden="true"></canvas>
+
+    <div class="projects-nav">
+      <button type="button" class="proj-arrow proj-arrow-left" id="arrow-trigger-left" aria-label="Previous project">&#8249;</button>
+
+      <div class="project-card">
+        <h3 class="project-card-heading">Projects</h3>
+        <div class="pixel-wrap">
+          <canvas id="pixel-canvas"></canvas>
+        </div>
+        <div class="project-meta">
+          <h3 id="project-title"></h3>
+          <p id="project-desc"></p>
+          <div class="project-links">
+            <a id="project-link" target="_blank" rel="noopener">GitHub</a>
+            <a id="project-live" target="_blank" rel="noopener">Live</a>
+          </div>
+          <span class="project-counter" id="project-counter">1 / 3</span>
+        </div>
       </div>
-      <div class="arrow-trigger" id="arrow-trigger" aria-label="Next project">
-        <span class="arrow">&rsaquo;</span>
-      </div>
+
+      <button type="button" class="proj-arrow proj-arrow-right" id="arrow-trigger" aria-label="Next project">&#8250;</button>
     </div>
-    <div class="project-meta">
-      <h3 id="project-title"></h3>
-      <p id="project-desc"></p>
-      <div class="project-links">
-        <a id="project-link" href="#" target="_blank" rel="noopener">GitHub</a>
-        <a id="project-live" href="#" target="_blank" rel="noopener">Live</a>
-      </div>
-    </div>
+
+    <div class="scroll-unlock-hint" id="scroll-unlock-hint">View all projects to continue &#8595;</div>
+
     <div class="mobile-projects-showcase" id="mobile-projects-showcase" aria-label="Project showcase"></div>
   </section>
 
   <section id="contact" aria-labelledby="contact-title">
     <div class="sky-decor" aria-hidden="true">
-      <canvas id="cloud-canvas"></canvas>
+      <canvas id="contact-mobile-particles"></canvas>
       <canvas id="bird-canvas"></canvas>
-      <div class="cloud-layer cloud-layer--back"></div>
-      <div class="cloud-layer cloud-layer--mid"></div>
-      <div class="cloud-layer cloud-layer--front"></div>
     </div>
     <div class="contact-content">
       <div class="contact-copy">
@@ -336,11 +353,12 @@
     </div>
   </section>
 
+  <button id="back-to-top" aria-label="Back to top">&#8593; Back to Top</button>
+
   <script src="projects.js" defer></script>
   <script src="pixelGrid.js" defer></script>
   <script src="aboutParticles.js" defer></script>
   <script src="hero.js" defer></script>
-  <script src="cloudMist.js" defer></script>
   <script src="birdFlock.js" defer></script>
   <script src="main.js" defer></script>
 </body>

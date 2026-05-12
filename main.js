@@ -7,8 +7,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const rainCanvas = document.getElementById("rain-canvas");
+  const heroPanorama = document.querySelector(".hero-panorama");
+  const heroImg = document.getElementById("hero-img");
   const aboutCanvas = document.getElementById("about-particles");
   const aboutSection = document.getElementById("about");
+  const projectsCanvas = document.getElementById("projects-particles");
+  const projectsSection = document.getElementById("projects");
+  const heroMobileCanvas = document.getElementById("hero-mobile-particles");
+  const heroSection = document.getElementById("hero");
+  const contactMobileCanvas = document.getElementById("contact-mobile-particles");
+  const contactSection = document.getElementById("contact");
   const pixelCanvas = document.getElementById("pixel-canvas");
 
   const titleEl = document.getElementById("project-title");
@@ -24,11 +32,47 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobileContactStatus = document.getElementById("mobile-contact-status");
   const mobileHeroQuery = window.matchMedia("(max-width: 768px)");
 
+  const counterEl = document.getElementById("project-counter");
+  const hintEl = document.getElementById("scroll-unlock-hint");
+  const hotspotOverlay = document.querySelector(".hotspot-overlay");
+  const heroHotspotsStorageKey = "kurtisHeroHotspotsDismissed";
+
+  const hasDismissedHeroHotspots = () => {
+    try {
+      window.localStorage.removeItem(heroHotspotsStorageKey);
+      return window.sessionStorage.getItem(heroHotspotsStorageKey) === "true";
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const dismissHeroHotspots = () => {
+    if (!hotspotOverlay || hotspotOverlay.classList.contains("is-dismissed")) return;
+
+    try {
+      window.sessionStorage.setItem(heroHotspotsStorageKey, "true");
+    } catch (error) {
+      // Hotspots should still dismiss for this page view if storage is blocked.
+    }
+
+    document.body.classList.add("hotspots-dismissed");
+    hotspotOverlay.classList.add("is-dismissed");
+    window.setTimeout(() => hotspotOverlay.remove(), 380);
+  };
+
+  if (hotspotOverlay && hasDismissedHeroHotspots()) {
+    document.body.classList.add("hotspots-dismissed");
+    hotspotOverlay.remove();
+  }
+
   const updateProjectMeta = (p) => {
     titleEl.textContent = p.title;
     descEl.textContent = p.description;
     linkEl.href = p.link;
     liveEl.href = p.liveUrl;
+    const idx = projects.indexOf(p);
+    if (counterEl) counterEl.textContent = `${idx + 1} / ${projects.length}`;
+    markSeen(idx);
   };
 
   const renderMobileProjects = () => {
@@ -89,12 +133,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const aboutParticles = aboutCanvas && aboutSection
     ? new AboutParticleSystem(aboutCanvas, aboutSection)
     : null;
+  const projectParticles = projectsCanvas && projectsSection
+    ? new AboutParticleSystem(projectsCanvas, projectsSection)
+    : null;
+  const heroMobileParticles = heroMobileCanvas && heroSection
+    ? new AboutParticleSystem(heroMobileCanvas, heroSection)
+    : null;
+  const contactMobileParticles = contactMobileCanvas && contactSection
+    ? new AboutParticleSystem(contactMobileCanvas, contactSection)
+    : null;
   const grid = new PixelGrid(pixelCanvas, projects, updateProjectMeta);
   renderMobileProjects();
-  const cloudCanvas = document.getElementById("cloud-canvas");
-  const cloudMist = cloudCanvas && typeof CloudMistAnimator !== "undefined"
-    ? new CloudMistAnimator(cloudCanvas)
-    : null;
   const birdCanvas = document.getElementById("bird-canvas");
   const birdFlock = birdCanvas && typeof BirdFlock !== "undefined"
     ? new BirdFlock(birdCanvas)
@@ -226,6 +275,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!(id in sectionVisible)) continue;
         sectionVisible[id] = entry.isIntersecting;
         entry.target.classList.toggle("is-visible", entry.isIntersecting);
+        if (id === "about")    document.body.classList.toggle("in-about",    entry.isIntersecting);
+        if (id === "projects") document.body.classList.toggle("in-projects", entry.isIntersecting);
         if (id === "contact") {
           document.body.classList.toggle("in-sky", entry.isIntersecting);
         }
@@ -246,9 +297,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let running = false;
   let animationFrameId = null;
   let lastFrameTime = null;
-  let contactFrameCarry = 2;
+  let contactFrameCarry = 0;
   const targetFrameMs = 1000 / 60;
-  const contactFrameStep = 3;
+  const contactFrameStep = 1;
   const loop = (now) => {
     animationFrameId = null;
     if (!running) return;
@@ -257,18 +308,25 @@ document.addEventListener("DOMContentLoaded", () => {
     lastFrameTime = now;
 
     if (sectionVisible.hero && !mobileHeroQuery.matches) hero.step(delta);
+    if (heroMobileParticles && sectionVisible.hero && mobileHeroQuery.matches) heroMobileParticles.step(delta);
     if (aboutParticles && sectionVisible.about) aboutParticles.step(delta);
+    if (projectParticles && sectionVisible.projects) projectParticles.step(delta);
     // Keep PixelGrid stepping when projects is visible OR while a transition
     // is in flight, so scrolling away mid-transition still resolves cleanly.
     if (sectionVisible.projects || grid.state !== 0) grid.step(delta);
     if (sectionVisible.contact) {
-      contactFrameCarry += delta;
-      if (contactFrameCarry >= contactFrameStep) {
-        const contactDelta = Math.min(contactFrameCarry, contactFrameStep);
-        if (birdFlock) birdFlock.step(contactDelta);
-        contactFrameCarry = 0;
+      if (mobileHeroQuery.matches) {
+        if (contactMobileParticles) contactMobileParticles.step(delta);
+      } else {
+        contactFrameCarry += delta;
+        if (contactFrameCarry >= contactFrameStep) {
+          const contactDelta = Math.min(contactFrameCarry, contactFrameStep);
+          if (birdFlock) birdFlock.step(contactDelta);
+          contactFrameCarry = 0;
+        }
       }
     } else {
+      if (birdFlock) birdFlock.updateColor(delta);
       contactFrameCarry = contactFrameStep;
     }
     animationFrameId = requestAnimationFrame(loop);
@@ -308,6 +366,72 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  let suppressHeroClick = false;
+  if (heroImg) {
+    heroImg.addEventListener("dragstart", (e) => e.preventDefault());
+  }
+
+  if (heroPanorama) {
+    let isPanningHero = false;
+    let heroDragStarted = false;
+    let heroDragStartX = 0;
+    let heroDragStartY = 0;
+    let heroStartScrollLeft = 0;
+
+    heroPanorama.querySelectorAll("img").forEach((img) => {
+      img.draggable = false;
+    });
+    heroPanorama.addEventListener("dragstart", (e) => e.preventDefault(), true);
+    heroPanorama.addEventListener("selectstart", (e) => e.preventDefault(), true);
+
+    heroPanorama.addEventListener("pointerdown", (e) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+
+      isPanningHero = true;
+      heroDragStarted = false;
+      suppressHeroClick = false;
+      heroDragStartX = e.clientX;
+      heroDragStartY = e.clientY;
+      heroStartScrollLeft = heroPanorama.scrollLeft;
+      heroPanorama.setPointerCapture?.(e.pointerId);
+      if (e.pointerType === "mouse") e.preventDefault();
+    });
+
+    heroPanorama.addEventListener("pointermove", (e) => {
+      if (!isPanningHero) return;
+
+      const dx = e.clientX - heroDragStartX;
+      const dy = e.clientY - heroDragStartY;
+      if (!heroDragStarted && Math.hypot(dx, dy) < 6) return;
+
+      heroDragStarted = true;
+      suppressHeroClick = true;
+      heroPanorama.classList.add("is-dragging");
+      heroPanorama.scrollLeft = heroStartScrollLeft - dx;
+      e.preventDefault();
+    });
+
+    const stopHeroPan = (e) => {
+      if (!isPanningHero) return;
+
+      isPanningHero = false;
+      heroPanorama.classList.remove("is-dragging");
+      heroPanorama.releasePointerCapture?.(e.pointerId);
+      if (heroDragStarted) {
+        window.setTimeout(() => {
+          suppressHeroClick = false;
+        }, 0);
+      }
+    };
+
+    heroPanorama.addEventListener("pointerup", stopHeroPan);
+    heroPanorama.addEventListener("pointercancel", stopHeroPan);
+    heroPanorama.addEventListener("lostpointercapture", () => {
+      isPanningHero = false;
+      heroPanorama.classList.remove("is-dragging");
+    });
+  }
+
   // Mouse-following hint cards
   let activeZone = null;
 
@@ -331,7 +455,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "e" || e.key === "E") {
-      if (activeZone) handleAction(activeZone.dataset.action);
+      if (activeZone) {
+        dismissHeroHotspots();
+        handleAction(activeZone.dataset.action);
+      }
     }
   });
 
@@ -359,7 +486,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   document.querySelectorAll("[data-action]").forEach(el => {
-    el.addEventListener("click", () => handleAction(el.dataset.action));
+    el.addEventListener("click", (e) => {
+      if (el.classList.contains("zone") && suppressHeroClick) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      if (el.classList.contains("zone")) dismissHeroHotspots();
+      handleAction(el.dataset.action);
+    });
   });
 
   const skillCards = Array.from(document.querySelectorAll(".skill-card[data-particle-color]"));
@@ -410,6 +546,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     card.classList.add("is-active");
     if (aboutParticles) aboutParticles.setColor(card.dataset.particleColor);
+    if (projectParticles) projectParticles.setColor(card.dataset.particleColor);
+    if (heroMobileParticles) heroMobileParticles.setColor(card.dataset.particleColor);
+    if (contactMobileParticles) contactMobileParticles.setColor(card.dataset.particleColor);
+    if (birdFlock) birdFlock.setColor(card.dataset.particleColor);
   };
 
   const updateMobileSkillStack = () => {
@@ -748,7 +888,70 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Trigger explosion / speed up if animating
+  // Seen-project tracking and scroll gate
+  const PROJECT_SCROLL_DWELL_MS = 500;
+  const seenProjects = new Set();
+  let projectsLocked = true;
+  let activeProjectShownAt = performance.now();
+  let projectUnlockTimer = null;
+
+  const markSeen = (idx) => {
+    if (idx < 0 || idx >= projects.length) return;
+    activeProjectShownAt = performance.now();
+    seenProjects.add(idx);
+    const allSeen = seenProjects.size >= projects.length;
+    if (allSeen) {
+      projectsLocked = true;
+      if (projectUnlockTimer) window.clearTimeout(projectUnlockTimer);
+      projectUnlockTimer = window.setTimeout(() => {
+        projectsLocked = false;
+      }, PROJECT_SCROLL_DWELL_MS);
+    }
+    if (hintEl) {
+      hintEl.classList.toggle("unlocked", allSeen);
+      hintEl.textContent = allSeen
+        ? "Scroll down to continue ↓"
+        : `View all projects to continue (${seenProjects.size} / ${projects.length} seen) ↓`;
+      hintEl.classList.add("visible");
+    }
+  };
+
+  const advanceProjectFromScroll = (direction) => {
+    if (seenProjects.size >= projects.length) return;
+    if (grid.state !== 0) return;
+    if (performance.now() - activeProjectShownAt < PROJECT_SCROLL_DWELL_MS) return;
+    grid.explode(direction);
+  };
+
+  // Separate high-threshold observer so the gate only fires when projects is
+  // fully snapped into view, not during the scroll-snap animation from About.
+  let projectsSnapped = false;
+  if ("IntersectionObserver" in window && sectionEls.projects) {
+    new IntersectionObserver(([entry]) => {
+      projectsSnapped = entry.intersectionRatio >= 0.6;
+    }, { threshold: [0, 0.6] }).observe(sectionEls.projects);
+  }
+
+  // Intercept downward scroll on projects section until all projects are seen
+  document.addEventListener("wheel", (e) => {
+    if (!projectsLocked || !projectsSnapped) return;
+    if (e.deltaY > 0) {
+      e.preventDefault();
+      advanceProjectFromScroll(1);
+    }
+  }, { passive: false });
+
+  let touchStartY = 0;
+  document.addEventListener("touchstart", (e) => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener("touchend", (e) => {
+    if (!projectsLocked || !projectsSnapped) return;
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    if (dy > 30) advanceProjectFromScroll(1);
+  }, { passive: true });
+
+  // Arrow buttons and canvas click
   const nextTrigger = document.getElementById("arrow-trigger");
   const prevTrigger = document.getElementById("arrow-trigger-left");
 
@@ -762,5 +965,16 @@ document.addEventListener("DOMContentLoaded", () => {
         window.open(projects[grid.currentIndex].liveUrl, "_blank", "noopener");
       }
     });
+  }
+
+  const backToTop = document.getElementById("back-to-top");
+  if (backToTop) {
+    const contactSection = document.getElementById("contact");
+    const observer = new IntersectionObserver(
+      ([entry]) => backToTop.classList.toggle("visible", entry.isIntersecting),
+      { threshold: 0.2 }
+    );
+    observer.observe(contactSection);
+    backToTop.addEventListener("click", () => scrollToSection("hero"));
   }
 });
