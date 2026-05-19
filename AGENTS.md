@@ -66,9 +66,6 @@ Keep this order unless you convert the site to modules. `main.js` depends on glo
 - Glow overlays include:
   - `.overlay-neon`
   - `.overlay-neon-roof`
-  - `.overlay-lantern-1`
-  - `.overlay-lantern-2`
-  - `.overlay-vending`
   - `.overlay-interior`
 - `main.js` adds periodic extra neon flicker and delayed interior light flicker.
 - Desktop transparent zones:

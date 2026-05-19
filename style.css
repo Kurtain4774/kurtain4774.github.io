@@ -5,11 +5,6 @@
   --storm-black:        #000;
   --neon-green:         #ffffff;
   --neon-green-glow:    rgba(255, 255, 255, 0.6);
-  --lantern-amber:      rgba(255, 160, 50, 0.45);
-  --lantern-amber-glow: rgba(255, 180, 60, 0.9);
-  --vending-blue:       rgba(100, 180, 255, 0.18);
-  --vending-blue-glow:  rgba(100, 180, 255, 0.8);
-
   /* ---- Projects — clean backgrounds ---- */
   --project-bg:         #0a0a0a;
   --project-canvas-bg:  #000;
@@ -249,7 +244,7 @@ body.in-sky .top-nav a:hover {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: 40;
   pointer-events: none;
   background:
     linear-gradient(to top,
@@ -284,12 +279,11 @@ body.in-sky .top-nav a:hover {
   }
 
   #hero-img {
-    inset: 50% 0 auto;
+    inset: 0 0 auto;
     width: 100%;
     height: auto;
-    min-height: 100%;
     object-fit: unset;
-    transform: translateY(-50%);
+    transform: none;
   }
 }
 
@@ -304,25 +298,130 @@ body.in-sky .top-nav a:hover {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 2;
+  z-index: 50;
+}
+
+/* ===== Hero Layer Base ===== */
+.hero-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.hero-bg {
+  z-index: 1;
+}
+
+/* Ambient asset images — no pointer events, each with baked-in glow */
+.hero-asset {
+  pointer-events: none;
+  display: block;
+  height: auto;
+}
+
+/* Full-scene overlays: 1672x941 PNG matches scene exactly — place at origin, full width */
+.asset-neon {
+  width: 50%;
+  height: 50%;
+  left: 25%;
+  top: -11%;
+  z-index: 25;
+  mix-blend-mode: screen;
+  opacity: 1;
+  transform: rotate(3.5deg);
+  transform-origin: 50% 50%;
+}
+
+/* Sampled green: rgb(80, 255, 80) from neon_sign_v2_transparent.png
+   Split into two layers: static filter (GPU-promoted, no repaint) +
+   a sibling div whose opacity animates on the compositor thread. */
+
+/* Static tight glow on the sign image — promoted once, never repainted */
+.neon-sign {
+  filter:
+    drop-shadow(0 0 6px  rgba(80, 255, 80, 0.9))
+    drop-shadow(0 0 18px rgba(80, 255, 80, 0.55));
+  will-change: filter;
+}
+
+/* Soft ambient halo — wider than the sign so it bleeds naturally */
+.neon-glow-pulse {
+  position: absolute;
+  width: 80%;
+  height: 75%;
+  left: 10%;
+  top: -22%;
+  z-index: 24;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background: radial-gradient(ellipse 70% 42% at 50% 52%,
+    rgba(80, 255, 80, 0.22) 0%,
+    rgba(80, 255, 80, 0.08) 45%,
+    transparent 72%
+  );
+  transform: rotate(3.5deg);
+  transform-origin: 50% 50%;
+  will-change: opacity;
+  animation: neon-glow-flicker 6s infinite;
+}
+
+/* Opacity-only flicker — runs entirely on the compositor, zero repaint */
+@keyframes neon-glow-flicker {
+  0%, 92% { opacity: 1; }
+  93%      { opacity: 0.72; }
+  94%      { opacity: 1; }
+  97%      { opacity: 0.84; }
+  100%     { opacity: 1; }
 }
 
 /* ===== Clickable Zones ===== */
 .zone {
   position: absolute;
   cursor: pointer;
-  z-index: 3;
+  z-index: 8;
 }
 
-.zone-shop    { left: 22%; top: 25%; width: 60%; height: 70%; }
-.zone-projects { left: 6%;   top: 34%; width: 15%; height: 36%; }
-.zone-github  { left: 84%; top: 65%; width: 14%; height: 30%; }
+/* Invisible About region over the shop window/door */
+.zone-shop { left: 22%; top: 25%; width: 60%; height: 70%; }
+
+/* Asset-backed clickable zones */
+.zone-asset {
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.zone-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.zone-projects {
+  width: 11%;
+  left: 8.5%;
+  top: 34%;
+  z-index: 10;
+}
+
+.zone-github {
+  width: 14%;
+  left: 82%;
+  top: 68.8%;
+  z-index: 30;
+  transform-origin: 50% 75%;
+}
+
+.zone-projects:hover .zone-img { filter: brightness(1.15); }
+.zone-github:hover .zone-img   { filter: brightness(1.15); }
+
+/* Projects board HTML text overlay */
 
 /* ===== First-visit Hotspot Indicators ===== */
 .hotspot-overlay {
   position: absolute;
   inset: 0;
-  z-index: 4;
+  z-index: 45;
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
@@ -347,9 +446,9 @@ body.hotspots-dismissed .hotspot-overlay {
   transform: translate(-50%, -50%);
 }
 
-.hotspot-projects { left: 17%; top: 56%; }
-.hotspot-about    { left: 50%;   top: 56%; }
-.hotspot-github   { left: 90%;   top: 82%; }
+.hotspot-projects { left: 16%; top: 53%; }
+.hotspot-about    { left: 50%;  top: 56%; }
+.hotspot-github   { left: 88%;  top: 82%; }
 
 .hotspot-ring {
   position: absolute;
@@ -384,8 +483,8 @@ body.hotspots-dismissed .hotspot-overlay {
   transform: translateX(-50%);
 }
 
-.hotspot-about .hotspot-ring { animation-delay: 0.35s; }
-.hotspot-github .hotspot-ring { animation-delay: 0.7s; }
+.hotspot-about .hotspot-ring   { animation-delay: 0.35s; }
+.hotspot-github .hotspot-ring  { animation-delay: 0.7s; }
 
 .zone-projects:hover ~ .hotspot-overlay .hotspot-projects .hotspot-ring,
 .zone-shop:hover ~ .hotspot-overlay .hotspot-about .hotspot-ring,
@@ -477,24 +576,6 @@ body.hotspots-dismissed .hotspot-overlay {
   50%       { box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.3), -2px 0 14px rgba(255, 255, 255, 0.55); }
 }
 
-/* ===== Glow Overlays ===== */
-.overlay {
-  position: absolute;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  mix-blend-mode: screen;
-}
-
-.overlay-neon {
-  left: 28%;
-  top: 4%;
-  width: 50%;
-  height: 18%;
-  background: radial-gradient(ellipse at center, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 45%, rgba(255,255,255,0) 72%);
-  animation: neonFlicker 0.75s steps(1) 0.6s both, neonPulse 4s ease-in-out 1.35s infinite both;
-}
-
 @keyframes neonFlicker {
   0%   { opacity: 0; }
   10%  { opacity: 1; }
@@ -508,107 +589,10 @@ body.hotspots-dismissed .hotspot-overlay {
   100% { opacity: 1; }
 }
 
-@keyframes neonPulse {
-  0%, 100% { opacity: 0.85; }
-  50%      { opacity: 1; }
-}
-
-
-.overlay-neon-roof {
-  left: 20%;
-  top: 0;
-  width: 66%;
-  height: 32%;
-  background: radial-gradient(ellipse at 54% 32%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 42%, rgba(255,255,255,0) 76%);
-  animation: overlayAppear 0.01s linear 0.6s both, neonRoofPulse 4s ease-in-out 1.35s infinite both;
-}
-
-.overlay-neon-awning {
-  left: 25%;
-  top: 15%;
-  width: 60%;
-  height: 8%;
-  background: radial-gradient(ellipse at 50% 72%, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0.05) 55%, rgba(255,255,255,0) 82%);
-  animation: overlayAppear 0.01s linear 0.65s both, neonAwningPulse 4s ease-in-out 1.4s infinite both;
-}
-
-@keyframes overlayAppear {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes neonAwningPulse {
-  0%, 100% { filter: opacity(0.43); }
-  50%      { filter: opacity(1); }
-}
-
-@keyframes neonRoofPulse {
-  0%, 100% { filter: opacity(0.55); }
-  50%      { filter: opacity(1); }
-}
-
-.overlay-lantern {
-  width: 11%;
-  height: 15%;
-  border: 0px solid transparent;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,160,50,0.45) 0%, rgba(255,160,50,0.2) 38%, rgba(255,160,50,0) 74%);
-}
-.overlay-lantern-1 {
-  left: 19%;
-  top: 36%;
-  animation: overlayAppear 0.01s linear 1.2s both, lanternPulse 3s ease-in-out 1.2s infinite both;
-}
-.overlay-lantern-2 {
-  left: 69%;
-  top: 39%;
-  animation: overlayAppear 0.01s linear 1.2s both, lanternPulse 3s ease-in-out 3s infinite both;
-}
-
-@keyframes lanternPulse {
-  0%, 100% { opacity: 0.45; }
-  50%      { opacity: 1; }
-}
-
-.overlay-vending {
-  left: 84%;
-  top: 30%;
-  width: 12%;
-  height: 30%;
-  background: radial-gradient(ellipse at center, rgba(100,180,255,0.18) 0%, rgba(100,180,255,0) 70%);
-  animation: overlayAppear 0.01s linear 1.4s both, vendingGlow 3.5s ease-in-out 1.4s infinite both;
-}
-
-@keyframes vendingGlow {
-  0%, 100% { opacity: 0.7; }
-  50%      { opacity: 1; }
-}
-
-.overlay-interior {
-  left: 29%;
-  top: 43%;
-  width: 34%;
-  height: 31%;
-  background: radial-gradient(ellipse at center, rgba(255,140,40,1) 0%, rgba(255,140,40,0.65) 38%, rgba(255,140,40,0) 78%);
-  opacity: 0;
-}
-
-.overlay-interior.is-ready {
-  opacity: 0.04;
-}
-
-.overlay-interior.is-flickering {
-  animation: interiorLightFlicker 0.15s ease-out both;
-}
-
-@keyframes interiorLightFlicker {
-  0%, 100% { opacity: 0.04; }
-  50%      { opacity: 0.12; }
-}
-
 body.animations-paused #hero-img,
 body.animations-paused .hero-scene,
-body.animations-paused .overlay,
+body.animations-paused .hero-asset,
+body.animations-paused .neon-glow-pulse,
 body.animations-paused .zone-hint.visible,
 body.animations-paused .hotspot-overlay,
 body.animations-paused .hotspot-ring {
@@ -619,7 +603,8 @@ body.animations-paused .hotspot-ring {
    .is-visible class is toggled by the IntersectionObserver in main.js. */
 #hero:not(.is-visible) #hero-img,
 #hero:not(.is-visible) .hero-scene,
-#hero:not(.is-visible) .overlay,
+#hero:not(.is-visible) .hero-asset,
+#hero:not(.is-visible) .neon-glow-pulse,
 #hero:not(.is-visible) .zone-hint.visible,
 #hero:not(.is-visible) .hotspot-overlay,
 #hero:not(.is-visible) .hotspot-ring {

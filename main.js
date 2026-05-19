@@ -24,8 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const linkEl  = document.getElementById("project-link");
   const liveEl  = document.getElementById("project-live");
   const mobileProjectsShowcase = document.getElementById("mobile-projects-showcase");
-  const interiorEl = document.querySelector(".overlay-interior");
-  const neonEl = document.querySelector(".overlay-neon");
+  const neonEl = document.querySelector(".asset-neon");
   const contactForm = document.getElementById("contact-form");
   const contactStatus = document.getElementById("contact-status");
   const mobileContactForm = document.getElementById("mobile-contact-form");
@@ -148,12 +147,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const birdFlock = birdCanvas && typeof BirdFlock !== "undefined"
     ? new BirdFlock(birdCanvas)
     : null;
-  let interiorCueTimer = null;
-  let interiorFlickerTimer = null;
   let neonFlickerTimer = null;
   let activeNeonFlicker = null;
-  let interiorReady = false;
-  const interiorCueAt = performance.now() + 1800;
   const neonReflickerDelay = 31350;
   const neonReflickerInterval = 30000;
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -189,31 +184,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const behavior = prefersReducedMotion.matches ? "auto" : "smooth";
     scrollSectionIntoView(section, behavior);
   };
-
-  const scheduleInteriorFlicker = () => {
-    window.clearTimeout(interiorFlickerTimer);
-    if (!interiorReady || document.hidden || !interiorEl) return;
-
-    interiorFlickerTimer = window.setTimeout(() => {
-      if (document.hidden || !interiorEl) return;
-      interiorEl.classList.add("is-flickering");
-      window.setTimeout(() => interiorEl.classList.remove("is-flickering"), 170);
-      scheduleInteriorFlicker();
-    }, 4000 + Math.random() * 4000);
-  };
-
-  const scheduleInteriorCue = () => {
-    window.clearTimeout(interiorCueTimer);
-    if (document.hidden || !interiorEl || interiorReady) return;
-
-    interiorCueTimer = window.setTimeout(() => {
-      interiorReady = true;
-      interiorEl.classList.add("is-ready");
-      scheduleInteriorFlicker();
-    }, Math.max(0, interiorCueAt - performance.now()));
-  };
-
-  scheduleInteriorCue();
 
   const triggerNameNeonFlicker = () => {
     if (!neonEl || document.hidden) return;
@@ -352,15 +322,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.hidden) {
       stopAnimationLoop();
       document.body.classList.add("animations-paused");
-      window.clearTimeout(interiorCueTimer);
-      window.clearTimeout(interiorFlickerTimer);
       window.clearTimeout(neonFlickerTimer);
       if (activeNeonFlicker) activeNeonFlicker.pause();
     } else {
       startAnimationLoop();
       document.body.classList.remove("animations-paused");
-      scheduleInteriorCue();
-      scheduleInteriorFlicker();
       if (activeNeonFlicker) activeNeonFlicker.play();
       scheduleNameNeonFlicker();
     }
@@ -477,6 +443,8 @@ document.addEventListener("DOMContentLoaded", () => {
       scrollToSection("about");
     } else if (action === "projects") {
       scrollToSection("projects");
+    } else if (action === "contact") {
+      scrollToSection("contact");
     } else if (action === "github") {
       window.open(GITHUB_URL, "_blank", "noopener");
     }

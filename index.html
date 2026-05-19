@@ -59,27 +59,32 @@
   <section id="hero">
     <div class="hero-panorama" aria-label="Scrollable ramen shop scene">
       <div class="hero-scene">
-        <img id="hero-img" src="./assets/hero.png" alt="Ramen shop at night" draggable="false" />
-        <canvas id="rain-canvas"></canvas>
+        <!-- Layer 1: Background -->
+        <img id="hero-img" class="hero-layer hero-bg" src="./assets/background.png" alt="Ramen shop at night" draggable="false" />
 
-        <div class="overlay overlay-neon"></div>
-        <div class="overlay overlay-neon-awning"></div>
-        <div class="overlay overlay-neon-roof"></div>
-        <div class="overlay overlay-lantern overlay-lantern-1"></div>
-        <div class="overlay overlay-lantern overlay-lantern-2"></div>
-        <div class="overlay overlay-vending"></div>
-        <div class="overlay overlay-interior"></div>
+        <!-- Layer 2: Ambient assets (no pointer events) -->
+        <div class="neon-glow-pulse" aria-hidden="true"></div>
+        <img class="hero-layer hero-asset asset-neon neon-sign" src="./assets/neon_sign_v2_transparent.png" alt="Kurtis Quant" draggable="false" />
 
-        <div class="zone zone-projects" data-action="projects" aria-label="Projects">
-          <div class="zone-hint"><kbd class="hint-key">E</kbd> View Projects</div>
-        </div>
+        <!-- Layer 3: Invisible About region -->
         <div class="zone zone-shop" data-action="about" aria-label="About Me">
           <div class="zone-hint"><kbd class="hint-key">E</kbd> About Me</div>
         </div>
-        <div class="zone zone-github" data-action="github" aria-label="GitHub">
+
+        <!-- Layer 3: Clickable asset zones -->
+        <div class="zone zone-asset zone-projects" data-action="projects" aria-label="Projects">
+          <img class="zone-img" src="./assets/projects_board_transparent.png" alt="" draggable="false" />
+          <div class="zone-hint"><kbd class="hint-key">E</kbd> View Projects</div>
+        </div>
+        <div class="zone zone-asset zone-github" data-action="github" aria-label="GitHub">
+          <img class="zone-img" src="./assets/github_board_transparent.png" alt="" draggable="false" />
           <div class="zone-hint"><kbd class="hint-key">E</kbd> Open GitHub</div>
         </div>
 
+        <!-- Layer 4: Rain canvas -->
+        <canvas id="rain-canvas"></canvas>
+
+        <!-- Layer 5: First-visit hotspot indicators -->
         <div class="hotspot-overlay" aria-hidden="true">
           <div class="hotspot hotspot-projects">
             <span class="hotspot-ring"></span>
