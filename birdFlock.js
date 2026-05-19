@@ -27,7 +27,9 @@ class BirdFlock {
     this.boundaryMargin = 60;
     this.color = { r: 255, g: 255, b: 255 };
     this.targetColor = { r: 255, g: 255, b: 255 };
-    this.colorAlpha = 0.35;
+    this.colorAlpha = 0.66;
+    this.glowAlpha = 0.36;
+    this.glowBlur = 12;
 
     this.reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -320,6 +322,8 @@ class BirdFlock {
     const g = Math.round(this.color.g);
     const b = Math.round(this.color.b);
     ctx.clearRect(0, 0, this.width, this.height);
+    ctx.shadowBlur = this.glowBlur;
+    ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${this.glowAlpha})`;
     ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.colorAlpha})`;
     ctx.beginPath();
 
@@ -346,6 +350,7 @@ class BirdFlock {
     }
 
     ctx.fill();
+    ctx.shadowBlur = 0;
   }
 }
 
