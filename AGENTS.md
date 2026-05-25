@@ -71,7 +71,7 @@ Keep this order unless you convert the site to modules. `main.js` depends on glo
 - Desktop transparent zones:
   - `.zone-projects` scrolls to `#projects`.
   - `.zone-shop` scrolls to `#about`.
-  - `.zone-github` opens `https://github.com/Kurtain4774`.
+  - `.zone-github` opens `https://github.com/kurtismquant`.
 - Hovering a zone shows a fixed mouse-following hint. Pressing `E` while hovering a zone triggers that zone's action.
 - Mobile hides zones and shows buttons for About, Projects, and GitHub below the image.
 
@@ -116,21 +116,21 @@ const projects = [
     title: "TFT Dualytics",
     description: "TFT Statistic Website - React, Node.js, Riot Games API, MongoDB",
     image: "./assets/screenshots/tftdualytics.png",
-    link: "https://github.com/kurtain4774/tftdualytics",
+    link: "https://github.com/kurtismquant/tftdualytics",
     liveUrl: "https://tftdualytics.com/"
   },
   {
     title: "Quoted",
     description: "Pinterest-style quote board - React, Express, MongoDB, JWT auth",
     image: "./assets/screenshots/quoted.png",
-    link: "https://github.com/kurtain4774/quoted",
+    link: "https://github.com/kurtismquant/quoted",
     liveUrl: "https://quotedwords.vercel.app/"
   },
   {
     title: "Habit Tracker",
     description: "Daily habit tracker - Next.js, Express, Prisma, Tailwind CSS",
     image: "./assets/screenshots/habitflow.png",
-    link: "https://github.com/kurtain4774/habitflow",
+    link: "https://github.com/kurtismquant/habitflow",
     liveUrl: "https://habit-tracker-nu-flame.vercel.app/"
   }
 ];

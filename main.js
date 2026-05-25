@@ -1,4 +1,4 @@
-const GITHUB_URL = "https://github.com/Kurtain4774";
+const GITHUB_URL = "https://github.com/kurtismquant";
 const CONTACT_EMAIL = "kurtismquant@gmail.com";
 
 document.addEventListener("DOMContentLoaded", () => {

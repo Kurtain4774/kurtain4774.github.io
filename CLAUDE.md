@@ -85,7 +85,7 @@ Keep this order unless you convert the site to modules. `main.js` depends on glo
 - Desktop transparent zones inside `.hero-scene`:
   - `.zone-projects` scrolls to `#projects`.
   - `.zone-shop` scrolls to `#about`.
-  - `.zone-github` opens `https://github.com/Kurtain4774`.
+  - `.zone-github` opens `https://github.com/kurtismquant`.
 - Hovering a zone shows a mouse-following `.zone-hint`. Pressing `E` while hovering triggers that zone's action.
 - `.hotspot-overlay` shows pulsing dot indicators for zones on first visit. It is dismissed on the first zone interaction and the dismissal is persisted in `sessionStorage` (`kurtisHeroHotspotsDismissed`). Dismissed hotspots are removed from the DOM after a 380ms fade.
 - `#hero-mobile-particles` canvas sits below the panorama on mobile and runs an `AboutParticleSystem`.
@@ -133,21 +133,21 @@ const projects = [
     title: "TFT Dualytics",
     description: "TFT Statistic Website -- React, Node.js, Riot Games API, MongoDB",
     image: "./assets/screenshots/tftdualytics.png",
-    link: "https://github.com/Kurtain4774/TFT-Dualytics",
+    link: "https://github.com/kurtismquant/TFT-Dualytics",
     liveUrl: "https://tft-dualytics.vercel.app/"
   },
   {
     title: "Quoted",
     description: "Pinterest-style quote board -- React, Express, MongoDB, JWT auth",
     image: "./assets/screenshots/quoted.png",
-    link: "https://github.com/Kurtain4774/QuoteWebApplication",
+    link: "https://github.com/kurtismquant/QuoteWebApplication",
     liveUrl: "https://quotedwords.vercel.app/"
   },
   {
     title: "Habit Tracker",
     description: "Daily habit tracker -- Next.js, Express, Prisma, Tailwind CSS",
     image: "./assets/screenshots/habitflow.png",
-    link: "https://github.com/Kurtain4774/habit-tracker",
+    link: "https://github.com/kurtismquant/habit-tracker",
     liveUrl: "https://habit-tracker-nu-flame.vercel.app/"
   }
 ];
